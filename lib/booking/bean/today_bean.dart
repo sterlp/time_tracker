@@ -16,6 +16,10 @@ class TodayBean extends ValueNotifier<List<TimeBooking>> {
   Duration get workHours => _workHours;
   bool get hasCurrentBooking => _currentRunning != null;
 
+  void changeDay(DateTime day) {
+
+  }
+
   Duration sumTimeBookingsWorkTime() {
     var result = Duration.zero;
     for (final b in value) result += b.workTime;

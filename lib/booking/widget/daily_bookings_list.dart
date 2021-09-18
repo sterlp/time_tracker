@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:time_tracker/booking/bean/today_bean.dart';
 import 'package:time_tracker/booking/entity/time_booking.dart';
 import 'package:time_tracker/booking/widget/delete_booking_dialog.dart';
+import 'package:time_tracker/common/list/dismissable_backgrounds.dart';
 import 'package:time_tracker/util/time_util.dart';
 
 class DailyBookingsList extends StatefulWidget {
@@ -24,7 +25,8 @@ class _DailyBookingsListState extends State<DailyBookingsList> {
           itemCount: items.length,
           itemBuilder: (context, index) => _buildTimeBookingItem(items[index]),
         );
-      });
+      }
+    );
   }
 
   Widget _buildTimeBookingItem(TimeBooking booking) {
@@ -53,7 +55,7 @@ class _DailyBookingsListState extends State<DailyBookingsList> {
     return Dismissible(
       key: Key(booking.id.toString()),
       direction: DismissDirection.endToStart,
-      background: Container(color: Colors.red),
+      background: deleteDismissableBackground(context),
       child: result,
       onDismissed: (direction) {
         widget.todayBean.delete(booking);
@@ -71,7 +73,7 @@ class _DailyBookingsListState extends State<DailyBookingsList> {
 
   List<Widget> _expandItems(List<Widget> widgets) {
     final results = <Widget>[];
-    for (Widget w in widgets) results.add(Expanded(child: w));
+    for (final w in widgets) results.add(Expanded(child: w));
     return results;
   }
 }
