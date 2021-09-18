@@ -43,7 +43,6 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Time Tracker',
-      theme: ThemeData(),
       home: FutureBuilder<AppContainer>(
         future: _container,
         builder: (context, snapshot) {

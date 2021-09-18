@@ -40,17 +40,28 @@ class TodayBean extends ValueNotifier<List<TimeBooking>> {
 
     return result;
   }
-  Future<void> stopBooking() async {
+  Future<TimeBooking?> stopBooking() async {
     if (hasCurrentBooking) {
       final b = _currentRunning!;
       _currentRunning = null;
       b.end = DateTimeUtil.precisionMinutes(DateTime.now());
       await _timeBookingDao.save(b);
       notifyListeners();
+      return b;
     }
+    return null;
   }
   void add(TimeBooking booking) {
     value.add(booking);
     notifyListeners();
+  }
+
+  Future<TimeBooking> delete(TimeBooking booking) {
+    value.removeWhere((e) => e == booking);
+    if (_currentRunning == booking) {
+      _currentRunning = null;
+    }
+    notifyListeners();
+    return _timeBookingDao.deleteEntity(booking);
   }
 }

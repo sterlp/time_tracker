@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:math';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -49,7 +50,6 @@ class _TimerButtonState extends State<TimerButton> {
 
   @override
   Widget build(BuildContext context) {
-
     final textStyle = Theme.of(context).textTheme.headline6;
 
     return ValueListenableBuilder(
@@ -86,15 +86,20 @@ class _TimerButtonState extends State<TimerButton> {
   }
 
   SizedBox _buildDailyProgress() {
+    final size = min(
+        MediaQuery.of(context).size.width,
+        MediaQuery.of(context).size.height) / 2.5;
+    final stroke = size / 10;
+
     final progress = totalWorkTime.inSeconds / (widget.todayBean.workHours.inSeconds);
     return SizedBox(
-      child: CircularProgressIndicator(value: progress, strokeWidth: 12,),
-      height: 180,
-      width: 180,
+      child: CircularProgressIndicator(value: progress, strokeWidth: stroke,),
+      height: size + stroke * 2,
+      width: size + stroke * 2,
     );
   }
 
-  ElevatedButton _buildStartButton(BuildContext context) {
+  Widget _buildStartButton(BuildContext context) {
     Widget text;
     final today = widget.todayBean;
     if (today.hasCurrentBooking) {
@@ -105,13 +110,16 @@ class _TimerButtonState extends State<TimerButton> {
       text = Text('Starten',
         style: Theme.of(context).textTheme.headline4,);
     }
+    final size = min(MediaQuery.of(context).size.width,
+      MediaQuery.of(context).size.height) / 2.5;
 
     return ElevatedButton(
       onPressed: _startPressed,
       child: text,
       style: ElevatedButton.styleFrom(
         shape: const CircleBorder(),
-        padding: const EdgeInsets.all(48),
+        elevation: 6.0,
+        fixedSize: Size(size, size)
       ),
     );
   }

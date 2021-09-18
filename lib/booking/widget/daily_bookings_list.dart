@@ -1,6 +1,8 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:time_tracker/booking/bean/today_bean.dart';
 import 'package:time_tracker/booking/entity/time_booking.dart';
+import 'package:time_tracker/booking/widget/delete_booking_dialog.dart';
 import 'package:time_tracker/util/time_util.dart';
 
 class DailyBookingsList extends StatefulWidget {
@@ -26,24 +28,45 @@ class _DailyBookingsListState extends State<DailyBookingsList> {
   }
 
   Widget _buildTimeBookingItem(TimeBooking booking) {
+    Widget result;
+    final bookingStart = '${toHoursWithMinutes(booking.start)} Uhr';
+    final bookingDuration = toDurationHoursAndMinutes(booking.workTime);
     if (booking.end == null) {
-      return ListTile(
+      result = ListTile(
         leading: const Icon(Icons.lock_clock),
         title: Row(children: _expandItems([
           const Text('Beginn:'),
-          Text('${toHoursWithMinutes(booking.start)} Uhr')
+          Text(bookingStart)
         ])),
       );
     } else {
-      return ListTile(
+      result = ListTile(
         leading: const Icon(Icons.lock_clock),
         title: Row(children: _expandItems([
           const Text('Buchung:'),
-          Text(toDurationHoursAndMinutes(booking.workTime))
+          Text(bookingDuration)
         ])),
-        subtitle: Text('Start: ${toHoursWithMinutes(booking.start)} Uhr, Ende: ${toHoursWithMinutes(booking.end)} Uhr'),
+        subtitle: Text('Start: ${bookingStart}, Ende: ${toHoursWithMinutes(booking.end)} Uhr'),
       );
     }
+
+    return Dismissible(
+      key: Key(booking.id.toString()),
+      direction: DismissDirection.endToStart,
+      background: Container(color: Colors.red),
+      child: result,
+      onDismissed: (direction) {
+        widget.todayBean.delete(booking);
+        ScaffoldMessenger.of(context)
+          .showSnackBar(SnackBar(content:
+              Text('Buchung von $bookingStart und Dauer: $bookingDuration wurde gelöscht.')
+            )
+          );
+      },
+      confirmDismiss: (direction) async {
+        return showConfirmDeleteBookingDialog(context, booking);
+      },
+    );
   }
 
   List<Widget> _expandItems(List<Widget> widgets) {

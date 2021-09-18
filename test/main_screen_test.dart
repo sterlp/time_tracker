@@ -21,7 +21,7 @@ void main() {
     expect(find.text('Loading ...'), findsOneWidget);
   });
 
-  testWidgets('Loaded App should show a Start', (WidgetTester tester) async {
+  testWidgets('Loaded App should show a "Starten"', (WidgetTester tester) async {
     // GIVEN
     final context = AppContextMock();
     await tester.pumpWidget(MyApp(c: context.initMockContext(),));
@@ -29,5 +29,19 @@ void main() {
     await tester.pumpAndSettle();
     // THEN
     expect(find.text('Starten'), findsOneWidget);
+  });
+
+  testWidgets('Press Starten should show a "Stopp"', (WidgetTester tester) async {
+    // GIVEN
+    final context = AppContextMock();
+    await tester.pumpWidget(MyApp(c: context.initMockContext(),));
+    await tester.pumpAndSettle();
+    // WHEN
+    await tester.press(find.text('Starten'));
+    await tester.pumpAndSettle();
+
+    // THEN
+    expect(find.text('Stopp'), findsOneWidget);
+    expect(find.text('Beginn'), findsOneWidget);
   });
 }
