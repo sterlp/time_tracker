@@ -19,7 +19,10 @@ class TimeBooking extends AbstractEntity {
   set workTime(Duration time) {
     end = start.add(time);
   }
-
+  @override
+  String toString() {
+    return 'TimeBooking[id=$id, start=$start, end=$end]';
+  }
 }
 /*
 class TimeBookings extends ValueNotifier<List<TimeBooking>> {

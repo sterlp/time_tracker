@@ -114,4 +114,19 @@ Future<void> main() async {
     expect(subject.value[1].end, isNotNull);
     expect(subject.hasCurrentBooking, isTrue);
   });
+
+  test('Test reload with open booking', () async {
+    // GIVEN
+    await subject.startNewBooking();
+    await subject.startNewBooking();
+    await subject.startNewBooking();
+    // WHEN
+    subject = TodayBean(dao);
+    await subject.reload();
+    // THEN
+    expect(subject.value.length, 3);
+    expect(subject.hasCurrentBooking, isTrue);
+    expect(subject.value[0].end, isNull);
+    expect(subject.value[1].end, isNotNull);
+  });
 }

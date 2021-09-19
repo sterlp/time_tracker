@@ -11,7 +11,7 @@ import 'package:time_tracker/db/db_v2.dart';
 class TimeBookingDao extends AbstractDao<TimeBooking> {
   final dayFormat = DateFormat('yyyy-MM-dd');
   final _zero = Duration.zero;
-  final _orderByStartDate = '${DbBookingTableV2.start_date} DESC';
+  final _orderByStartDate = '${DbBookingTableV2.start_date} DESC, id DESC';
 
   TimeBookingDao(Database db) : super(db, DbBookingTableV2.table);
 
