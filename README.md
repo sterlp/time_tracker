@@ -1,4 +1,6 @@
-# time_tracker
+[![Flutter CI](https://github.com/sterlp/time_tracker/actions/workflows/main.yml/badge.svg)](https://github.com/sterlp/time_tracker/actions/workflows/main.yml)
+
+# Time Tracker
 
 Eine einfache Zeiterfassung für die Arbeit.
 
