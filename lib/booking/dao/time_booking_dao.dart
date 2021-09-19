@@ -11,14 +11,19 @@ import 'package:time_tracker/db/db_v2.dart';
 class TimeBookingDao extends AbstractDao<TimeBooking> {
   final dayFormat = DateFormat('yyyy-MM-dd');
   final _zero = Duration.zero;
+  final _orderByStartDate = '${DbBookingTableV2.start_date} DESC';
 
   TimeBookingDao(Database db) : super(db, DbBookingTableV2.table);
+
+  Future<List<TimeBooking>> allOrderByStart() {
+    return loadAll(orderBy: _orderByStartDate);
+  }
 
   Future<List<TimeBooking>> loadDay(DateTime dateTime) {
     return loadAll(
         where: "day = ?",
         whereArgs: [dayFormat.format(dateTime)],
-        orderBy: "start_date ASC"
+        orderBy: _orderByStartDate
     );
   }
 

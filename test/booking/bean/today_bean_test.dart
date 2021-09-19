@@ -103,4 +103,15 @@ Future<void> main() async {
     expect(await dao.countAll(), 2);
     expect(subject.hasCurrentBooking, isTrue);
   });
+
+  test('Open booking is always the first one', () async {
+    // GIVEN
+    await subject.startNewBooking();
+    // WHEN
+    await subject.startNewBooking();
+    // THEN
+    expect(subject.value[0].end, isNull);
+    expect(subject.value[1].end, isNotNull);
+    expect(subject.hasCurrentBooking, isTrue);
+  });
 }

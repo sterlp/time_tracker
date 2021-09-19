@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:sqflite_entities/converter/date_util.dart';
 import 'package:time_tracker/booking/dao/time_booking_dao.dart';
 import 'package:time_tracker/booking/entity/time_booking.dart';
+import 'package:time_tracker/common/list_functions.dart';
 
 class TodayBean extends ValueNotifier<List<TimeBooking>> {
   final TimeBookingDao _timeBookingDao;
@@ -28,7 +29,7 @@ class TodayBean extends ValueNotifier<List<TimeBooking>> {
 
   Future<List<TimeBooking>> reload() async {
     final dbData = await _timeBookingDao.loadDay(_day);
-    _currentRunning = dbData.firstWhere((e) => e.isOpen);
+    _currentRunning = firstWhere(dbData, (e) => e.isOpen);
     return value = dbData;
   }
 
@@ -38,7 +39,7 @@ class TodayBean extends ValueNotifier<List<TimeBooking>> {
     var result = TimeBooking(DateTimeUtil.precisionMinutes(DateTime.now()));
     result.targetWorkTime = _workHours;
     result = await _timeBookingDao.save(result);
-    value.add(result);
+    value.insert(0, result);
     _currentRunning = result;
     notifyListeners();
 

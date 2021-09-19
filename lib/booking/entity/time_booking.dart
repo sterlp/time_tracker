@@ -8,6 +8,7 @@ class TimeBooking extends AbstractEntity {
   Duration targetWorkTime = const Duration(hours: 8);
 
   TimeBooking(this.start, {DateTime? endTime}) : end = endTime;
+  TimeBooking.now() : this(DateTimeUtil.precisionMinutes(DateTime.now()));
   
   Duration get workTime {
     final currentEnd = end ?? DateTimeUtil.precisionMinutes(DateTime.now());
@@ -18,6 +19,7 @@ class TimeBooking extends AbstractEntity {
   set workTime(Duration time) {
     end = start.add(time);
   }
+
 }
 /*
 class TimeBookings extends ValueNotifier<List<TimeBooking>> {

@@ -36,6 +36,7 @@ void main() {
     final context = AppContextMock();
     await tester.pumpWidget(MyApp(c: context.initMockContext(),));
     await tester.pumpAndSettle();
+
     // WHEN
     await tester.press(find.text('Starten'));
     await tester.pumpAndSettle();

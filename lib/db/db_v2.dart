@@ -10,6 +10,7 @@ class DbBookingTableV2 extends DbUpdate {
   static const String targetHoursInMin = 'target_hours_in_min';
   static const String weekday = 'weekday';
   static const String day = 'day';
+  static const String start_date = 'start_date';
 
   DbBookingTableV2() : super(2);
 

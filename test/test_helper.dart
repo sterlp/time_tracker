@@ -5,6 +5,7 @@ import 'package:mocktail/mocktail.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:sqflite_common_ffi/sqflite_ffi.dart';
 import 'package:sqflite_entities/service/db_provider.dart';
+import 'package:time_tracker/booking/bean/booking_service.dart';
 import 'package:time_tracker/booking/bean/today_bean.dart';
 import 'package:time_tracker/booking/dao/time_booking_dao.dart';
 import 'package:time_tracker/booking/entity/time_booking.dart';
@@ -44,6 +45,7 @@ class AppContextMock {
     result.add<ConfigDao>(configDao);
     result.add<TimeBookingDao>(timeBookingDao);
     result.add<TodayBean>(TodayBean(timeBookingDao));
+    result.add<BookingService>(BookingService(timeBookingDao));
     return Future.value(result);
   }
 }
