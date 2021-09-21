@@ -117,6 +117,7 @@ class _TimerButtonState extends State<TimerButton> {
       onPressed: _startPressed,
       child: text,
       style: ElevatedButton.styleFrom(
+        enableFeedback: true,
         shape: const CircleBorder(),
         elevation: 6.0,
         fixedSize: Size(size, size)

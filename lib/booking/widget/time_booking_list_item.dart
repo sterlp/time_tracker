@@ -21,6 +21,7 @@ class TimeBookingListItem extends StatelessWidget {
     final bookingDuration = toDurationHoursAndMinutes(booking.workTime);
     if (booking.end == null) {
       result = ListTile(
+        onLongPress: () => _editBooking(booking, context),
         leading: const Icon(Icons.lock_clock),
         title: Row(children: _expandItems([
           const Text('Beginn:'),

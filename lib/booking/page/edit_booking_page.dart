@@ -22,9 +22,16 @@ class EditBookingPage extends StatelessWidget {
         children: [
           ListTile(
             title: TextFormField(
-              decoration: InputDecoration(hintText: 'Start', label: Text('Start')),
+              initialValue: dateTimeFormat.format(booking.start),
+              decoration: const InputDecoration(hintText: 'Start', label: Text('Start')),
             ),
-          )
+          ),
+          ListTile(
+            title: TextFormField(
+              initialValue: booking.end == null ? null : dateTimeFormat.format(booking.end!),
+              decoration: const InputDecoration(hintText: 'Ende', label: Text('Ende')),
+            ),
+          ),
         ],
       )
     );

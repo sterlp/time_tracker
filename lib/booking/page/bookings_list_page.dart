@@ -38,14 +38,6 @@ class _BookingListPageState extends State<BookingListPage> {
 
   @override
   Widget build(BuildContext context) {
-
-    return MaterialApp(
-        title: 'Time Tracker',
-        home: _buildHome(),
-    );
-  }
-
-  Widget _buildHome() {
     if (_bookings == null) {
       return const LoadingWidget();
     } else {

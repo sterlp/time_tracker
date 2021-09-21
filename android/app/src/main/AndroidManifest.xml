@@ -2,7 +2,7 @@
     package="org.sterl.time_tracker">
    <application
         android:label="Time Tracker"
-        android:icon="@mipmap/ic_launcher">
+        android:icon="@mipmap/launcher_icon">
         <activity
             android:name=".MainActivity"
             android:launchMode="singleTop"
