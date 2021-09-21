@@ -1,15 +1,16 @@
-
-import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:time_tracker/booking/bean/today_bean.dart';
 import 'package:time_tracker/booking/dao/time_booking_dao.dart';
 
 import '../../test_helper.dart';
+import '../booking_test_data.dart';
 
 Future<void> main() async {
   final dbProvider = await initTestDB();
   final db = await dbProvider.init();
   final dao = TimeBookingDao(db);
+  final testData = BookingTestData(dao);
   var subject = TodayBean(dao);
 
   tearDownAll(() async {
@@ -128,5 +129,55 @@ Future<void> main() async {
     expect(subject.hasCurrentBooking, isTrue);
     expect(subject.value[0].end, isNull);
     expect(subject.value[1].end, isNotNull);
+  });
+
+  test('Test reload with only closed bookings', () async {
+    // GIVEN
+    await subject.startNewBooking();
+    await subject.startNewBooking();
+    await subject.stopBooking();
+    // WHEN
+    await subject.reload();
+    // THEN
+    expect(subject.value.length, 2);
+    expect(subject.hasCurrentBooking, isFalse);
+    expect(subject.value[0].end, isNotNull);
+    expect(subject.value[1].end, isNotNull);
+  });
+
+  test('Will change day', () async {
+    // GIVEN
+    expect(DateUtils.isSameDay(subject.day, DateTime.now()), isTrue);
+    // WHEN
+    final date = DateTime.now().add(const Duration(days: -3));
+    await subject.changeDay(date);
+    // THEN
+    expect(DateUtils.isSameDay(subject.day, date), isTrue);
+  });
+
+  test('Change day selects right booking', () async {
+    // GIVEN
+    await testData.newBooking(-2, const Duration(days: -2));
+    await testData.newBooking(-2, const Duration(days: -2));
+    final runningBooking = await testData.newBooking(-1, null);
+    // WHEN
+    final bookings = await subject.reload();
+    // THEN
+    expect(bookings.length, 1);
+    expect(subject.value.length, 1);
+    expect(subject.value[0].end, isNull);
+    expect(subject.value[0], runningBooking);
+  });
+
+  test('Open bookings will be selected', () async {
+    // GIVEN
+    await testData.newBooking(-2, null);
+    await testData.newBooking(-1, null);
+    // WHEN
+    final bookings = await subject.reload();
+    subject.stopBooking();
+    // THEN
+    expect(subject.hasCurrentBooking, isTrue);
+    expect(subject.value.length, 2);
   });
 }

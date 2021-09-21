@@ -1,6 +1,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:time_tracker/booking/entity/time_booking.dart';
+import 'package:time_tracker/booking/page/edit_booking_page.dart';
 import 'package:time_tracker/booking/widget/delete_booking_dialog.dart';
 import 'package:time_tracker/common/list/dismissable_backgrounds.dart';
 import 'package:time_tracker/util/time_util.dart';
@@ -15,7 +16,7 @@ class TimeBookingListItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    Widget result;
+    ListTile result;
     final bookingStart = '${toHoursWithMinutes(booking.start)} Uhr';
     final bookingDuration = toDurationHoursAndMinutes(booking.workTime);
     if (booking.end == null) {
@@ -28,6 +29,7 @@ class TimeBookingListItem extends StatelessWidget {
       );
     } else {
       result = ListTile(
+        onLongPress: () => _editBooking(booking, context),
         leading: const Icon(Icons.lock_clock),
         title: Row(children: _expandItems([
           const Text('Buchung:'),
@@ -53,6 +55,13 @@ class TimeBookingListItem extends StatelessWidget {
       confirmDismiss: (direction) async {
         return showConfirmDeleteBookingDialog(context, booking);
       },
+    );
+  }
+
+  void _editBooking(TimeBooking booking, BuildContext context) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => EditBookingPage(booking)),
     );
   }
 

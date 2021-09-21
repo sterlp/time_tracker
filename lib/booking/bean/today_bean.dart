@@ -1,4 +1,5 @@
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:sqflite_entities/converter/date_util.dart';
 import 'package:time_tracker/booking/dao/time_booking_dao.dart';
@@ -17,8 +18,12 @@ class TodayBean extends ValueNotifier<List<TimeBooking>> {
   Duration get workHours => _workHours;
   bool get hasCurrentBooking => _currentRunning != null;
 
-  void changeDay(DateTime day) {
-
+  Future<List<TimeBooking>> changeDay(DateTime day) async {
+    if (DateUtils.isSameDay(_day, day)) return SynchronousFuture(value);
+    else {
+      _day = DateUtils.dateOnly(day);
+      return reload();
+    }
   }
 
   Duration sumTimeBookingsWorkTime() {
@@ -29,14 +34,18 @@ class TodayBean extends ValueNotifier<List<TimeBooking>> {
 
   Future<List<TimeBooking>> reload() async {
     final dbData = await _timeBookingDao.loadDay(_day);
-    _currentRunning = firstWhere(dbData, (e) => e.isOpen);
+    _selectFirstOpenBooking(dbData);
     return value = dbData;
+  }
+
+  void _selectFirstOpenBooking(List<TimeBooking> bookings) {
+    _currentRunning = firstWhere(bookings, (e) => e.isOpen);
   }
 
   Future<TimeBooking> startNewBooking() async {
     await stopBooking();
 
-    var result = TimeBooking(DateTimeUtil.precisionMinutes(DateTime.now()));
+    var result = TimeBooking.now();
     result.targetWorkTime = _workHours;
     result = await _timeBookingDao.save(result);
     value.insert(0, result);
@@ -48,9 +57,9 @@ class TodayBean extends ValueNotifier<List<TimeBooking>> {
   Future<TimeBooking?> stopBooking() async {
     if (hasCurrentBooking) {
       final b = _currentRunning!;
-      _currentRunning = null;
       b.end = DateTimeUtil.precisionMinutes(DateTime.now());
       await _timeBookingDao.save(b);
+      _selectFirstOpenBooking(value);
       notifyListeners();
       return b;
     }
