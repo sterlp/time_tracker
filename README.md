@@ -4,6 +4,8 @@
 
 Eine einfache Zeiterfassung für die Arbeit.
 
+- https://play.google.com/store/apps/details?id=org.sterl.time_tracker
+
 ## Getting Started
 
 This project is a starting point for a Flutter application.
