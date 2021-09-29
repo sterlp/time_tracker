@@ -1,5 +1,7 @@
 import 'package:dependency_container/dependency_container.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:intl/date_symbol_data_local.dart';
 import 'package:sqflite_entities/service/db_provider.dart';
 import 'package:time_tracker/booking/bean/booking_service.dart';
 import 'package:time_tracker/booking/bean/today_bean.dart';
@@ -27,6 +29,7 @@ Future<AppContainer> initContext({Future<DbProvider>? dbProvider}) async {
   result.add(todayBean);
   result.add(BookingService(dao));
 
+  await initializeDateFormatting('de_DE');
   return result;
 }
 
@@ -45,6 +48,15 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Time Tracker',
+      supportedLocales: const [
+        Locale('de', 'DE'),
+        Locale('en', ''),
+      ],
+      localizationsDelegates: const [
+        GlobalMaterialLocalizations.delegate,
+        GlobalWidgetsLocalizations.delegate,
+        GlobalCupertinoLocalizations.delegate
+      ],
       home: FutureBuilder<AppContainer>(
         future: _container,
         builder: (context, snapshot) {

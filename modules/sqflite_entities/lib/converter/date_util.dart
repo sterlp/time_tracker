@@ -1,3 +1,4 @@
+import 'package:flutter/src/material/time.dart';
 import 'package:intl/intl.dart';
 import 'package:intl/locale.dart';
 
@@ -17,7 +18,8 @@ class DateTimeUtil {
     if (d == null) return '';
     else return f.format(d);
   }
-  static String formatWithString(DateTime date, String format, Locale? locale) {
+
+  static String formatWithString(DateTime? date, String format, Locale? locale) {
     DateFormat? f = _formatterCache[format];
     if (f == null) {
       if (locale == null) {
@@ -30,7 +32,6 @@ class DateTimeUtil {
     return DateTimeUtil.format(date, f);
   }
 
-
   static DateTime precisionMilliseconds(DateTime now) {
     return DateTime(now.year, now.month, now.day, now.hour, now.minute, now.second, now.millisecond);
   }
@@ -39,5 +40,10 @@ class DateTimeUtil {
   }
   static DateTime precisionMinutes(DateTime now) {
     return DateTime(now.year, now.month, now.day, now.hour, now.minute);
+  }
+  static DateTime asDateTime(DateTime newDate, TimeOfDay newTime) {
+    return DateTime(newDate.year,
+      newDate.month, newDate.day, newTime.hour, newTime.minute
+    );
   }
 }
