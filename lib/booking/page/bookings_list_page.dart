@@ -46,7 +46,8 @@ class _BookingListPageState extends State<BookingListPage> {
         body: DailyBookingsList(
           _bookings!,
           _doSave,
-          _doDelete
+          _doDelete,
+          showFirstDayHeader: true,
         ),
         floatingActionButton: FloatingActionButton(
           onPressed: () async {

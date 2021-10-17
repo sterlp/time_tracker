@@ -10,7 +10,10 @@ class DailyBookingsList extends StatelessWidget {
   final ValueListenable<List<TimeBooking>> items;
   final Function(TimeBooking b) saveFn;
   final Function(TimeBooking b) deleteFn;
-  const DailyBookingsList(this.items, this.saveFn, this.deleteFn, {Key? key})
+  final bool showFirstDayHeader;
+
+  const DailyBookingsList(this.items, this.saveFn, this.deleteFn,
+      {Key? key, this.showFirstDayHeader = false})
       : super(key: key);
 
   @override
@@ -25,7 +28,11 @@ class DailyBookingsList extends StatelessWidget {
           itemCount: items.length,
           itemBuilder: (context, index) {
             final day = items[index].day;
-            if (lastDay == null || lastDay != day) {
+            if (lastDay == null) {
+              if (showFirstDayHeader) lastDay = '';
+              else lastDay = day;
+            }
+            if (lastDay != day) {
               lastDay = day;
               return Column(
                 children: [

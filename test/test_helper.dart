@@ -24,6 +24,7 @@ Future<AppContainer> initTestContext() async {
 }
 class CreditServiceMock with Mock implements ConfigDao {}
 class RewardServiceMock with Mock implements TimeBookingDao {}
+class BookingServiceMock with Mock implements BookingService {}
 
 class AppContextMock {
   final configDao = CreditServiceMock();
