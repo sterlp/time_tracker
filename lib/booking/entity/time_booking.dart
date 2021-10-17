@@ -1,4 +1,3 @@
-import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:sqflite_entities/converter/date_util.dart';
 import 'package:sqflite_entities/converter/sqlite_converter.dart';
@@ -14,7 +13,8 @@ class TimeBooking extends AbstractEntity {
 
   TimeBooking(this.start, {DateTime? endTime}) : end = endTime;
   TimeBooking.now() : this(DateTimeUtil.precisionMinutes(DateTime.now()));
-  
+
+  String get day => dayFormat.format(start);
   Duration get workTime {
     final currentEnd = end ?? DateTimeUtil.precisionMinutes(DateTime.now());
     return currentEnd.difference(start);
@@ -38,7 +38,7 @@ class TimeBooking extends AbstractEntity {
     final value = this;
     return {
       'id': value.id,
-      'day': dayFormat.format(value.start),
+      'day': day,
       'start_date': dateTimeToInt(value.start),
       'end_date': dateTimeToInt(value.end),
       DbBookingTableV2.workedHoursInMin: value.workTime.inMinutes,

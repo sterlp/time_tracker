@@ -3,6 +3,7 @@ import 'dart:math';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
 import 'package:sqflite_entities/converter/date_util.dart';
 import 'package:time_tracker/booking/bean/today_bean.dart';
@@ -31,10 +32,12 @@ class _TimerButtonState extends State<TimerButton> {
         (timer) {
         final newNow  = DateTimeUtil.precisionMinutes(DateTime.now());
         if (newNow.millisecondsSinceEpoch - now.millisecondsSinceEpoch > 1) {
-          setState(() {
-            now = newNow;
-          });
-          print('Update $now');
+          if (mounted) {
+            setState(() {
+              now = newNow;
+            });
+            print('Update $now');
+          }
         }
       }
     );
@@ -132,5 +135,6 @@ class _TimerButtonState extends State<TimerButton> {
     } else {
       today.startNewBooking();
     }
+    HapticFeedback.heavyImpact();
   }
 }

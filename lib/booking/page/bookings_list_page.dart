@@ -63,7 +63,7 @@ class _BookingListPageState extends State<BookingListPage> {
     await _reload();
     if (mounted) {
       ScaffoldMessenger.of(context)
-          .showSnackBar(const SnackBar(content: Text('Buchung gespeichert.'))
+        .showSnackBar(const SnackBar(content: Text('Buchung gespeichert.'))
       );
     }
   }
@@ -72,7 +72,7 @@ class _BookingListPageState extends State<BookingListPage> {
     await _reload();
     if (mounted) {
       ScaffoldMessenger.of(context)
-          .showSnackBar(const SnackBar(content: Text('Buchung gelöscht.'))
+        .showSnackBar(const SnackBar(content: Text('Buchung gelöscht.'))
       );
     }
   }
