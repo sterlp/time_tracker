@@ -6,9 +6,9 @@ import 'package:time_tracker/booking/widget/daily_bookings_list.dart';
 import 'package:time_tracker/booking/widget/daily_config_overview.dart';
 import 'package:time_tracker/booking/widget/timer_button.dart';
 
-class BookingWidget extends StatelessWidget {
+class BookingWidgetPage extends StatelessWidget {
   final TodayBean todayBean;
-  const BookingWidget(this.todayBean, {Key? key}) : super(key: key);
+  const BookingWidgetPage(this.todayBean, {Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

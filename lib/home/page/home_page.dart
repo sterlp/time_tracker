@@ -2,10 +2,9 @@ import 'package:dependency_container/dependency_container.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/date_symbol_data_local.dart';
-import 'package:intl/intl.dart';
 import 'package:time_tracker/booking/bean/today_bean.dart';
 import 'package:time_tracker/booking/page/bookings_list_page.dart';
-import 'package:time_tracker/booking/widget/booking_widget.dart';
+import 'package:time_tracker/booking/page/booking_widget_page.dart';
 
 class HomePage extends StatefulWidget {
   final AppContainer _container;
@@ -18,7 +17,6 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   int _index = 0;
-  final title = 'Time Tracker';
 
   @override
   void initState() {
@@ -31,9 +29,9 @@ class _HomePageState extends State<HomePage> {
     final today = widget._container.get<TodayBean>();
     return Scaffold(
       appBar: AppBar(
-        title: Text(title),
+        title: const Text('Time Tracker'),
       ),
-      body: _index == 0 ? BookingWidget(today) : BookingListPage(widget._container),
+      body: _index == 0 ? BookingWidgetPage(today) : BookingListPage(widget._container),
       bottomNavigationBar: BottomNavigationBar(
         items: const <BottomNavigationBarItem>[
           BottomNavigationBarItem(
@@ -42,7 +40,7 @@ class _HomePageState extends State<HomePage> {
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.history),
-            label: 'History',
+            label: 'Historie',
           ),
         ],
         currentIndex: _index,

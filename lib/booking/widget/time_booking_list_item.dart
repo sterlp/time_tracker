@@ -20,35 +20,43 @@ class TimeBookingListItem extends StatelessWidget {
     ListTile result;
     final bookingStart = '${toHoursWithMinutes(booking.start)} Uhr';
     final bookingDuration = toDurationHoursAndMinutes(booking.workTime);
+    Widget title;
+    Widget? subTitle;
     if (booking.end == null) {
-      result = ListTile(
-        onLongPress: () => _editBooking(booking, context),
-        leading: const Icon(Icons.lock_clock),
-        title: Row(children: _expandItems([
+      title = Row(children: _expandItems([
           const Text('Beginn:'),
           Text(bookingStart)
-        ])),
+        ])
       );
     } else {
-      result = ListTile(
-        onLongPress: () => _editBooking(booking, context),
-        leading: const Icon(Icons.lock_clock),
-        title: Row(children: _expandItems([
+      title = Row(children: _expandItems([
           const Text('Buchung:'),
           Text(bookingDuration)
-        ])),
-        subtitle: Text('Start: $bookingStart, Ende: ${toHoursWithMinutes(booking.end)} Uhr'),
+        ])
       );
+      subTitle = Text('Start: $bookingStart, Ende: ${toHoursWithMinutes(booking.end)} Uhr');
     }
+    result = ListTile(
+      onLongPress: () => _editBooking(booking, context),
+      leading: const Icon(Icons.lock_clock),
+      title: title,
+      subtitle: subTitle,
+    );
 
     return Dismissible(
       key: Key(booking.id.toString()),
-      direction: DismissDirection.endToStart,
-      background: deleteDismissableBackground(context),
+      background: editDismissableBackground(context),
+      secondaryBackground: deleteDismissableBackground(context),
       child: result,
-      onDismissed: (direction) => deleteFn(booking),
+      onDismissed: (direction) {
+        deleteFn(booking);
+      },
       confirmDismiss: (direction) async {
-        return showConfirmDeleteBookingDialog(context, booking);
+        if (direction == DismissDirection.endToStart) {
+          return showConfirmDeleteBookingDialog(context, booking);
+        }
+        _editBooking(booking, context);
+        return false;
       },
     );
   }

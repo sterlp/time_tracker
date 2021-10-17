@@ -8,5 +8,17 @@ Widget deleteDismissableBackground(BuildContext context) {
       const Icon(Icons.delete),
       Container(width: 32,)
     ],),
-    alignment: Alignment.centerRight,);
+    alignment: Alignment.centerRight,
+  );
+}
+
+Widget editDismissableBackground(BuildContext context) {
+  return Container(color: Colors.green,
+    child: Row(children: [
+      Container(width: 32,),
+      const Icon(Icons.create),
+      Expanded(child: Container()),
+    ],),
+    alignment: Alignment.centerLeft,
+  );
 }
