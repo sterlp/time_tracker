@@ -1,17 +1,22 @@
 
 import 'package:flutter/material.dart';
 import 'package:sqflite_entities/converter/date_util.dart';
+import 'package:time_tracker/log/logger.dart';
 
 class DateTimeFormField extends StatefulWidget {
-  final DateTime? initialDateTime;
+  DateTime? dateTime;
   final DateTime? firstDateTime;
+  final DateTime? lastDateTime;
   final ValueChanged<DateTime> onChanged;
   final InputDecoration decoration;
+  final FormFieldValidator<DateTime?>? validator;
 
-  const DateTimeFormField(this.initialDateTime, this.onChanged,
+  DateTimeFormField(this.dateTime, this.onChanged,
       {Key? key,
         this.decoration = const InputDecoration(),
         this.firstDateTime,
+        this.lastDateTime,
+        this.validator,
       }) : super(key: key);
 
   @override
@@ -20,31 +25,36 @@ class DateTimeFormField extends StatefulWidget {
 
 class _DateTimeFormFieldState extends State<DateTimeFormField> {
   final _controller = TextEditingController();
-  DateTime? _dateTime;
+  final _log = LoggerFactory.get<DateTimeFormField>();
 
   @override
   Widget build(BuildContext context) {
-    final d = _dateTime ?? widget.initialDateTime;
-    if (d == null) {
-      _controller.text = '';
-    } else {
-      _controller.text = DateTimeUtil.formatWithString(d, 'EEEE, dd.MM.yyyy, HH:mm', null)
-          + ' Uhr';
+    final dateTime = widget.dateTime;
+    if (dateTime != null) {
+      _controller.text = DateTimeUtil.formatWithString(dateTime,
+          'EEEE, dd.MM.yyyy, HH:mm', null) + ' Uhr';
     }
     return TextFormField(
-      readOnly: true,
       controller: _controller,
-      onTap: _pickNewDate,
+      readOnly: true,
+      onTap: () => _pickNewDate(context),
       decoration: widget.decoration,
+      validator: _validate,
     );
   }
 
-  Future<void> _pickNewDate() async {
-    final currentDate = _dateTime ?? widget.initialDateTime ?? DateTime.now();
+  String? _validate(String? v) {
+    _log.debug('validate ${widget.dateTime}');
+    if (widget.validator != null) return widget.validator!(widget.dateTime);
+    else return null;
+  }
+
+  Future<void> _pickNewDate(BuildContext context) async {
+    final currentDate = widget.dateTime ?? DateTime.now();
     var newDate = await showDatePicker(context: context,
       initialDate: currentDate,
-      firstDate: currentDate.add(const Duration(days: -1)),
-      lastDate: currentDate.add(const Duration(days: 1)),
+      firstDate: widget.firstDateTime ?? currentDate.add(const Duration(days: -30)),
+      lastDate: widget.lastDateTime ?? currentDate.add(const Duration(days: 30)),
       confirmText: 'UHRZEIT WÄHLEN'
     );
     if (newDate != null) {
@@ -53,8 +63,10 @@ class _DateTimeFormFieldState extends State<DateTimeFormField> {
       );
       if (newTime != null) {
         newDate = DateTimeUtil.asDateTime(newDate, newTime);
+        widget.dateTime = newDate;
+        _controller.text = DateTimeUtil.formatWithString(newDate,
+            'EEEE, dd.MM.yyyy, HH:mm', null) + ' Uhr';
         widget.onChanged(newDate);
-        setState(() => _dateTime = newDate);
       }
     }
   }

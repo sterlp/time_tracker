@@ -6,13 +6,14 @@ import 'package:time_tracker/booking/widget/delete_booking_dialog.dart';
 import 'package:time_tracker/common/list/dismissable_backgrounds.dart';
 import 'package:time_tracker/util/time_util.dart';
 
-typedef DeleteTimeBooking<TimeBooking> = void Function(TimeBooking booking);
-
 class TimeBookingListItem extends StatelessWidget {
 
   final TimeBooking booking;
-  final DeleteTimeBooking<TimeBooking> deleteFn;
-  const TimeBookingListItem(this.booking, this.deleteFn, {Key? key}) : super(key: key);
+  final Function(TimeBooking b) deleteFn;
+  final Function(TimeBooking b) saveFn;
+  const TimeBookingListItem(this.booking, this.saveFn, this.deleteFn,
+      {Key? key})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -45,25 +46,18 @@ class TimeBookingListItem extends StatelessWidget {
       direction: DismissDirection.endToStart,
       background: deleteDismissableBackground(context),
       child: result,
-      onDismissed: (direction) {
-        deleteFn(booking);
-        ScaffoldMessenger.of(context)
-          .showSnackBar(SnackBar(content:
-            Text('Buchung von $bookingStart und Dauer: $bookingDuration wurde gelöscht.')
-          )
-        );
-      },
+      onDismissed: (direction) => deleteFn(booking),
       confirmDismiss: (direction) async {
         return showConfirmDeleteBookingDialog(context, booking);
       },
     );
   }
 
-  void _editBooking(TimeBooking booking, BuildContext context) {
-    Navigator.push(
-      context,
-      MaterialPageRoute(builder: (context) => EditBookingPage(booking)),
-    );
+  Future<void> _editBooking(TimeBooking booking, BuildContext context) async {
+    final saved = await showEditBookingPage(context, booking: booking);
+    if (saved != null) {
+      saveFn(saved);
+    }
   }
 
   List<Widget> _expandItems(List<Widget> widgets) {

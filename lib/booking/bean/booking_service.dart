@@ -11,6 +11,9 @@ class BookingService {
     b.id = null;
     return _timeBookingDao.save(b);
   }
+  Future<TimeBooking> save(TimeBooking b) {
+    return _timeBookingDao.save(b);
+  }
 
   Future<List<TimeBooking>> all() {
     return _timeBookingDao.allOrderByStart();

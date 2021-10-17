@@ -48,28 +48,11 @@ WHERE ${DbBookingTableV2.day} = ?
   @override
   TimeBooking fromMap(Map<String, dynamic> values) {
     final result = TimeBooking(parseDateTime(values['start_date'])!);
-    result.id = values['id'] as int;
-    result.end = parseDateTime(values['end_date']);
-    result.targetWorkTime = Duration(minutes: values[DbBookingTableV2.targetHoursInMin] as int);
+    result.setMap(values);
     return result;
   }
-  /// id integer PRIMARY KEY AUTOINCREMENT,
-  //   day varchar(10),
-  //   start_date int NOT NULL,
-  //   end_date int,
-  //   $workedHoursInMin int,
-  //   $plannedHoursInMin int,
-  //   $weekday NOT NULL
   @override
   Map<String, dynamic> toMap(TimeBooking value) {
-    return {
-      'id': value.id,
-      'day': dayFormat.format(value.start),
-      'start_date': dateTimeToInt(value.start),
-      'end_date': dateTimeToInt(value.end),
-      DbBookingTableV2.workedHoursInMin: value.workTime.inMinutes,
-      DbBookingTableV2.targetHoursInMin: value.targetWorkTime.inMinutes,
-      'weekday': value.start.weekday
-    };
+    return value.asMap();
   }
 }

@@ -6,8 +6,10 @@ import 'package:time_tracker/booking/widget/time_booking_list_item.dart';
 
 class DailyBookingsList extends StatelessWidget {
   final ValueListenable<List<TimeBooking>> items;
-  final DeleteTimeBooking<TimeBooking> deleteFn;
-  const DailyBookingsList(this.items, this.deleteFn, {Key? key}) : super(key: key);
+  final Function(TimeBooking b) saveFn;
+  final Function(TimeBooking b) deleteFn;
+  const DailyBookingsList(this.items, this.saveFn, this.deleteFn, {Key? key})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -18,7 +20,7 @@ class DailyBookingsList extends StatelessWidget {
           return ListView.builder(
             itemCount: items.length,
             itemBuilder: (context, index) =>
-                TimeBookingListItem(items[index], deleteFn),
+                TimeBookingListItem(items[index], saveFn, deleteFn),
           );
         }
     );

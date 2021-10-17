@@ -1,73 +1,117 @@
-import 'package:date_time_picker/date_time_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:sqflite_entities/converter/date_util.dart';
 import 'package:time_tracker/booking/entity/time_booking.dart';
+import 'package:time_tracker/booking/widget/time_account.dart';
 import 'package:time_tracker/common/widget/date_time_form_field.dart';
+import 'package:time_tracker/log/logger.dart';
+import 'package:time_tracker/util/time_util.dart';
 
-class EditBookingPage extends StatelessWidget {
+Future<TimeBooking?> showEditBookingPage(
+    BuildContext context,
+    {TimeBooking? booking}) {
+  booking ??= TimeBooking.now();
+  return Navigator.push<TimeBooking?>(
+    context,
+    MaterialPageRoute(builder: (context) => EditBookingPage(booking!)),
+  );
+}
+
+class EditBookingPage extends StatefulWidget {
   final TimeBooking booking;
   final dateTimeFormat = DateFormat('EEEE dd.MM.yyy HH:mm');
 
   EditBookingPage(this.booking, {Key? key}) : super(key: key);
 
   @override
+  _EditBookingPageState createState() => _EditBookingPageState();
+}
+
+class _EditBookingPageState extends State<EditBookingPage> {
+  final _log = LoggerFactory.get<EditBookingPage>();
+  final _formKey = GlobalKey<FormState>();
+  final _booking = TimeBooking.now();
+  bool valid = false;
+
+  @override
+  void initState() {
+    _booking.setMap(widget.booking.asMap());
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
+    _log.debug('build ...');
     const bold = TextStyle(fontWeight: FontWeight.bold);
+
     return Scaffold(
       appBar: AppBar(
-        title: Text(booking.id == null ? 'Neue Buchung' : 'Buchung bearbeiten'),
+        title: Text(_booking.id == null ? 'Neue Buchung' : 'Buchung bearbeiten'),
         actions: [
-          IconButton(onPressed: _save, icon: const Icon(Icons.done)),
+          IconButton(onPressed:
+            valid ? _save : null,
+            icon: const Icon(Icons.done)),
         ],
       ),
-      body: ListView(
-        children: [
-          ListTile(
-            title: DateTimeFormField(
-              booking.start,
-              (d) {
-                print('new date time selected $d');
-              },
-              decoration: const InputDecoration(hintText: 'Startzeit', label: Text('Startzeit')),
-            ),
+      body: Form(
+        key: _formKey,
+        child: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              TextFormField(
+                initialValue: toDurationHoursAndMinutes(_booking.targetWorkTime),
+                decoration: const InputDecoration(label: Text('Tagessoll')),
+                readOnly: true,
+              ),
+              DateTimeFormField(
+                _booking.start,
+                _setStart,
+                decoration: const InputDecoration(label: Text('Start')),
+              ),
+              DateTimeFormField(
+                _booking.end,
+                _setEnd,
+                validator: (value) { // value is the last state of the widget
+                  String? msg;
+                  if (_booking.end == null) {
+                    msg = null;
+                  } else if (_booking.end!.isBefore(_booking.start)) {
+                    msg = 'Endedatum muss vor dem Startdatum  liegen.';
+                  }
+                  return msg;
+                },
+                decoration: const InputDecoration(label: Text('Ende')),
+                firstDateTime: _booking.start,
+              ),
+              Padding(
+                padding: const EdgeInsets.symmetric(vertical: 16),
+                child: TimeAccount(_booking.targetWorkTime, _booking.workTime),
+              )
+            ],
           ),
-          ListTile(
-            title: DateTimeFormField(
-              booking.end,
-                  (d) {
-                print('new date time selected $d');
-              },
-              decoration: const InputDecoration(label: Text('Ende')),
-            ),
-          ),
-          ListTile(
-            title: TextFormField(
-              initialValue: booking.end == null ? null : dateTimeFormat.format(booking.end!),
-              decoration: const InputDecoration(hintText: 'Ende', label: Text('Ende')),
-              onTap: () async {
-                final date = booking.end ?? booking.start;
-                final d = await showDatePicker(context: context,
-                    initialDate: date,
-                    firstDate: booking.start,
-                    lastDate: date.add(const Duration(days: 1)));
-                print('selected date '
-                    + (d == null ? '-' : d.toString()));
-                if (d != null) {
-                  final d = booking.end ?? booking.start;
-                  showTimePicker(context: context,
-                      initialTime: TimeOfDay(hour: d.hour, minute: d.minute)
-                  );
-                }
-              },
-            ),
-          ),
-        ],
+        ),
       )
     );
   }
 
-  void _save() {
+  void _setStart(DateTime newDate) {
+    _booking.start = newDate;
+    setState(() {
+      valid = _formKey.currentState!.validate();
+    });
+  }
+  void _setEnd(DateTime newDate) {
+    _booking.end = newDate;
+    setState(() {
+      valid = _formKey.currentState!.validate();
+    });
+  }
 
+  void _save() {
+    if (_formKey.currentState!.validate()) {
+      widget.booking.setMap(_booking.asMap());
+      Navigator.pop(context, widget.booking);
+    }
   }
 }

@@ -28,7 +28,9 @@ class BookingWidget extends StatelessWidget {
               },
             ),
           ),
-          Expanded(child: DailyBookingsList(todayBean, todayBean.delete))
+          Expanded(child: DailyBookingsList(todayBean,
+              todayBean.save,
+              todayBean.delete))
         ]
     );
   }

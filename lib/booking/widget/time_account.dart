@@ -11,14 +11,17 @@ class TimeAccount extends StatelessWidget {
   Widget build(BuildContext context) {
     final divToday = done - target;
     final textStyle = Theme.of(context).textTheme.subtitle1;
+    final headStyle = Theme.of(context).textTheme.headline6;
     final doneAt = DateTime.now().subtract(done).add(target);
 
     return Table(
       children: [
-        const TableRow(
+        TableRow(
           children: [
-            Center(child: Icon(Icons.hourglass_top, size: 32)),
-            Center(child: Icon(Icons.hourglass_bottom, size: 32,)),
+            Center(child: Text('Soll', style: headStyle,)),
+            Center(child: Text('Ist', style: headStyle,)),
+            //Center(child: Icon(Icons.hourglass_top, size: 32)),
+            //Center(child: Icon(Icons.hourglass_bottom, size: 32,)),
           ]
         ),
         TableRow(children: [

@@ -78,4 +78,9 @@ class TodayBean extends ValueNotifier<List<TimeBooking>> {
     notifyListeners();
     return _timeBookingDao.deleteEntity(booking);
   }
+  Future<TimeBooking> save(TimeBooking booking) async {
+    final result = await _timeBookingDao.save(booking);
+    reload();
+    return result;
+  }
 }
