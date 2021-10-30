@@ -18,7 +18,7 @@ DateTime? parseDateTime(dynamic v) {
 }
 
 /// Returns the value of an ENUM as String, otherwise null.
-String? enumToString(dynamic e) => e == null ? null : e.toString().split('.').last;
+String? enumToString(dynamic e) => e?.toString().split('.').last;
 /// Returns the first matching ENUM to the given String
 T? parseEnum<T>(String? v, List<T> enumValues) {
   if (v == null) return null;

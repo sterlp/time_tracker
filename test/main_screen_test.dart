@@ -1,19 +1,10 @@
-import 'package:dependency_container/dependency_container.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:time_tracker/home/page/home_page.dart';
 
 import 'package:time_tracker/main.dart';
 
 import 'test_helper.dart';
 
 void main() {
-  Future<AppContainer>? _container;
-
-  setUpAll(() {
-    _container = initTestContext();
-  });
-
   testWidgets('Start App should show Loading', (WidgetTester tester) async {
     // GIVEN
     await tester.pumpWidget(MyApp());

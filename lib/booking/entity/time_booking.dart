@@ -29,11 +29,12 @@ class TimeBooking extends AbstractEntity {
   }
 
   void setMap(Map<String, dynamic> values) {
-    id = values['id'] as int;
+    if (values['id'] != null)id = values['id'] as int ;
     start = parseDateTime(values['start_date'])!;
     end = parseDateTime(values['end_date']);
     targetWorkTime = Duration(minutes: values[DbBookingTableV2.targetHoursInMin] as int);
   }
+
   Map<String, dynamic> asMap() {
     final value = this;
     return {

@@ -56,8 +56,6 @@ class DbProvider {
   }
 
   Future<void> close() async {
-    if (_db != null)  {
-      return await (await _db!).close();
-    }
+    if (_db != null) await _db!.close();
   }
 }

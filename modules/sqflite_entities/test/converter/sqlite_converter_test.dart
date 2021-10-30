@@ -3,8 +3,8 @@ import 'package:sqflite_entities/converter/sqlite_converter.dart';
 
 import '../util/date_utils.dart';
 
-main() {
-  var now = dateTimePrecisionMilliseconds(DateTime.now());
+void main() {
+  final now = dateTimePrecisionMilliseconds(DateTime.now());
 
   test('Test dateTimeToInt', () {
     expect(dateTimeToInt(null), isNull);

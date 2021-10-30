@@ -1,9 +1,5 @@
-import 'package:flutter/foundation.dart';
-import 'package:flutter/material.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:sqflite_entities/dao/abstract_base_dao.dart';
-import 'package:sqflite_entities/entity/abstract_entity.dart';
-import 'package:sqflite_entities/entity/attached_entity.dart';
 
 abstract class AbstractMapDao extends AbstractBaseDao<String> {
 

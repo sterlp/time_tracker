@@ -23,7 +23,7 @@ class TimerButton extends StatefulWidget {
 class _TimerButtonState extends State<TimerButton> {
   Timer? _refreshTimer;
   final _headerFormat = DateFormat('EEEE, dd.MM.yyyy');
-  var now = DateTimeUtil.precisionMinutes(DateTime.now());
+  var _now = DateTimeUtil.precisionMinutes(DateTime.now());
 
   @override
   void initState() {
@@ -31,12 +31,13 @@ class _TimerButtonState extends State<TimerButton> {
       const Duration(seconds: 5),
         (timer) {
         final newNow  = DateTimeUtil.precisionMinutes(DateTime.now());
-        if (newNow.millisecondsSinceEpoch - now.millisecondsSinceEpoch > 1) {
+        if (newNow.millisecondsSinceEpoch - _now.millisecondsSinceEpoch > 1) {
           if (mounted) {
+            widget.todayBean.changeDay(newNow);
             setState(() {
-              now = newNow;
+              _now = newNow;
             });
-            print('Update $now');
+            print('Update $_now');
           }
         }
       }
@@ -64,11 +65,11 @@ class _TimerButtonState extends State<TimerButton> {
           children: [
             Padding(
                 padding: const EdgeInsets.fromLTRB(0, 16, 0, 0),
-                child: Text(_headerFormat.format(now),
+                child: Text(_headerFormat.format(_now),
                     style: textStyle)),
             Padding(
                 padding: const EdgeInsets.fromLTRB(0, 0, 0, 24),
-                child: Text('${toHoursWithMinutes(now)} Uhr',
+                child: Text('${toHoursWithMinutes(_now)} Uhr',
                     style: textStyle)),
             Stack(
               alignment: AlignmentDirectional.center,
@@ -106,7 +107,7 @@ class _TimerButtonState extends State<TimerButton> {
     Widget text;
     final today = widget.todayBean;
     if (today.hasCurrentBooking) {
-      final total = totalWorkTime;
+      // final total = totalWorkTime;
       text = Text('Stopp',
         style: Theme.of(context).textTheme.headline4,);
     } else {

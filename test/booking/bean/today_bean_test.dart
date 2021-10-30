@@ -174,7 +174,7 @@ Future<void> main() async {
     await testData.newBooking(-2, null);
     await testData.newBooking(-1, null);
     // WHEN
-    final bookings = await subject.reload();
+    await subject.reload();
     subject.stopBooking();
     // THEN
     expect(subject.hasCurrentBooking, isTrue);

@@ -22,15 +22,20 @@ class BookingWidgetPage extends StatelessWidget {
               builder: (context, value, child) {
                 final startTime = value.isNotEmpty ? value.first.start : null;
                 return DailyConfigOverview(
-                    todayBean.workHours,
-                    startTime,
-                    todayBean.sumTimeBookingsWorkTime());
+                  todayBean.workHours,
+                  startTime,
+                  todayBean.sumTimeBookingsWorkTime()
+                );
               },
             ),
           ),
-          Expanded(child: DailyBookingsList(todayBean,
+          Expanded(
+            child: DailyBookingsList(
+              todayBean,
               todayBean.save,
-              todayBean.delete))
+              todayBean.delete
+            )
+          )
         ]
     );
   }

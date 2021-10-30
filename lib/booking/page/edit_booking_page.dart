@@ -41,7 +41,7 @@ class _EditBookingPageState extends State<EditBookingPage> {
   @override
   Widget build(BuildContext context) {
     _log.debug('build ...');
-    const bold = TextStyle(fontWeight: FontWeight.bold);
+    // const bold = TextStyle(fontWeight: FontWeight.bold);
 
     return Scaffold(
       appBar: AppBar(

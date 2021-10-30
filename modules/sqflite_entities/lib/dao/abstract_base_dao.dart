@@ -1,7 +1,4 @@
-import 'package:flutter/foundation.dart';
 import 'package:sqflite/sqflite.dart';
-import 'package:sqflite_entities/entity/abstract_entity.dart';
-import 'package:sqflite_entities/entity/attached_entity.dart';
 
 abstract class AbstractBaseDao<KeyType> {
   final Database _db;

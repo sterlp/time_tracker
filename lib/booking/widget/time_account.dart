@@ -12,7 +12,7 @@ class TimeAccount extends StatelessWidget {
     final divToday = done - target;
     final textStyle = Theme.of(context).textTheme.subtitle1;
     final headStyle = Theme.of(context).textTheme.headline6;
-    final doneAt = DateTime.now().subtract(done).add(target);
+    // final doneAt = DateTime.now().subtract(done).add(target);
 
     return Table(
       children: [
