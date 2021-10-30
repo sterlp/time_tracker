@@ -17,8 +17,10 @@ class LabelTextWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final headerStyle = Theme.of(context).textTheme.subtitle1;
-    final valueStyle = DefaultTextStyle.of(context).style.apply(fontWeightDelta: 3);
+    final headerStyle = Theme.of(context).textTheme.subtitle2?.apply(
+        color: Theme.of(context).disabledColor);
+    final valueStyle = Theme.of(context).textTheme.subtitle1;
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [

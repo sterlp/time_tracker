@@ -12,6 +12,10 @@ class TimeAccount extends StatelessWidget {
     final divToday = done - target;
     final textStyle = Theme.of(context).textTheme.subtitle1;
     final headStyle = Theme.of(context).textTheme.headline6;
+
+    var c = Theme.of(context).primaryTextTheme.subtitle1?.color ?? Colors.black;
+    if (divToday.inMinutes > 0) c = Colors.green;
+    else if (divToday.inMinutes < 30) c = Colors.red;
     // final doneAt = DateTime.now().subtract(done).add(target);
 
     return Table(
@@ -20,13 +24,13 @@ class TimeAccount extends StatelessWidget {
           children: [
             Center(child: Text('Soll', style: headStyle,)),
             Center(child: Text('Ist', style: headStyle,)),
-            //Center(child: Icon(Icons.hourglass_top, size: 32)),
-            //Center(child: Icon(Icons.hourglass_bottom, size: 32,)),
           ]
         ),
         TableRow(children: [
-          Center(child: Text(toDurationHoursAndMinutes(divToday), style: textStyle,)),
-          Center(child: Text(toDurationHoursAndMinutes(done), style: textStyle))
+          Center(child: Text(toDurationHoursAndMinutes(divToday),
+            style: textStyle?.apply(color: c),)),
+          Center(child: Text(toDurationHoursAndMinutes(done),
+              style: textStyle))
         ]),
       ],
     );

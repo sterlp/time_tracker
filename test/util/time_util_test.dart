@@ -12,4 +12,11 @@ void main() {
     expect('11:20', toHoursAndMinutes(const Duration(hours: 11, minutes: 20)));
     expect('111:20', toHoursAndMinutes(const Duration(hours: 111, minutes: 20)));
   });
+
+  test('test toDurationHoursAndMinutes', () {
+    expect('0 Std 0 Min', toDurationHoursAndMinutes(Duration.zero));
+    expect('5 Std 0 Min', toDurationHoursAndMinutes(const Duration(hours: 5)));
+    expect('-3 Std -15 Min', toDurationHoursAndMinutes(
+        const Duration(hours: 5) - const Duration(hours: 8, minutes: 15)));
+  });
 }

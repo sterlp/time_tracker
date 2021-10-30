@@ -19,7 +19,7 @@ class DailyBookingsList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     String? lastDay;
-    final df = DateFormat('EEEE, dd.MM');
+    final df = DateFormat('EEEE, dd.MM', 'de');
     return ValueListenableBuilder<List<TimeBooking>>(
       valueListenable: items,
       builder: (context, value, child) {

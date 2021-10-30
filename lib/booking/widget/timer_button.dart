@@ -22,7 +22,7 @@ class TimerButton extends StatefulWidget {
 
 class _TimerButtonState extends State<TimerButton> {
   Timer? _refreshTimer;
-  final _headerFormat = DateFormat('EEEE, dd.MM.yyyy');
+  final _headerFormat = DateFormat('EEEE, dd.MM.yyyy', 'de');
   var _now = DateTimeUtil.precisionMinutes(DateTime.now());
 
   @override
