@@ -23,6 +23,11 @@ class _BookingListPageState extends State<BookingListPage> {
     _reload();
     super.initState();
   }
+  @override
+  void dispose() {
+    if (_bookings != null) _bookings!.dispose();
+    super.dispose();
+  }
 
   Future<void> _reload() async {
     final items = await widget._container.get<BookingService>().all();

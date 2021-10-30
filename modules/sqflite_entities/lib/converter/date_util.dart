@@ -19,15 +19,16 @@ class DateTimeUtil {
     else return f.format(d);
   }
 
-  static String formatWithString(DateTime? date, String format, Locale? locale) {
-    DateFormat? f = _formatterCache[format];
+  static String formatWithString(DateTime? date, String format, [Locale? locale]) {
+    final key = '$format$locale';
+    DateFormat? f = _formatterCache[key];
     if (f == null) {
       if (locale == null) {
         f = DateFormat(format);
       } else {
         f = DateFormat(format, locale.languageCode);
       }
-      _formatterCache[format] = f;
+      _formatterCache[key] = f;
     }
     return DateTimeUtil.format(date, f);
   }

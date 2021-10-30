@@ -1,9 +1,22 @@
 
-
 class DailyBookingStatistic {
-  final DateTime day;
-  final Duration workedMinutes;
+  final String day;
+  final DateTime start;
+  final DateTime? end;
+  final Duration workedTime;
   final Duration planedWorkTime;
 
-  DailyBookingStatistic(this.day, this.workedMinutes, this.planedWorkTime);
+  static Duration sumWorkedTime(List<DailyBookingStatistic> elements) {
+    return elements.map((e) => e.workedTime).reduce((v, e) => v + e);
+  }
+  static Duration sumOverHours(List<DailyBookingStatistic> elements) {
+    return elements.map((e) => e.overHours).reduce((v, e) => v + e);
+  }
+  DailyBookingStatistic(this.day,
+      this.start,
+      this.end,
+      this.workedTime,
+      this.planedWorkTime);
+
+  Duration get overHours => workedTime - planedWorkTime;
 }

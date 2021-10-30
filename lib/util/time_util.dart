@@ -21,7 +21,8 @@ String toHoursWithMinutes(DateTime? time) {
   }
 }
 /// h Std m Min
-String toDurationHoursAndMinutes(Duration duration) {
+String toDurationHoursAndMinutes(Duration? inDuration) {
+  final duration = inDuration ?? Duration.zero;
   final minutes = duration.inMinutes - duration.inHours * 60;
   return '${duration.inHours} Std $minutes Min';
 }

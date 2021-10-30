@@ -3,6 +3,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:time_tracker/booking/bean/today_bean.dart';
+import 'package:time_tracker/booking/dao/time_booking_dao.dart';
+import 'package:time_tracker/booking/page/bookings_by_week_page.dart';
 import 'package:time_tracker/booking/page/bookings_list_page.dart';
 import 'package:time_tracker/booking/page/booking_widget_page.dart';
 
@@ -17,30 +19,41 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   int _index = 0;
+  var _pages = <Widget>[];
 
   @override
   void initState() {
     super.initState();
+    final today = widget._container.get<TodayBean>();
+    _pages = [
+      BookingWidgetPage(today),
+      BookingsWeekPage(widget._container.get<TimeBookingDao>()),
+      BookingListPage(widget._container)
+    ];
     initializeDateFormatting();
   }
 
   @override
   Widget build(BuildContext context) {
-    final today = widget._container.get<TodayBean>();
+
     return Scaffold(
       appBar: AppBar(
         title: const Text('Time Tracker'),
       ),
-      body: _index == 0 ? BookingWidgetPage(today) : BookingListPage(widget._container),
+      body: _pages[_index],
       bottomNavigationBar: BottomNavigationBar(
         items: const <BottomNavigationBarItem>[
           BottomNavigationBarItem(
-            icon: Icon(Icons.today),
+            icon: Icon(Icons.calendar_today),
             label: 'Heute',
           ),
           BottomNavigationBarItem(
+            icon: Icon(Icons.calendar_view_week),
+            label: 'Wochensicht',
+          ),
+          BottomNavigationBarItem(
             icon: Icon(Icons.history),
-            label: 'Historie',
+            label: 'Buchungshistorie',
           ),
         ],
         currentIndex: _index,

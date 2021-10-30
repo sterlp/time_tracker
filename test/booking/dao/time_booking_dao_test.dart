@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:time_tracker/booking/dao/time_booking_dao.dart';
 import 'package:time_tracker/booking/entity/time_booking.dart';
+import 'package:time_tracker/booking/entity/time_booking_statistics.dart';
 
 import '../../test_helper.dart';
 
@@ -59,22 +60,24 @@ Future<void> main() async {
   test('Query daily stats', () async {
     // GIVEN
     await subject.saveAll([
-      TimeBooking(DateTime(2021, 3, 4, 9))..workTime = _time(7),
-      TimeBooking(DateTime(2021, 3, 3, 9))..workTime = _time(8),
-      TimeBooking(DateTime(2021, 3, 1, 8))..workTime = _time(4, minutes: 17),
-      TimeBooking(DateTime(2021, 3, 1, 14))..workTime = _time(2, minutes: 15)
+      TimeBooking(DateTime(2021, 3, 3, 9))..workTime = _time(7),
+      TimeBooking(DateTime(2021, 3, 2, 9))..workTime = _time(8),
+      TimeBooking(DateTime(2021, 3, 1, 8))..workTime = _time(4, minutes: 15),
+      TimeBooking(DateTime(2021, 3, 1, 13))..workTime = _time(2),
     ]);
     // WHEN
-    var stats = await subject.queryDailyStats(DateTime(2021, 3, 1, 8));
+    var stats = await subject.stats();
     // THEN
-    expect(stats.day, DateUtils.dateOnly(DateTime(2021, 3, 1, 8)));
-    expect(stats.planedWorkTime, const Duration(hours: 8));
-    expect(stats.workedMinutes, const Duration(minutes: (4 + 2) * 60 + 15 + 17));
+    expect(stats.length, 3);
+    var overHours = DailyBookingStatistic.sumOverHours(stats);
+    expect(overHours, equals(const Duration(hours: -2, minutes: -45)));
 
     // WHEN
-    stats = await subject.queryDailyStats(DateTime(2021, 3, 3, 12));
+    stats = await subject.stats(DateTime(2021, 3, 3));
     // THEN
-    expect(stats.workedMinutes, const Duration(hours: 8));
+    expect(stats.length, 2);
+    overHours = DailyBookingStatistic.sumOverHours(stats);
+    expect(overHours, equals(const Duration(hours: -1, minutes: -45)));
   });
 }
 Duration _time(int hours, {int minutes = 0}) {

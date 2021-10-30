@@ -27,22 +27,43 @@ class TimeBookingDao extends AbstractDao<TimeBooking> {
     );
   }
 
-  Future<DailyBookingStatistic> queryDailyStats(DateTime dateTime) async {
-    final result = await db.rawQuery('''
-SELECT 
-  sum(${DbBookingTableV2.workedHoursInMin}) as worked, 
-  max(${DbBookingTableV2.targetHoursInMin}) as planed 
-FROM $tableName 
-WHERE ${DbBookingTableV2.day} = ? 
-''', [dayFormat.format(dateTime)]);
-
-    if (result.isEmpty) {
-      return DailyBookingStatistic(DateUtils.dateOnly(dateTime), _zero, _zero);
+  Future<List<DailyBookingStatistic>> stats([DateTime? withoutDay]) async {
+    var query = '''
+SELECT
+  ${DbBookingTableV2.day} as ${DbBookingTableV2.day},
+  min(${DbBookingTableV2.startDate}) as ${DbBookingTableV2.startDate},
+  max(${DbBookingTableV2.endDate}) as ${DbBookingTableV2.endDate},
+  sum(${DbBookingTableV2.workedHoursInMin}) as worked,
+  max(${DbBookingTableV2.targetHoursInMin}) as planed
+FROM $tableName
+''';
+    final sortAndGroup = '''
+    GROUP BY ${DbBookingTableV2.day}
+    ORDER BY ${DbBookingTableV2.startDate} DESC
+    ''';
+    List<Map<String, Object?>> qResult;
+    final List<DailyBookingStatistic> result = [];
+    if (withoutDay == null) {
+      query += 'WHERE ${DbBookingTableV2.endDate} IS NOT NULL';
+      query += sortAndGroup;
+      qResult = await db.rawQuery(query);
     } else {
-      return DailyBookingStatistic(DateUtils.dateOnly(dateTime),
-          Duration(minutes: result[0]['worked']! as int),
-          Duration(minutes: result[0]['planed']! as int));
+      query += 'WHERE ${DbBookingTableV2.day} <> ? AND ${DbBookingTableV2.endDate} IS NOT NULL';
+      query += sortAndGroup;
+      qResult = await db.rawQuery(query, [dayFormat.format(withoutDay)]);
     }
+    if (qResult.isNotEmpty) {
+      for (final r in qResult) {
+        final t = DailyBookingStatistic(
+          r[DbBookingTableV2.day]! as String,
+          parseDateTime(r[DbBookingTableV2.startDate])!,
+          parseDateTime(r[DbBookingTableV2.endDate]),
+          Duration(minutes: r['worked']! as int),
+          Duration(minutes: r['planed']! as int));
+        result.add(t);
+      }
+    }
+    return result;
   }
 
   @override
