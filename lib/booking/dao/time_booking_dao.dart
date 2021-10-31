@@ -54,9 +54,10 @@ FROM $tableName
         final t = DailyBookingStatistic(
           r[DbBookingTableV2.day]! as String,
           parseDateTime(r[DbBookingTableV2.startDate])!,
-          parseDateTime(r[DbBookingTableV2.endDate]),
+          parseDateTime(r[DbBookingTableV2.endDate]) ?? DateTime.now(),
           Duration(minutes: r['worked']! as int),
-          Duration(minutes: r['planed']! as int));
+          Duration(minutes: r['planed']! as int)
+        );
         result.add(t);
       }
     }

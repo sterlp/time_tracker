@@ -87,8 +87,7 @@ class _BookingsWeekPageState extends State<BookingsWeekPage> {
           padding: padding,
           child: Row(
             children: [
-              Text('Überstunden gesamt:', style: headStyle,),
-              Expanded(child: Container()),
+              Expanded(child: Text('Überstunden gesamt:', style: headStyle,)),
               Text(toDurationHoursAndMinutes(overHoursTotal), textScaleFactor: 1.3,),
             ],
           ),
@@ -98,8 +97,7 @@ class _BookingsWeekPageState extends State<BookingsWeekPage> {
           padding: padding,
           child: Row(
             children: [
-              Text('Ø Arbeitszeit:', style: headStyle,),
-              Expanded(child: Container()),
+              Expanded(child: Text('Ø Arbeitszeit:', style: headStyle,)),
               Text(toDurationHoursAndMinutes(avgWorkTime), textScaleFactor: 1.3,),
             ],
           ),
@@ -109,8 +107,7 @@ class _BookingsWeekPageState extends State<BookingsWeekPage> {
           padding: padding,
           child: Row(
             children: [
-              Text('Ø Pausenzeit:', style: headStyle,),
-              Expanded(child: Container()),
+              Expanded(child: Text('Ø Pausenzeit:', style: headStyle,)),
               Text(toDurationHoursAndMinutes(avgBreakTime), textScaleFactor: 1.3,),
             ],
           ),
@@ -122,7 +119,7 @@ class _BookingsWeekPageState extends State<BookingsWeekPage> {
 
   Widget _buildWeekItem(DailyBookingStatistic item) {
     final headStyle = Theme.of(context).textTheme.headline6;
-    final breakTime = (item.end ?? DateTime.now()).difference(item.start) - item.workedTime;
+    final breakTime = item.end.difference(item.start) - item.workedTime;
 
     return Padding(
       padding: const EdgeInsets.all(10),
@@ -153,6 +150,7 @@ class _BookingsWeekPageState extends State<BookingsWeekPage> {
                 child: Row(
                   children: expandWidgets([
                     LabelTextWidget.ofDuration('Pause', breakTime),
+                    LabelTextWidget.ofDuration('Soll', item.planedWorkTime),
                   ]),
                 ),
               ),

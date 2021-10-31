@@ -2,7 +2,7 @@
 class DailyBookingStatistic {
   final String day;
   final DateTime start;
-  final DateTime? end;
+  final DateTime end;
   final Duration workedTime;
   final Duration planedWorkTime;
 
@@ -22,5 +22,5 @@ class DailyBookingStatistic {
       this.planedWorkTime);
 
   Duration get overHours => workedTime - planedWorkTime;
-  Duration get breakTime => (end ?? DateTime.now()).difference(start) - workedTime;
+  Duration get breakTime => end.difference(start) - workedTime;
 }

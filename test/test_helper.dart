@@ -23,12 +23,12 @@ Future<AppContainer> initTestContext() async {
   return initContext(dbProvider: initTestDB());
 }
 class CreditServiceMock with Mock implements ConfigDao {}
-class RewardServiceMock with Mock implements TimeBookingDao {}
+class TimeBookingDaoMock with Mock implements TimeBookingDao {}
 class BookingServiceMock with Mock implements BookingService {}
 
 class AppContextMock {
   final configDao = CreditServiceMock();
-  final timeBookingDao = RewardServiceMock();
+  final timeBookingDao = TimeBookingDaoMock();
   TimeTrackerConfig? config;
   TodayBean? todayBean;
 
