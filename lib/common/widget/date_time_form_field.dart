@@ -1,5 +1,6 @@
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:sqflite_entities/converter/date_util.dart';
 
 class DateTimeFormField extends StatelessWidget {
@@ -40,7 +41,8 @@ class DateTimeFormField extends StatelessWidget {
   }
 
   Future<void> _pickNewDate(BuildContext context) async {
-    final currentDate = dateTime ?? DateTime.now();
+    HapticFeedback.selectionClick();
+    final currentDate = dateTime ?? firstDateTime ?? DateTime.now();
     var newDate = await showDatePicker(context: context,
       initialDate: currentDate,
       firstDate: firstDateTime ?? currentDate.add(const Duration(days: -30)),

@@ -1,6 +1,7 @@
 import 'package:dependency_container/dependency_container.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:time_tracker/booking/bean/booking_service.dart';
 import 'package:time_tracker/booking/entity/time_booking.dart';
 import 'package:time_tracker/booking/page/edit_booking_page.dart';
@@ -54,6 +55,7 @@ class _BookingListPageState extends State<BookingListPage> {
         ),
         floatingActionButton: FloatingActionButton(
           onPressed: () async {
+            HapticFeedback.selectionClick();
             final saved = await showEditBookingPage(context);
             if (saved != null) _doSave(saved);
           },

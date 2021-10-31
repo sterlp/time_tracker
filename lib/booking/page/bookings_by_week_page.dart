@@ -51,20 +51,19 @@ class _BookingsWeekPageState extends State<BookingsWeekPage> {
     return ListView.builder(
       itemCount: value.length,
       itemBuilder: (context, index) {
-        final overHoursTotal = DailyBookingStatistic.sumOverHours(value);
-
         final item = value[index];
-        final headStyle = Theme.of(context).textTheme.headline6;
 
         if (index == 0) {
+          final headStyle = Theme.of(context).textTheme.headline6;
+          final overHoursTotal = DailyBookingStatistic.sumOverHours(value);
           return Column(
             children: [
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Text('Überstunden gesamt', style: headStyle,),
-            ),
-            Text(toDurationHoursAndMinutes(overHoursTotal), textScaleFactor: 1.3,),
-              _buildWeekItem(item)
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Text('Überstunden gesamt', style: headStyle,),
+              ),
+              Text(toDurationHoursAndMinutes(overHoursTotal), textScaleFactor: 1.3,),
+              _buildWeekItem(item),
             ],
           );
         } else {

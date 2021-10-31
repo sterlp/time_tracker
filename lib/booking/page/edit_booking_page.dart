@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
 import 'package:time_tracker/booking/entity/time_booking.dart';
 import 'package:time_tracker/booking/widget/time_account.dart';
@@ -100,18 +101,21 @@ class _EditBookingPageState extends State<EditBookingPage> {
     setState(() {
       valid = _formKey.currentState!.validate();
     });
+    HapticFeedback.selectionClick();
   }
   void _setEnd(DateTime newDate) {
     _booking.end = newDate;
     setState(() {
       valid = _formKey.currentState!.validate();
     });
+    HapticFeedback.selectionClick();
   }
 
   void _save() {
     if (_formKey.currentState!.validate()) {
       widget.booking.setMap(_booking.asMap());
       Navigator.pop(context, widget.booking);
+      HapticFeedback.selectionClick();
     }
   }
 }

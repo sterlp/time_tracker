@@ -22,23 +22,38 @@ void main() {
     expect(find.text('-3 Std -15 Min'), findsOneWidget);
   });
 
-  testWidgets('TimeAccount negativ color', (WidgetTester tester) async {
+  testWidgets('TimeAccount negativ color test', (WidgetTester tester) async {
     // GIVEN
     await tester.pumpWidget(const MaterialApp(
         title: 'test',
-        home: TimeAccount(Duration(hours: 8, minutes: 15), Duration(hours: 5)))
+        home: TimeAccount(Duration(hours: 7, minutes: 15), Duration(hours: 5)))
     );
     // THEN
-    var text = tester.widget<Text>(find.text('-3 Std -15 Min'));
+    var text = tester.widget<Text>(find.text('-2 Std -15 Min'));
     expect(text.style?.color, Colors.red);
+  });
 
-    // WHEN
+  testWidgets('TimeAccount positiv color test', (WidgetTester tester) async {
+    // Given
     await tester.pumpWidget(const MaterialApp(
         title: 'test',
         home: TimeAccount(Duration(hours: 4), Duration(hours: 5)))
     );
     // THEN
-    text = tester.widget<Text>(find.text('1 Std 0 Min'));
+    final text = tester.widget<Text>(find.text('1 Std 0 Min'));
     expect(text.style?.color, Colors.green);
   });
+
+  testWidgets('TimeAccount neutral color test', (WidgetTester tester) async {
+    // GIVEN
+    await tester.pumpWidget(MaterialApp(
+        title: 'test',
+        theme: ThemeData.dark(),
+        home: TimeAccount(Duration(hours: 4, minutes: 30), Duration(hours: 4)))
+    );
+    // THEN
+    final text = tester.widget<Text>(find.text('0 Std -30 Min'));
+    expect(text.style?.color, Colors.white);
+  });
+
 }

@@ -1,6 +1,7 @@
 import 'package:dependency_container/dependency_container.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:time_tracker/booking/bean/today_bean.dart';
 import 'package:time_tracker/booking/dao/time_booking_dao.dart';
@@ -30,7 +31,7 @@ class _HomePageState extends State<HomePage> {
       BookingsWeekPage(widget._container.get<TimeBookingDao>()),
       BookingListPage(widget._container)
     ];
-    initializeDateFormatting();
+    initializeDateFormatting('de');
   }
 
   @override
@@ -58,7 +59,10 @@ class _HomePageState extends State<HomePage> {
         ],
         currentIndex: _index,
         //selectedItemColor: Colors.amber[800],
-        onTap: (value) => setState(() => _index = value),
+        onTap: (value) {
+          setState(() => _index = value);
+          HapticFeedback.selectionClick();
+        },
       ),
     );
   }

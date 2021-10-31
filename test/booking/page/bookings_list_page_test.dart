@@ -2,6 +2,7 @@
 import 'package:dependency_container/dependency_container.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:intl/date_symbol_data_local.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:time_tracker/booking/bean/booking_service.dart';
 import 'package:time_tracker/booking/entity/time_booking.dart';
@@ -14,6 +15,7 @@ void main() {
   BookingServiceMock _bookingServiceMock = BookingServiceMock();
   List<TimeBooking> _bookings = [];
   setUpAll(() {
+    initializeDateFormatting();
     _container = AppContainer();
     _bookingServiceMock = BookingServiceMock();
     _container.add<BookingService>(_bookingServiceMock);

@@ -48,8 +48,10 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Time Tracker',
+      theme: ThemeData.dark(),
       supportedLocales: const [
         Locale('de', 'DE'),
+        Locale('de', ''),
         Locale('en', ''),
       ],
       localizationsDelegates: const [
