@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:sqflite_entities/converter/date_util.dart';
@@ -24,7 +23,7 @@ class DateTimeFormField extends StatelessWidget {
   Widget build(BuildContext context) {
     if (dateTime != null) {
       _controller.text = DateTimeUtil.formatWithString(dateTime,
-          'EEEE, dd.MM.yyyy, HH:mm', null) + ' Uhr';
+          'EEEE, dd.MM.yyyy, HH:mm') + ' Uhr';
     }
     return TextFormField(
       controller: _controller,

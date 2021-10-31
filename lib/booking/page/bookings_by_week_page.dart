@@ -1,6 +1,5 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 import 'package:sqflite_entities/converter/date_util.dart';
 import 'package:time_tracker/booking/dao/time_booking_dao.dart';
 import 'package:time_tracker/booking/entity/time_booking_statistics.dart';
@@ -19,7 +18,7 @@ class BookingsWeekPage extends StatefulWidget {
 
 class _BookingsWeekPageState extends State<BookingsWeekPage> {
   final _stats = ValueNotifier<List<DailyBookingStatistic>?>(null);
-  final _df = DateFormat('EEEE, dd.MM.yyyy', 'DE');
+  final _df = DateTimeUtil.getFormat('EEEE, dd.MM.yyyy', 'de');
   Future<void> _reload() async {
     _stats.value = await widget._bookingDao.stats();
   }

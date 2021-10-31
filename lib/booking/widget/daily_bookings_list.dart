@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
+import 'package:sqflite_entities/converter/date_util.dart';
 import 'package:time_tracker/booking/entity/time_booking.dart';
 import 'package:time_tracker/booking/widget/time_booking_list_item.dart';
 import 'package:time_tracker/common/widget/divider_with_label.dart';
@@ -19,7 +19,7 @@ class DailyBookingsList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     String? lastDay;
-    final df = DateFormat('EEEE, dd.MM', 'de');
+    final df = DateTimeUtil.getFormat('EEEE, dd.MM', 'de');
     return ValueListenableBuilder<List<TimeBooking>>(
       valueListenable: items,
       builder: (context, value, child) {

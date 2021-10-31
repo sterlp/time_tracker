@@ -4,7 +4,6 @@ import 'dart:math';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:intl/intl.dart';
 import 'package:sqflite_entities/converter/date_util.dart';
 import 'package:time_tracker/booking/bean/today_bean.dart';
 import 'package:time_tracker/booking/widget/time_account.dart';
@@ -22,7 +21,7 @@ class TimerButton extends StatefulWidget {
 
 class _TimerButtonState extends State<TimerButton> {
   Timer? _refreshTimer;
-  final _headerFormat = DateFormat('EEEE, dd.MM.yyyy', 'de');
+  final _headerFormat = DateTimeUtil.getFormat('EEEE, dd.MM.yyyy', 'de');
   var _now = DateTimeUtil.precisionMinutes(DateTime.now());
 
   @override

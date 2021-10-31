@@ -3,6 +3,8 @@ import 'dart:developer';
 import 'package:flutter/foundation.dart';
 
 class LoggerFactory {
+  LoggerFactory._();
+
   static Logger get<T>() {
     return getWithName(T.toString());
   }

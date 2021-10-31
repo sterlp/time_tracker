@@ -29,7 +29,7 @@ void main() {
         home: TimeAccount(Duration(hours: 7, minutes: 15), Duration(hours: 5)))
     );
     // THEN
-    var text = tester.widget<Text>(find.text('-2 Std -15 Min'));
+    final text = tester.widget<Text>(find.text('-2 Std -15 Min'));
     expect(text.style?.color, Colors.red);
   });
 
@@ -49,7 +49,7 @@ void main() {
     await tester.pumpWidget(MaterialApp(
         title: 'test',
         theme: ThemeData.dark(),
-        home: TimeAccount(Duration(hours: 4, minutes: 30), Duration(hours: 4)))
+        home: const TimeAccount(Duration(hours: 4, minutes: 30), Duration(hours: 4)))
     );
     // THEN
     final text = tester.widget<Text>(find.text('0 Std -30 Min'));

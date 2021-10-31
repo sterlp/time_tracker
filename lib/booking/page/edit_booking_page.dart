@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:intl/intl.dart';
+import 'package:sqflite_entities/converter/date_util.dart';
 import 'package:time_tracker/booking/entity/time_booking.dart';
 import 'package:time_tracker/booking/widget/time_account.dart';
 import 'package:time_tracker/common/widget/date_time_form_field.dart';
@@ -19,7 +19,7 @@ Future<TimeBooking?> showEditBookingPage(
 
 class EditBookingPage extends StatefulWidget {
   final TimeBooking booking;
-  final dateTimeFormat = DateFormat('EEEE dd.MM.yyy HH:mm');
+  final dateTimeFormat = DateTimeUtil.getFormat('EEEE dd.MM.yyyy HH:mm', 'de');
 
   EditBookingPage(this.booking, {Key? key}) : super(key: key);
 

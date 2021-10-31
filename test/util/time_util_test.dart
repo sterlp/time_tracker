@@ -1,5 +1,7 @@
 
 import 'package:flutter_test/flutter_test.dart';
+import 'package:intl/intl.dart';
+import 'package:sqflite_entities/converter/date_util.dart';
 import 'package:time_tracker/util/time_util.dart';
 
 void main() {
@@ -18,5 +20,13 @@ void main() {
     expect('5 Std 0 Min', toDurationHoursAndMinutes(const Duration(hours: 5)));
     expect('-3 Std -15 Min', toDurationHoursAndMinutes(
         const Duration(hours: 5) - const Duration(hours: 8, minutes: 15)));
+  });
+
+  test('test format cache', () {
+    // GIVEN
+    expect(DateFormat('yyyy'), isNot(DateFormat('yyyy')));
+    // THEN
+    expect(DateTimeUtil.getFormat('yyyy'), DateTimeUtil.getFormat('yyyy'));
+    expect(DateTimeUtil.getFormat('yyyy'), DateTimeUtil.getFormat('yyyy'));
   });
 }
