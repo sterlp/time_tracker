@@ -12,6 +12,9 @@ class DailyBookingStatistic {
   static Duration sumOverHours(List<DailyBookingStatistic> elements) {
     return elements.map((e) => e.overHours).reduce((v, e) => v + e);
   }
+  static Duration sumBreakTime(List<DailyBookingStatistic> value) {
+    return value.map((e) => e.breakTime).reduce((v, e) => v + e);
+  }
   DailyBookingStatistic(this.day,
       this.start,
       this.end,
@@ -19,4 +22,5 @@ class DailyBookingStatistic {
       this.planedWorkTime);
 
   Duration get overHours => workedTime - planedWorkTime;
+  Duration get breakTime => (end ?? DateTime.now()).difference(start) - workedTime;
 }

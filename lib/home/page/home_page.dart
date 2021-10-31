@@ -39,7 +39,7 @@ class _HomePageState extends State<HomePage> {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Time Tracker'),
+        title: const Text('Time Tracker Zeiterfassung'),
       ),
       body: _pages[_index],
       bottomNavigationBar: BottomNavigationBar(

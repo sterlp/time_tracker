@@ -53,15 +53,9 @@ class _BookingsWeekPageState extends State<BookingsWeekPage> {
         final item = value[index];
 
         if (index == 0) {
-          final headStyle = Theme.of(context).textTheme.headline6;
-          final overHoursTotal = DailyBookingStatistic.sumOverHours(value);
           return Column(
             children: [
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Text('Überstunden gesamt', style: headStyle,),
-              ),
-              Text(toDurationHoursAndMinutes(overHoursTotal), textScaleFactor: 1.3,),
+              _buildHeader(value),
               _buildWeekItem(item),
             ],
           );
@@ -69,6 +63,60 @@ class _BookingsWeekPageState extends State<BookingsWeekPage> {
           return _buildWeekItem(item);
         }
       }
+    );
+  }
+
+  Widget _buildHeader(List<DailyBookingStatistic> value) {
+    const padding = EdgeInsets.fromLTRB(16, 8, 16, 0);
+    final headStyle = Theme.of(context).textTheme.headline6;
+    final overHoursTotal = DailyBookingStatistic.sumOverHours(value);
+    var avgWorkTime = Duration.zero;
+    var avgBreakTime = Duration.zero;
+
+    if (value.isNotEmpty) {
+      avgWorkTime = Duration(
+        minutes: (DailyBookingStatistic.sumWorkedTime(value).inMinutes / value.length).round(),
+      );
+      avgBreakTime = Duration(
+        minutes: (DailyBookingStatistic.sumBreakTime(value).inMinutes / value.length).round(),
+      );
+    }
+    return Column(
+      children: [
+        Padding(
+          padding: padding,
+          child: Row(
+            children: [
+              Text('Überstunden gesamt:', style: headStyle,),
+              Expanded(child: Container()),
+              Text(toDurationHoursAndMinutes(overHoursTotal), textScaleFactor: 1.3,),
+            ],
+          ),
+        ),
+
+        Padding(
+          padding: padding,
+          child: Row(
+            children: [
+              Text('Ø Arbeitszeit:', style: headStyle,),
+              Expanded(child: Container()),
+              Text(toDurationHoursAndMinutes(avgWorkTime), textScaleFactor: 1.3,),
+            ],
+          ),
+        ),
+
+        Padding(
+          padding: padding,
+          child: Row(
+            children: [
+              Text('Ø Pausenzeit:', style: headStyle,),
+              Expanded(child: Container()),
+              Text(toDurationHoursAndMinutes(avgBreakTime), textScaleFactor: 1.3,),
+            ],
+          ),
+        ),
+
+      ],
     );
   }
 
