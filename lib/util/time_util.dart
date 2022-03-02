@@ -6,14 +6,14 @@ int durationToMinutes(Duration? d) {
   }
 }
 
-/// Returns the [duration] as <b>hh:mm</b> <code>String</code>.
+/// Returns the [duration] as <b>HH:mm</b> <code>String</code>.
 String toHoursAndMinutes(Duration duration) {
   final hours = duration.inHours;
   final minutes = duration.inMinutes - hours * 60;
   return '${_padWith0(hours)}:${_padWith0(minutes)}';
 }
 
-/// Returns 00:00
+/// Returns the time as <b>00:00</b>
 String toHoursWithMinutes(DateTime? time) {
   if (time == null) return '';
   else {

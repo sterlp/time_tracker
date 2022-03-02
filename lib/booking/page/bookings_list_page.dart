@@ -55,7 +55,7 @@ class _BookingListPageState extends State<BookingListPage> {
         ),
         floatingActionButton: FloatingActionButton(
           onPressed: () async {
-            HapticFeedback.selectionClick();
+            Feedback.forTap(context);
             final saved = await showEditBookingPage(context);
             if (saved != null) _doSave(saved);
           },

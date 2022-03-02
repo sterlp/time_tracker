@@ -49,7 +49,7 @@ class _EditBookingPageState extends State<EditBookingPage> {
         title: Text(_booking.id == null ? 'Neue Buchung' : 'Buchung bearbeiten'),
         actions: [
           IconButton(onPressed:
-            valid ? _save : null,
+            valid ? Feedback.wrapForTap(_save, context) : null,
             icon: const Icon(Icons.done)),
         ],
       ),
@@ -101,21 +101,18 @@ class _EditBookingPageState extends State<EditBookingPage> {
     setState(() {
       valid = _formKey.currentState!.validate();
     });
-    HapticFeedback.selectionClick();
   }
   void _setEnd(DateTime newDate) {
     _booking.end = newDate;
     setState(() {
       valid = _formKey.currentState!.validate();
     });
-    HapticFeedback.selectionClick();
   }
 
   void _save() {
     if (_formKey.currentState!.validate()) {
       widget.booking.setMap(_booking.asMap());
       Navigator.pop(context, widget.booking);
-      HapticFeedback.selectionClick();
     }
   }
 }

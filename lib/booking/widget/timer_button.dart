@@ -116,7 +116,7 @@ class _TimerButtonState extends State<TimerButton> {
       MediaQuery.of(context).size.height) / 2.5;
 
     return ElevatedButton(
-      onPressed: _startPressed,
+      onPressed: Feedback.wrapForTap(_startPressed, context),
       child: text,
       style: ElevatedButton.styleFrom(
         enableFeedback: true,
@@ -134,6 +134,5 @@ class _TimerButtonState extends State<TimerButton> {
     } else {
       today.startNewBooking();
     }
-    HapticFeedback.heavyImpact();
   }
 }

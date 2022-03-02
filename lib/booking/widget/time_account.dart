@@ -28,9 +28,9 @@ class TimeAccount extends StatelessWidget {
         ),
         TableRow(children: [
           Center(child: Text(toDurationHoursAndMinutes(divToday),
-            style: textStyle?.apply(color: c),)),
+            style: textStyle?.apply(color: c),),),
           Center(child: Text(toDurationHoursAndMinutes(done),
-              style: textStyle))
+              style: textStyle,),)
         ]),
       ],
     );

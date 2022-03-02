@@ -9,7 +9,9 @@ class MapDbV2 extends DbUpdate {
   MapDbV2() : super(2);
 
   @override
-  Future<void> update(Database db) {
-    return db.execute('DELETE FROM ${MapDbV1.tableName};');
+  Future<void> update(Database db) async {
+    await db.execute('INSERT INTO ${MapDbV1.tableName} VALUES ("key1", "value1")');
+    await db.execute('INSERT INTO ${MapDbV1.tableName} VALUES ("key2", "value2")');
+    await db.execute('INSERT INTO ${MapDbV1.tableName} VALUES ("key3", null)');
   }
 }

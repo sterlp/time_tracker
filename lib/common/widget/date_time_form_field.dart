@@ -28,7 +28,7 @@ class DateTimeFormField extends StatelessWidget {
     return TextFormField(
       controller: _controller,
       readOnly: true,
-      onTap: () => _pickNewDate(context),
+      onTap: () => Feedback.wrapForTap(() => _pickNewDate(context), context) ,
       decoration: decoration,
       validator: _validate,
     );
@@ -40,7 +40,6 @@ class DateTimeFormField extends StatelessWidget {
   }
 
   Future<void> _pickNewDate(BuildContext context) async {
-    HapticFeedback.selectionClick();
     final currentDate = dateTime ?? firstDateTime ?? DateTime.now();
     var newDate = await showDatePicker(context: context,
       initialDate: currentDate,
@@ -50,7 +49,7 @@ class DateTimeFormField extends StatelessWidget {
     );
     if (newDate != null) {
       final newTime = await showTimePicker(context: context,
-          initialTime: TimeOfDay(hour: currentDate.hour, minute: currentDate.minute)
+        initialTime: TimeOfDay(hour: currentDate.hour, minute: currentDate.minute),
       );
       if (newTime != null) {
         newDate = DateTimeUtil.asDateTime(newDate, newTime);

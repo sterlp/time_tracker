@@ -23,21 +23,23 @@ void main() {
     await dbProvider?.close();
   });
 
-  test('Test count and delete', () async {
-    final subject = TestMapDao(db!);
-
-    expect(await subject.countAll(), 2);
-
-    expect(await subject.deleteAll(), 2);
-    expect(await subject.countAll(), 0);
-  });
-
   test('Test get Value', () async {
     final subject = TestMapDao(db!);
 
     expect(await subject.getValue('key1'), 'value1');
     expect(await subject.getValue('key2'), 'value2');
     expect(await subject.getValue('key3'), isNull);
+  });
+
+  test('Test count and delete', () async {
+    // GIVEN
+    final subject = TestMapDao(db!);
+    // THEN
+    expect(await subject.countAll(), 3);
+    // WHEN
+    expect(await subject.deleteAll(), 3);
+    // THEN
+    expect(await subject.countAll(), 0);
   });
 
   test('Test Set and Get Value', () async {
@@ -54,11 +56,11 @@ void main() {
   });
 
   test('Map load all', () async {
+    // GIVEN
     final subject = TestMapDao(db!);
-
-    await subject.setValue('key3', null);
+    // WHEN
     final m = await subject.loadAll();
-
+    // THEN
     expect(m.length, 3);
     expect(m['key1'], 'value1');
     expect(m['key2'], 'value2');
@@ -66,12 +68,14 @@ void main() {
   });
 
   test('Test getValueWithDefault', () async {
+    // GIVEN
     final subject = TestMapDao(db!);
-
+    // THEN
     expect(await subject.getValueWithDefault('foobar', 'a'), 'a');
 
-    expect(await subject.getValueWithDefault('key1', 'a'), 'value1');
-    await subject.setValue('key1', null);
-    expect(await subject.getValueWithDefault('key1', 'a'), 'a');
+    // WHEN
+    subject.setValue('key1', 'foo');
+    // THEN
+    expect(await subject.getValueWithDefault('key1', 'a'), 'foo');
   });
 }
