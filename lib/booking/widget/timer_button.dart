@@ -6,6 +6,7 @@ import 'package:flutter/services.dart';
 import 'package:sqflite_entities/converter/date_util.dart';
 import 'package:time_tracker/booking/bean/today_bean.dart';
 import 'package:time_tracker/booking/widget/time_account.dart';
+import 'package:time_tracker/common/feedback.dart';
 import 'package:time_tracker/util/time_util.dart';
 
 
@@ -116,7 +117,7 @@ class _TimerButtonState extends State<TimerButton> {
       MediaQuery.of(context).size.height) / 2.5;
 
     return ElevatedButton(
-      onPressed: Feedback.wrapForTap(_startPressed, context),
+      onPressed: FeedbackFixed.wrapTouch(_startPressed, context),
       child: text,
       style: ElevatedButton.styleFrom(
         enableFeedback: true,

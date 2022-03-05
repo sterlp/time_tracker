@@ -1,13 +1,12 @@
 import 'package:dependency_container/dependency_container.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:time_tracker/booking/bean/today_bean.dart';
 import 'package:time_tracker/booking/dao/time_booking_dao.dart';
 import 'package:time_tracker/booking/page/bookings_by_week_page.dart';
 import 'package:time_tracker/booking/page/bookings_list_page.dart';
 import 'package:time_tracker/booking/page/booking_widget_page.dart';
+import 'package:time_tracker/common/feedback.dart';
 
 class HomePage extends StatefulWidget {
   final AppContainer _container;
@@ -40,6 +39,14 @@ class _HomePageState extends State<HomePage> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Time Tracker Zeiterfassung'),
+        actions: [
+          /*IconButton(
+            onPressed: () {
+              Share.share('Fooo.csv', subject: 'Look what I made!');
+            },
+            icon: const Icon(Icons.download)
+          )*/
+        ],
       ),
       body: _pages[_index],
       bottomNavigationBar: BottomNavigationBar(
@@ -60,8 +67,8 @@ class _HomePageState extends State<HomePage> {
         currentIndex: _index,
         //selectedItemColor: Colors.amber[800],
         onTap: (value) {
+          FeedbackFixed.touch(context);
           setState(() => _index = value);
-          Feedback.forTap(context);
         },
       ),
     );

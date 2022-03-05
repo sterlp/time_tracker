@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:sqflite_entities/converter/date_util.dart';
+import 'package:time_tracker/common/feedback.dart';
 
 class DateTimeFormField extends StatelessWidget {
   final DateTime? dateTime;
@@ -28,7 +28,7 @@ class DateTimeFormField extends StatelessWidget {
     return TextFormField(
       controller: _controller,
       readOnly: true,
-      onTap: () => Feedback.wrapForTap(() => _pickNewDate(context), context) ,
+      onTap: FeedbackFixed.wrapTouch(() =>  _pickNewDate(context), context),
       decoration: decoration,
       validator: _validate,
     );

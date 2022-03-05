@@ -2,6 +2,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:time_tracker/booking/entity/time_booking.dart';
+import 'package:time_tracker/common/feedback.dart';
 import 'package:time_tracker/util/time_util.dart';
 
 Future<bool?> showConfirmDeleteBookingDialog(BuildContext context, TimeBooking booking) {
@@ -14,10 +15,10 @@ Future<bool?> showConfirmDeleteBookingDialog(BuildContext context, TimeBooking b
       title: const Text('Buchung Löschen?'),
       content: Text('Buchung von $bookingStart und Dauer: $bookingDuration.'),
       actions: [
-        TextButton(onPressed: () => Navigator.of(c).pop(false),
-            child: const Text('Nein')),
-        TextButton(onPressed: () => Navigator.of(c).pop(true),
-            child: const Text('Ja'))
+        TextButton(onPressed: FeedbackFixed.wrapTouch(() => Navigator.of(c).pop(false), c),
+            child: const Text('Nein'),),
+        TextButton(onPressed: FeedbackFixed.wrapTouch(() => Navigator.of(c).pop(true), c),
+            child: const Text('Ja'),),
       ],
     ),
   );

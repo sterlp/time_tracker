@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:sqflite_entities/converter/date_util.dart';
 import 'package:time_tracker/booking/entity/time_booking.dart';
 import 'package:time_tracker/booking/widget/time_account.dart';
+import 'package:time_tracker/common/feedback.dart';
 import 'package:time_tracker/common/widget/date_time_form_field.dart';
 import 'package:time_tracker/log/logger.dart';
 import 'package:time_tracker/util/time_util.dart';
@@ -49,8 +50,8 @@ class _EditBookingPageState extends State<EditBookingPage> {
         title: Text(_booking.id == null ? 'Neue Buchung' : 'Buchung bearbeiten'),
         actions: [
           IconButton(onPressed:
-            valid ? Feedback.wrapForTap(_save, context) : null,
-            icon: const Icon(Icons.done)),
+            valid ? FeedbackFixed.wrapTouch(_save, context) : null,
+            icon: const Icon(Icons.done),),
         ],
       ),
       body: Form(

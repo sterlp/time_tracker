@@ -3,7 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:time_tracker/booking/entity/time_booking.dart';
 import 'package:time_tracker/booking/page/edit_booking_page.dart';
 import 'package:time_tracker/booking/widget/delete_booking_dialog.dart';
-import 'package:time_tracker/common/list/dismissable_backgrounds.dart';
+import 'package:time_tracker/common/feedback.dart';
+import 'package:time_tracker/common/list/dismissible_backgrounds.dart';
 import 'package:time_tracker/util/time_util.dart';
 
 class TimeBookingListItem extends StatelessWidget {
@@ -32,12 +33,12 @@ class TimeBookingListItem extends StatelessWidget {
       title = Row(children: _expandItems([
           const Text('Buchung:'),
           Text(bookingDuration)
-        ])
+        ]),
       );
       subTitle = Text('Start: $bookingStart, Ende: ${toHoursWithMinutes(booking.end)} Uhr');
     }
     result = ListTile(
-      onLongPress: () => _editBooking(booking, context),
+      onLongPress: FeedbackFixed.wrapLongTouch(() => _editBooking(booking, context), context),
       leading: const Icon(Icons.lock_clock),
       title: title,
       subtitle: subTitle,
@@ -45,16 +46,18 @@ class TimeBookingListItem extends StatelessWidget {
 
     return Dismissible(
       key: Key(booking.id.toString()),
-      background: editDismissableBackground(context),
-      secondaryBackground: deleteDismissableBackground(context),
+      background: editDismissibleBackground(context),
+      secondaryBackground: deleteDismissibleBackground(context),
       child: result,
       onDismissed: (direction) {
+        FeedbackFixed.touch(context);
         deleteFn(booking);
       },
       confirmDismiss: (direction) async {
         if (direction == DismissDirection.endToStart) {
           return showConfirmDeleteBookingDialog(context, booking);
         }
+        FeedbackFixed.touch(context);
         _editBooking(booking, context);
         return false;
       },

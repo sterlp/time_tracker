@@ -1,7 +1,7 @@
 
 import 'package:flutter/material.dart';
 
-Widget deleteDismissableBackground(BuildContext context) {
+Widget deleteDismissibleBackground(BuildContext context) {
   return Container(color: Colors.red,
     child: Row(children: [
       Expanded(child: Container()),
@@ -12,7 +12,7 @@ Widget deleteDismissableBackground(BuildContext context) {
   );
 }
 
-Widget editDismissableBackground(BuildContext context) {
+Widget editDismissibleBackground(BuildContext context) {
   return Container(color: Colors.green,
     child: Row(children: [
       Container(width: 32,),
