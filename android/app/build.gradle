@@ -34,7 +34,7 @@ android {
 
     defaultConfig {
         applicationId "org.sterl.time_tracker"
-        minSdkVersion 16
+        minSdkVersion 23
         targetSdkVersion 31
         versionCode flutterVersionCode.toInteger()
         versionName flutterVersionName

@@ -1,12 +1,21 @@
+import 'dart:io';
+
+import 'package:csv/csv.dart';
 import 'package:dependency_container/dependency_container.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/date_symbol_data_local.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:share_plus/share_plus.dart';
+import 'package:sqflite_entities/converter/date_util.dart';
+import 'package:time_tracker/booking/bean/booking_service.dart';
 import 'package:time_tracker/booking/bean/today_bean.dart';
 import 'package:time_tracker/booking/dao/time_booking_dao.dart';
 import 'package:time_tracker/booking/page/bookings_by_week_page.dart';
 import 'package:time_tracker/booking/page/bookings_list_page.dart';
 import 'package:time_tracker/booking/page/booking_widget_page.dart';
 import 'package:time_tracker/common/feedback.dart';
+import 'package:time_tracker/log/logger.dart';
+import 'package:time_tracker/util/time_util.dart';
 
 class HomePage extends StatefulWidget {
   final AppContainer _container;
@@ -35,17 +44,45 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
+    final _log = LoggerFactory.get<HomePage>();
 
     return Scaffold(
       appBar: AppBar(
         title: const Text('Time Tracker Zeiterfassung'),
         actions: [
-          /*IconButton(
-            onPressed: () {
-              Share.share('Fooo.csv', subject: 'Look what I made!');
+          IconButton(
+            onPressed: () async {
+              // SUPER BETA
+              final directory = await getApplicationDocumentsDirectory();
+              var f = File('${directory.path}/Datenexport.csv');
+              if (await f.exists()) await f.delete();
+              //
+              final bs = widget._container.get<BookingService>();
+
+              final bookings = await bs.all();
+              final List<List<dynamic>?> result = [['Kalenderwoche', 'Tag', 'Wochentag', 'Start', 'Ende', 'Arbeitszeit']];
+              for (final b in bookings) {
+                result.add([
+                  b.start.weekday,
+                  b.day,
+                  b.start.toWeekdayString(),
+                  DateTimeUtil.formatWithString(b.start, 'dd.MM.yyyy HH:mm'),
+                  DateTimeUtil.formatWithString(b.end, 'dd.MM.yyyy HH:mm'),
+                  toHoursAndMinutes(b.workTime)]);
+              }
+
+              final csvData = const ListToCsvConverter(
+                fieldDelimiter: ';'
+              ).convert(result);
+              await f.create();
+              f = await f.writeAsString(csvData, flush: true);
+              _log.info("Written file ${f.lengthSync()} ${f.path}");
+              await Share.shareFiles(
+                  [f.path],
+                  subject: 'Datenexport.csv', mimeTypes: ['text/csv']);
             },
-            icon: const Icon(Icons.download)
-          )*/
+            icon: const Icon(Icons.download),
+          ),
         ],
       ),
       body: _pages[_index],
