@@ -8,6 +8,7 @@ import 'package:time_tracker/booking/bean/today_bean.dart';
 import 'package:time_tracker/booking/dao/time_booking_dao.dart';
 import 'package:time_tracker/config/dao/config_dao.dart';
 import 'package:time_tracker/db/time_traker_db.dart';
+import 'package:time_tracker/export/export_service.dart';
 import 'package:time_tracker/home/page/home_page.dart';
 import 'package:time_tracker/home/widget/loading_widget.dart';
 import 'package:time_tracker/log/logger.dart';
@@ -27,7 +28,9 @@ Future<AppContainer> initContext({Future<DbProvider>? dbProvider}) async {
   final todayBean = TodayBean(dao);
   todayBean.reload();
   result.add(todayBean);
-  result.add(BookingService(dao));
+  final bookingService = BookingService(dao);
+  result.add(bookingService);
+  result.add(ExportService(bookingService));
 
   await initializeDateFormatting('de_DE');
   return result;

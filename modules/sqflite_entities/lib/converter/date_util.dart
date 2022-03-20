@@ -48,7 +48,7 @@ class DateTimeUtil {
   }
   static DateTime asDateTime(DateTime newDate, TimeOfDay newTime) {
     return DateTime(newDate.year,
-      newDate.month, newDate.day, newTime.hour, newTime.minute
+      newDate.month, newDate.day, newTime.hour, newTime.minute,
     );
   }
 }
