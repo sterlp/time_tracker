@@ -1,5 +1,5 @@
 import 'dart:io';
-
+import 'package:sqflite_entities/entity/query.dart';
 import 'package:csv/csv.dart';
 import 'package:dependency_container/dependency_container.dart';
 import 'package:flutter/material.dart';
@@ -56,14 +56,14 @@ class _HomePageState extends State<HomePage> {
               final directory = await getApplicationDocumentsDirectory();
               var f = File('${directory.path}/Datenexport.csv');
               if (await f.exists()) await f.delete();
-              //
+
               final bs = widget._container.get<BookingService>();
 
-              final bookings = await bs.all();
+              final bookings = await bs.all(order: SortOrder.ASC);
               final List<List<dynamic>?> result = [['Kalenderwoche', 'Tag', 'Wochentag', 'Start', 'Ende', 'Arbeitszeit']];
               for (final b in bookings) {
                 result.add([
-                  b.start.weekday,
+                  'KW${b.start.weekOfYear}',
                   b.day,
                   b.start.toWeekdayString(),
                   DateTimeUtil.formatWithString(b.start, 'dd.MM.yyyy HH:mm'),
@@ -79,7 +79,8 @@ class _HomePageState extends State<HomePage> {
               _log.info("Written file ${f.lengthSync()} ${f.path}");
               await Share.shareFiles(
                   [f.path],
-                  subject: 'Datenexport.csv', mimeTypes: ['text/csv']);
+                  subject: 'Datenexport.csv', mimeTypes: ['text/csv'],);
+              f.delete();
             },
             icon: const Icon(Icons.download),
           ),

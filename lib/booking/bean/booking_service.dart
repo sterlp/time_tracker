@@ -1,6 +1,7 @@
-
+import 'package:sqflite_entities/entity/query.dart';
 import 'package:time_tracker/booking/dao/time_booking_dao.dart';
 import 'package:time_tracker/booking/entity/time_booking.dart';
+import 'package:time_tracker/db/db_v2.dart';
 
 class BookingService {
   final TimeBookingDao _timeBookingDao;
@@ -15,8 +16,9 @@ class BookingService {
     return _timeBookingDao.save(b);
   }
 
-  Future<List<TimeBooking>> all() {
-    return _timeBookingDao.allOrderByStart();
+  Future<List<TimeBooking>> all({SortOrder order = SortOrder.DESC}) {
+    if (order == SortOrder.DESC) return _timeBookingDao.allOrderByStart();
+    else return _timeBookingDao.loadAll(orderBy: '${DbBookingTableV2.startDate} ASC');
   }
   Future<TimeBooking> delete(TimeBooking booking) {
     return _timeBookingDao.deleteEntity(booking);

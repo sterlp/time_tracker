@@ -44,11 +44,11 @@ abstract class AbstractDao<T extends AbstractEntity> {
       String? having,
       String? orderBy,
       int? limit,
-      int? offset}) async {
+      int? offset,}) async {
 
     final List<Map<String, dynamic>> results = await _db.query(tableName,
         where: where, whereArgs: whereArgs, groupBy: groupBy, having: having,
-        orderBy: orderBy, limit: limit, offset: offset);
+        orderBy: orderBy, limit: limit, offset: offset,);
 
     return results.map((e) => fromMap(e)).toList();
   }

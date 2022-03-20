@@ -12,6 +12,9 @@ class TimeBookingDao extends AbstractDao<TimeBooking> {
 
   TimeBookingDao(Database db) : super(db, DbBookingTableV2.table);
 
+  Future<List<TimeBooking>> all() {
+    return loadAll(orderBy: _orderByStartDate);
+  }
   Future<List<TimeBooking>> allOrderByStart() {
     return loadAll(orderBy: _orderByStartDate);
   }
