@@ -13,7 +13,7 @@ class TimeAccount extends StatelessWidget {
     final textStyle = Theme.of(context).textTheme.subtitle1;
     final headStyle = Theme.of(context).textTheme.headline6;
 
-    var c = Theme.of(context).primaryTextTheme.subtitle1?.color;
+    Color? c;
     if (divToday.inMinutes >= 0) c = Colors.green;
     else if (divToday.inMinutes < -45) c = Colors.red;
     // final doneAt = DateTime.now().subtract(done).add(target);
