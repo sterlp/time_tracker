@@ -65,7 +65,7 @@ class _TimerButtonState extends State<TimerButton> {
             Padding(
                 padding: const EdgeInsets.fromLTRB(0, 16, 0, 0),
                 child: Text(_headerFormat.format(_now),
-                    style: textStyle)),
+                    style: textStyle,),),
             Padding(
                 padding: const EdgeInsets.fromLTRB(0, 0, 0, 24),
                 child: Text('${toHoursWithMinutes(_now)} Uhr',

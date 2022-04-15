@@ -15,6 +15,9 @@ class BookingService {
   Future<TimeBooking> save(TimeBooking b) {
     return _timeBookingDao.save(b);
   }
+  Future<List<TimeBooking>> loadDay(DateTime dateTime) {
+    return _timeBookingDao.loadDay(dateTime);
+  }
 
   Future<List<TimeBooking>> all({SortOrder order = SortOrder.DESC}) {
     if (order == SortOrder.DESC) return _timeBookingDao.allOrderByStart();

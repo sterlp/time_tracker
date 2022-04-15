@@ -3,7 +3,7 @@ import 'package:sqflite_entities/converter/date_util.dart';
 import 'package:time_tracker/common/feedback.dart';
 
 class DateTimeFormField extends StatelessWidget {
-  final DateTime? dateTime;
+  DateTime? dateTime;
   final DateTime? firstDateTime;
   final DateTime? lastDateTime;
   final ValueChanged<DateTime> onChanged;
@@ -30,7 +30,7 @@ class DateTimeFormField extends StatelessWidget {
       readOnly: true,
       onTap: FeedbackFixed.wrapTouch(() =>  _pickNewDate(context), context),
       decoration: decoration,
-      validator: _validate,
+      validator: validator == null ? null : _validate,
     );
   }
 
@@ -45,14 +45,14 @@ class DateTimeFormField extends StatelessWidget {
       initialDate: currentDate,
       firstDate: firstDateTime ?? currentDate.add(const Duration(days: -30)),
       lastDate: lastDateTime ?? currentDate.add(const Duration(days: 30)),
-      confirmText: 'UHRZEIT WÄHLEN'
+      confirmText: 'UHRZEIT WÄHLEN',
     );
     if (newDate != null) {
       final newTime = await showTimePicker(context: context,
         initialTime: TimeOfDay(hour: currentDate.hour, minute: currentDate.minute),
       );
       if (newTime != null) {
-        newDate = DateTimeUtil.asDateTime(newDate, newTime);
+        dateTime = newDate = DateTimeUtil.asDateTime(newDate, newTime);
         _controller.text = DateTimeUtil.formatWithString(newDate,
             'EEEE, dd.MM.yyyy, HH:mm', null) + ' Uhr';
         onChanged(newDate);

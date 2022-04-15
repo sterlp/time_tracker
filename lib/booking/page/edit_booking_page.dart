@@ -1,16 +1,15 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:sqflite_entities/converter/date_util.dart';
 import 'package:time_tracker/booking/entity/time_booking.dart';
 import 'package:time_tracker/booking/widget/time_account.dart';
 import 'package:time_tracker/common/feedback.dart';
 import 'package:time_tracker/common/widget/date_time_form_field.dart';
+import 'package:time_tracker/common/widget/form/duration_form_field.dart';
 import 'package:time_tracker/log/logger.dart';
-import 'package:time_tracker/util/time_util.dart';
 
 Future<TimeBooking?> showEditBookingPage(
     BuildContext context,
-    {TimeBooking? booking}) {
+    {TimeBooking? booking,}) {
   booking ??= TimeBooking.now();
   return Navigator.push<TimeBooking?>(
     context,
@@ -32,7 +31,7 @@ class _EditBookingPageState extends State<EditBookingPage> {
   final _log = LoggerFactory.get<EditBookingPage>();
   final _formKey = GlobalKey<FormState>();
   final _booking = TimeBooking.now();
-  bool valid = false;
+  bool _valid = false;
 
   @override
   void initState() {
@@ -42,15 +41,12 @@ class _EditBookingPageState extends State<EditBookingPage> {
 
   @override
   Widget build(BuildContext context) {
-    _log.debug('build ...');
-    // const bold = TextStyle(fontWeight: FontWeight.bold);
-
     return Scaffold(
       appBar: AppBar(
         title: Text(_booking.id == null ? 'Neue Buchung' : 'Buchung bearbeiten'),
         actions: [
           IconButton(onPressed:
-            valid ? FeedbackFixed.wrapTouch(_save, context) : null,
+            _valid ? FeedbackFixed.wrapTouch(_save, context) : null,
             icon: const Icon(Icons.done),),
         ],
       ),
@@ -61,11 +57,6 @@ class _EditBookingPageState extends State<EditBookingPage> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              TextFormField(
-                initialValue: toDurationHoursAndMinutes(_booking.targetWorkTime),
-                decoration: const InputDecoration(label: Text('Tagessoll')),
-                readOnly: true,
-              ),
               DateTimeFormField(
                 _booking.start,
                 _setStart,
@@ -86,6 +77,15 @@ class _EditBookingPageState extends State<EditBookingPage> {
                 decoration: const InputDecoration(label: Text('Ende')),
                 firstDateTime: _booking.start,
               ),
+              DurationFormField(
+                duration: _booking.targetWorkTime,
+                decoration: const InputDecoration(label: Text('Tagessoll')),
+                onChanged: _setWorkTime,
+                validator: (d) {
+                  if (d == null || d.inMinutes == 0) return 'Arbeitszeit muss größer 0 sein.';
+                  return null;
+                },
+              ),
               Padding(
                 padding: const EdgeInsets.symmetric(vertical: 16),
                 child: TimeAccount(_booking.targetWorkTime, _booking.workTime),
@@ -97,17 +97,23 @@ class _EditBookingPageState extends State<EditBookingPage> {
     );
   }
 
+  void _setWorkTime(Duration workTime) {
+    _booking.targetWorkTime = workTime;
+    _validate();
+  }
   void _setStart(DateTime newDate) {
     _booking.start = newDate;
-    setState(() {
-      valid = _formKey.currentState!.validate();
-    });
+    _validate();
   }
   void _setEnd(DateTime newDate) {
     _booking.end = newDate;
-    setState(() {
-      valid = _formKey.currentState!.validate();
-    });
+    _validate();
+  }
+
+  bool _validate() {
+    final v = _formKey.currentState!.validate();
+    setState(() => _valid = v);
+    return v;
   }
 
   void _save() {

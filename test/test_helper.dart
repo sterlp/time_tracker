@@ -42,11 +42,12 @@ class AppContextMock {
     final result = AppContainer();
 
     when(() => timeBookingDao.loadDay(any())).thenAnswer((_) => Future.value(todayBookings));
+    final dao = BookingService(timeBookingDao);
 
     result.add<ConfigDao>(configDao);
     result.add<TimeBookingDao>(timeBookingDao);
-    result.add<TodayBean>(TodayBean(timeBookingDao));
-    result.add<BookingService>(BookingService(timeBookingDao));
+    result.add<BookingService>(dao);
+    result.add<TodayBean>(TodayBean(dao));
     return Future.value(result);
   }
 }

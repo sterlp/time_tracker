@@ -25,11 +25,11 @@ Future<AppContainer> initContext({Future<DbProvider>? dbProvider}) async {
   // TodayBean
   final dao = TimeBookingDao(db);
   result.add(dao);
-  final todayBean = TodayBean(dao);
-  todayBean.reload();
-  result.add(todayBean);
   final bookingService = BookingService(dao);
   result.add(bookingService);
+  final todayBean = TodayBean(bookingService);
+  todayBean.reload();
+  result.add(todayBean);
   result.add(ExportService(bookingService));
 
   await initializeDateFormatting('de_DE');

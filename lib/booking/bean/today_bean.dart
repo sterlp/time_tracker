@@ -2,17 +2,18 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:sqflite_entities/converter/date_util.dart';
+import 'package:time_tracker/booking/bean/booking_service.dart';
 import 'package:time_tracker/booking/dao/time_booking_dao.dart';
 import 'package:time_tracker/booking/entity/time_booking.dart';
 import 'package:time_tracker/common/list_functions.dart';
 
 class TodayBean extends ValueNotifier<List<TimeBooking>> {
-  final TimeBookingDao _timeBookingDao;
+  final BookingService _bookingService;
   final _workHours = const Duration(hours: 8);
   TimeBooking? _currentRunning;
   var _day = DateUtils.dateOnly(DateTime.now());
 
-  TodayBean(this._timeBookingDao) : super([]);
+  TodayBean(this._bookingService) : super([]);
 
   DateTime get day => _day;
   Duration get workHours => _workHours;
@@ -33,7 +34,7 @@ class TodayBean extends ValueNotifier<List<TimeBooking>> {
   }
 
   Future<List<TimeBooking>> reload() async {
-    final dbData = await _timeBookingDao.loadDay(_day);
+    final dbData = await _bookingService.loadDay(_day);
     _selectFirstOpenBooking(dbData);
     return value = dbData;
   }
@@ -47,7 +48,7 @@ class TodayBean extends ValueNotifier<List<TimeBooking>> {
 
     var result = TimeBooking.now();
     result.targetWorkTime = _workHours;
-    result = await _timeBookingDao.save(result);
+    result = await _bookingService.save(result);
     value.insert(0, result);
     _currentRunning = result;
     notifyListeners();
@@ -58,7 +59,7 @@ class TodayBean extends ValueNotifier<List<TimeBooking>> {
     if (hasCurrentBooking) {
       final b = _currentRunning!;
       b.end = DateTimeUtil.precisionMinutes(DateTime.now());
-      await _timeBookingDao.save(b);
+      await _bookingService.save(b);
       _selectFirstOpenBooking(value);
       notifyListeners();
       return b;
@@ -76,10 +77,10 @@ class TodayBean extends ValueNotifier<List<TimeBooking>> {
       _currentRunning = null;
     }
     notifyListeners();
-    return _timeBookingDao.deleteEntity(booking);
+    return _bookingService.delete(booking);
   }
   Future<TimeBooking> save(TimeBooking booking) async {
-    final result = await _timeBookingDao.save(booking);
+    final result = await _bookingService.save(booking);
     reload();
     return result;
   }

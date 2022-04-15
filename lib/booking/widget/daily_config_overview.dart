@@ -23,7 +23,7 @@ class DailyConfigOverview extends StatelessWidget {
             Text('${toHoursWithMinutes(workStarted)} Uhr', style: valueStyle),
         ),
         _keyValueRow(
-          Text('vorauss. Arbeitsende:', style: textStyle,),
+          Text('Arbeitsende:', style: textStyle,),
           Text('${toHoursWithMinutes(workEndTime)} Uhr', style: valueStyle),
         ),
       ],
