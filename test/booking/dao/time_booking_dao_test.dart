@@ -55,6 +55,29 @@ Future<void> main() async {
     expect(items.length, 0);
   });
 
+  test('Test update Day target', () async {
+    // GIVEN
+    var b1 = TimeBooking(DateTime(2021, 3, 3, 9))..workTime = _time(3);
+    var b2 = TimeBooking(DateTime(2021, 3, 3, 8))..workTime = _time(2);
+    var b3 = TimeBooking(DateTime(2021, 3, 8, 13))..workTime = _time(4);
+    await subject.saveAll([
+      b1, b2, b3,
+    ]);
+
+    // WHEN
+    const newDuration = Duration(hours: 4);
+    final count = await subject.updateTargetTime('2021-03-03', newDuration);
+    b1 = (await subject.getById(b1.id!))!;
+    b2 = (await subject.getById(b2.id!))!;
+    b3 = (await subject.getById(b3.id!))!;
+
+    // THEN
+    expect(count, equals(2));
+    expect(b1.targetWorkTime, equals(newDuration));
+    expect(b2.targetWorkTime, equals(newDuration));
+    expect(b3.targetWorkTime, equals(const Duration(hours: 8)));
+  });
+
   test('Query daily stats', () async {
     // GIVEN
     await subject.saveAll([

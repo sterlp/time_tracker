@@ -30,4 +30,24 @@ Future<void> main() async {
     expect(result.length, 2);
   });
 
+  test('Test update Day target', () async {
+    // GIVEN
+    var b1 = TimeBooking(DateTime(2021, 3, 3, 9))..workTime = _time(3);
+    var b2 = TimeBooking(DateTime(2021, 3, 3, 8))..workTime = _time(2);
+    var b3 = TimeBooking(DateTime(2021, 3, 8, 13))..workTime = _time(4);
+    b1 = await subject.save(b1);
+    b2 = await subject.save(b2);
+    b3 = await subject.save(b3);
+
+    // WHEN
+    b1.targetWorkTime = const Duration(hours: 4);
+    b1 = await subject.save(b1);
+    b2 = await subject.reload(b2);
+
+    // THEN
+    expect(b2.targetWorkTime, equals(b1.targetWorkTime));
+  });
+}
+Duration _time(int hours, {int minutes = 0}) {
+  return Duration(hours: hours, minutes: minutes);
 }

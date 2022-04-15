@@ -12,6 +12,15 @@ class TimeBookingDao extends AbstractDao<TimeBooking> {
 
   TimeBookingDao(Database db) : super(db, DbBookingTableV2.table);
 
+  Future<int> updateTargetTime(String day, Duration newTarget) {
+    return db.rawUpdate("""
+      UPDATE ${DbBookingTableV2.table}
+      SET ${DbBookingTableV2.targetHoursInMin} = ?
+      WHERE ${DbBookingTableV2.day} = ?
+      """,
+      [newTarget.inMinutes, day]);
+  }
+
   Future<List<TimeBooking>> all() {
     return loadAll(orderBy: _orderByStartDate);
   }

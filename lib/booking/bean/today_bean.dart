@@ -9,7 +9,7 @@ import 'package:time_tracker/common/list_functions.dart';
 
 class TodayBean extends ValueNotifier<List<TimeBooking>> {
   final BookingService _bookingService;
-  final _workHours = const Duration(hours: 8);
+  Duration _workHours = const Duration(hours: 8);
   TimeBooking? _currentRunning;
   var _day = DateUtils.dateOnly(DateTime.now());
 
@@ -36,6 +36,7 @@ class TodayBean extends ValueNotifier<List<TimeBooking>> {
   Future<List<TimeBooking>> reload() async {
     final dbData = await _bookingService.loadDay(_day);
     _selectFirstOpenBooking(dbData);
+    if (dbData.isNotEmpty) _workHours = dbData[0].targetWorkTime;
     return value = dbData;
   }
 

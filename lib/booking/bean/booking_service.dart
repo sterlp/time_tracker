@@ -12,13 +12,18 @@ class BookingService {
     b.id = null;
     return _timeBookingDao.save(b);
   }
-  Future<TimeBooking> save(TimeBooking b) {
-    return _timeBookingDao.save(b);
+  Future<TimeBooking> reload(TimeBooking b) async {
+    var result = await _timeBookingDao.getById(b.id!);
+    return result ??= await _timeBookingDao.save(b);
+  }
+  Future<TimeBooking> save(TimeBooking b) async {
+    final r = await _timeBookingDao.save(b);
+    await _timeBookingDao.updateTargetTime(r.day, r.targetWorkTime);
+    return r;
   }
   Future<List<TimeBooking>> loadDay(DateTime dateTime) {
     return _timeBookingDao.loadDay(dateTime);
   }
-
   Future<List<TimeBooking>> all({SortOrder order = SortOrder.DESC}) {
     if (order == SortOrder.DESC) return _timeBookingDao.allOrderByStart();
     else return _timeBookingDao.loadAll(orderBy: '${DbBookingTableV2.startDate} ASC');
