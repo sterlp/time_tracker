@@ -30,7 +30,7 @@ void main() {
       home: BookingListPage(_container))
     );
     // THEN
-    expect(find.text('Loading ...'), findsOneWidget);
+    expect(find.text('Lade ...'), findsOneWidget);
     // WHEN
     await tester.pumpAndSettle();
     // THEN

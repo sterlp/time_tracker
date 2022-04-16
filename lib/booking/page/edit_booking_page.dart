@@ -1,5 +1,7 @@
+import 'package:dependency_container/dependency_container.dart';
 import 'package:flutter/material.dart';
 import 'package:sqflite_entities/converter/date_util.dart';
+import 'package:time_tracker/booking/bean/booking_service.dart';
 import 'package:time_tracker/booking/entity/time_booking.dart';
 import 'package:time_tracker/booking/widget/time_account.dart';
 import 'package:time_tracker/common/feedback.dart';
@@ -9,19 +11,21 @@ import 'package:time_tracker/log/logger.dart';
 
 Future<TimeBooking?> showEditBookingPage(
     BuildContext context,
+    AppContainer container,
     {TimeBooking? booking,}) {
-  booking ??= TimeBooking.now();
-  return Navigator.push<TimeBooking?>(
+  final b = booking ?? TimeBooking.now();
+  return Navigator.push<TimeBooking>(
     context,
-    MaterialPageRoute(builder: (context) => EditBookingPage(booking!)),
+    MaterialPageRoute(builder: (context) => EditBookingPage(container, b)),
   );
 }
 
 class EditBookingPage extends StatefulWidget {
-  final TimeBooking booking;
+  final AppContainer _container;
+  final TimeBooking _booking;
   final dateTimeFormat = DateTimeUtil.getFormat('EEEE dd.MM.yyyy HH:mm', 'de');
 
-  EditBookingPage(this.booking, {Key? key}) : super(key: key);
+  EditBookingPage(this._container, this._booking, {Key? key}) : super(key: key);
 
   @override
   _EditBookingPageState createState() => _EditBookingPageState();
@@ -30,13 +34,13 @@ class EditBookingPage extends StatefulWidget {
 class _EditBookingPageState extends State<EditBookingPage> {
   final _log = LoggerFactory.get<EditBookingPage>();
   final _formKey = GlobalKey<FormState>();
-  final _booking = TimeBooking.now();
+  TimeBooking _booking = TimeBooking.now();
   bool _valid = false;
 
   @override
   void initState() {
-    _booking.setMap(widget.booking.asMap());
     super.initState();
+    _booking.setMap(widget._booking.asMap());
   }
 
   @override
@@ -116,10 +120,14 @@ class _EditBookingPageState extends State<EditBookingPage> {
     return v;
   }
 
-  void _save() {
+  Future<void> _save() async {
     if (_formKey.currentState!.validate()) {
-      widget.booking.setMap(_booking.asMap());
-      Navigator.pop(context, widget.booking);
+      _booking = await widget._container.get<BookingService>().save(_booking);
+      if (mounted) {
+        ScaffoldMessenger.of(context)
+            .showSnackBar(const SnackBar(content: Text('Buchung gespeichert.')));
+        Navigator.pop(context, _booking);
+      }
     }
   }
 }

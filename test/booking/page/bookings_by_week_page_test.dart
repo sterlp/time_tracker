@@ -29,11 +29,11 @@ void main() {
       ),
     );
     // THEN
-    expect(find.text('Loading ...'), findsOneWidget);
+    expect(find.text('Lade ...'), findsOneWidget);
     // WHEN
     await tester.pumpAndSettle();
     // THEN
-    expect(find.text('Loading ...'), findsNothing);
+    expect(find.text('Lade ...'), findsNothing);
     expect(find.byType(Card), findsNothing);
     expect(find.byType(Text), findsNothing);
   });

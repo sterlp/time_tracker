@@ -8,12 +8,12 @@ import 'package:time_tracker/common/widget/divider_with_label.dart';
 
 class DailyBookingsList extends StatelessWidget {
   final ValueListenable<List<TimeBooking>> items;
-  final Function(TimeBooking b) saveFn;
+  final Function(TimeBooking b) editFn;
   final Function(TimeBooking b) deleteFn;
   final bool showFirstDayHeader;
 
-  const DailyBookingsList(this.items, this.saveFn, this.deleteFn,
-      {Key? key, this.showFirstDayHeader = false})
+  const DailyBookingsList(this.items, this.editFn, this.deleteFn,
+      {Key? key, this.showFirstDayHeader = false,})
       : super(key: key);
 
   @override
@@ -37,11 +37,11 @@ class DailyBookingsList extends StatelessWidget {
               return Column(
                 children: [
                   DividerWithLabel(df.format(items[index].start)),
-                  TimeBookingListItem(items[index], saveFn, deleteFn)
+                  TimeBookingListItem(items[index], editFn, deleteFn)
                 ],
               );
             } else {
-              return TimeBookingListItem(items[index], saveFn, deleteFn);
+              return TimeBookingListItem(items[index], editFn, deleteFn);
             }
           },
         );

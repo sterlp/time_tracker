@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:share_plus/share_plus.dart';
-import 'package:time_tracker/booking/bean/today_bean.dart';
 import 'package:time_tracker/booking/dao/time_booking_dao.dart';
 import 'package:time_tracker/booking/page/bookings_by_week_page.dart';
 import 'package:time_tracker/booking/page/bookings_list_page.dart';
@@ -29,9 +28,8 @@ class _HomePageState extends State<HomePage> {
   @override
   void initState() {
     super.initState();
-    final today = widget._container.get<TodayBean>();
     _pages = [
-      BookingWidgetPage(today),
+      BookingWidgetPage(widget._container),
       BookingsWeekPage(widget._container.get<TimeBookingDao>()),
       BookingListPage(widget._container)
     ];

@@ -49,37 +49,34 @@ class _BookingListPageState extends State<BookingListPage> {
       return Scaffold(
         body: DailyBookingsList(
           _bookings!,
-          _doSave,
+          _doEdit,
           _doDelete,
           showFirstDayHeader: true,
         ),
         floatingActionButton: FloatingActionButton(
           onPressed: () async {
             FeedbackFixed.touch(context);
-            final saved = await showEditBookingPage(context);
-            if (saved != null) _doSave(saved);
+            final saved = await showEditBookingPage(context, widget._container);
+            if (saved != null && mounted) _reload();
           },
           child: const Icon(Icons.add),
         ),
       );
     }
   }
-  Future<void> _doSave(TimeBooking booking) async {
-    await widget._container.get<BookingService>().save(booking);
-    await _reload();
-    if (mounted) {
-      ScaffoldMessenger.of(context)
-        .showSnackBar(const SnackBar(content: Text('Buchung gespeichert.'))
-      );
+  Future<void> _doEdit(TimeBooking booking) async {
+    final r = await showEditBookingPage(context, widget._container, booking: booking);
+    if (r != null && mounted) {
+      _reload();
     }
   }
   Future<void> _doDelete(TimeBooking booking) async {
     await widget._container.get<BookingService>().delete(booking);
-    await _reload();
     if (mounted) {
       ScaffoldMessenger.of(context)
-        .showSnackBar(const SnackBar(content: Text('Buchung gelöscht.'))
+        .showSnackBar(const SnackBar(content: Text('Buchung gelöscht.')),
       );
+      await _reload();
     }
   }
 }

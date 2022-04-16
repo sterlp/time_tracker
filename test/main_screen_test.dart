@@ -9,7 +9,7 @@ void main() {
     // GIVEN
     await tester.pumpWidget(MyApp());
     // THEN
-    expect(find.text('Loading ...'), findsOneWidget);
+    expect(find.text('Lade ...'), findsOneWidget);
   });
 
   testWidgets('Loaded App should show a "Starten"', (WidgetTester tester) async {

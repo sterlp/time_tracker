@@ -11,8 +11,8 @@ class TimeBookingListItem extends StatelessWidget {
 
   final TimeBooking booking;
   final Function(TimeBooking b) deleteFn;
-  final Function(TimeBooking b) saveFn;
-  const TimeBookingListItem(this.booking, this.saveFn, this.deleteFn,
+  final Function(TimeBooking b) editFn;
+  const TimeBookingListItem(this.booking, this.editFn, this.deleteFn,
       {Key? key})
       : super(key: key);
 
@@ -38,7 +38,7 @@ class TimeBookingListItem extends StatelessWidget {
       subTitle = Text('Start: $bookingStart, Ende: ${toHoursWithMinutes(booking.end)} Uhr');
     }
     result = ListTile(
-      onLongPress: FeedbackFixed.wrapLongTouch(() => _editBooking(booking, context), context),
+      onLongPress: FeedbackFixed.wrapLongTouch(() => editFn(booking), context),
       leading: const Icon(Icons.lock_clock),
       title: title,
       subtitle: subTitle,
@@ -58,17 +58,10 @@ class TimeBookingListItem extends StatelessWidget {
           return showConfirmDeleteBookingDialog(context, booking);
         }
         FeedbackFixed.touch(context);
-        _editBooking(booking, context);
+        editFn(booking);
         return false;
       },
     );
-  }
-
-  Future<void> _editBooking(TimeBooking booking, BuildContext context) async {
-    final saved = await showEditBookingPage(context, booking: booking);
-    if (saved != null) {
-      saveFn(saved);
-    }
   }
 
   List<Widget> _expandItems(List<Widget> widgets) {
