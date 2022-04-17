@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:mocktail/mocktail.dart';
+import 'package:sqflite_entities/entity/query.dart';
 import 'package:time_tracker/booking/bean/booking_service.dart';
 import 'package:time_tracker/booking/entity/time_booking.dart';
 import 'package:time_tracker/booking/page/bookings_list_page.dart';
@@ -20,7 +21,8 @@ void main() {
     _bookingServiceMock = BookingServiceMock();
     _container.add<BookingService>(_bookingServiceMock);
     _bookings = [];
-    when(() => _bookingServiceMock.all()).thenAnswer((_) => Future.value(_bookings));
+    registerFallbackValue(SortOrder.DESC);
+    when(() => _bookingServiceMock.all(order: any(named: 'order'))).thenAnswer((_) => Future.value(_bookings));
   });
 
   testWidgets('Load empty bookings', (WidgetTester tester) async {

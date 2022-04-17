@@ -1,22 +1,24 @@
-
+import 'package:dependency_container/dependency_container.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:time_tracker/booking/dao/time_booking_dao.dart';
 import 'package:time_tracker/booking/entity/time_booking_statistics.dart';
-import 'package:time_tracker/booking/page/bookings_by_week_page.dart';
+import 'package:time_tracker/booking/page/bookings_history_page.dart';
 
 import '../../test_helper.dart';
 
 void main() {
   TimeBookingDao _timeBookingDao = TimeBookingDaoMock();
   List<DailyBookingStatistic> stats = [];
-
+  AppContainer container = AppContainer();
   setUpAll(() => initializeDateFormatting());
 
   setUp(() {
     _timeBookingDao = TimeBookingDaoMock();
+    container = AppContainer();
+    container.add<TimeBookingDao>(_timeBookingDao);
     stats = [];
     when(() => _timeBookingDao.stats()).thenAnswer((_) => Future.value(stats));
   });
@@ -25,7 +27,7 @@ void main() {
     // GIVEN
     await tester.pumpWidget(MaterialApp(
         title: 'test',
-        home: BookingsWeekPage(_timeBookingDao),
+        home: BookingsHistoryPage(container),
       ),
     );
     // THEN
@@ -63,12 +65,12 @@ void main() {
     // WHEN
     await tester.pumpWidget(MaterialApp(
         title: 'test',
-        home: BookingsWeekPage(_timeBookingDao),
+        home: BookingsHistoryPage(container),
       ),
     );
     await tester.pumpAndSettle();
 
     // THEN --> TODO
-    expect(find.byType(Card), findsNWidgets(1));
+    expect(find.byType(Card), findsNWidgets(2));
   });
 }

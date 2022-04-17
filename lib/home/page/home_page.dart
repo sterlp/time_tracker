@@ -5,7 +5,7 @@ import 'package:intl/date_symbol_data_local.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:time_tracker/booking/dao/time_booking_dao.dart';
-import 'package:time_tracker/booking/page/bookings_by_week_page.dart';
+import 'package:time_tracker/booking/page/bookings_history_page.dart';
 import 'package:time_tracker/booking/page/bookings_list_page.dart';
 import 'package:time_tracker/booking/page/booking_widget_page.dart';
 import 'package:time_tracker/common/feedback.dart';
@@ -30,8 +30,7 @@ class _HomePageState extends State<HomePage> {
     super.initState();
     _pages = [
       BookingWidgetPage(widget._container),
-      BookingsWeekPage(widget._container.get<TimeBookingDao>()),
-      BookingListPage(widget._container)
+      BookingsHistoryPage(widget._container)
     ];
     initializeDateFormatting('de');
   }
@@ -72,10 +71,6 @@ class _HomePageState extends State<HomePage> {
           BottomNavigationBarItem(
             icon: Icon(Icons.calendar_today),
             label: 'Heute',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.calendar_view_week),
-            label: 'Wochensicht',
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.history),

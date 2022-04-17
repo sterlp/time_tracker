@@ -28,25 +28,33 @@ class TimeBookingDao extends AbstractDao<TimeBooking> {
     return loadAll(orderBy: _orderByStartDate);
   }
 
+  Future<List<TimeBooking>> fromTo(DateTime from, DateTime to) {
+    return loadAll(
+      where: "${DbBookingTableV2.startDate} >= ? AND ${DbBookingTableV2.startDate} <= ? ",
+      whereArgs: [dateTimeToInt(from), dateTimeToInt(to)],
+      orderBy: "${DbBookingTableV2.startDate} ASC",
+    );
+  }
+
   Future<List<TimeBooking>> loadDay(DateTime dateTime) {
     return loadAll(
         where: "day = ? OR end_date is null",
         whereArgs: [dayFormat.format(dateTime)],
-        orderBy: _orderByStartDate
+        orderBy: _orderByStartDate,
     );
   }
 
   Future<List<DailyBookingStatistic>> stats([DateTime? withoutDay]) async {
     var query = '''
-SELECT
-  ${DbBookingTableV2.day} as ${DbBookingTableV2.day},
-  min(${DbBookingTableV2.startDate}) as ${DbBookingTableV2.startDate},
-  max(${DbBookingTableV2.endDate}) as ${DbBookingTableV2.endDate},
-  sum(${DbBookingTableV2.workedHoursInMin}) as worked,
-  max(${DbBookingTableV2.targetHoursInMin}) as planed
-FROM $tableName
-''';
-    final sortAndGroup = '''
+    SELECT
+      ${DbBookingTableV2.day} as ${DbBookingTableV2.day},
+      min(${DbBookingTableV2.startDate}) as ${DbBookingTableV2.startDate},
+      max(${DbBookingTableV2.endDate}) as ${DbBookingTableV2.endDate},
+      sum(${DbBookingTableV2.workedHoursInMin}) as worked,
+      max(${DbBookingTableV2.targetHoursInMin}) as planed
+    FROM $tableName
+    ''';
+    const sortAndGroup = '''
     GROUP BY ${DbBookingTableV2.day}
     ORDER BY ${DbBookingTableV2.startDate} DESC
     ''';
