@@ -85,8 +85,10 @@ class _HomePageState extends State<HomePage> {
         currentIndex: _index,
         //selectedItemColor: Colors.amber[800],
         onTap: (value) {
-          FeedbackFixed.touch(context);
-          setState(() => _index = value);
+          if (_index != value) {
+            FeedbackFixed.touch(context);
+            setState(() => _index = value);
+          }
         },
       ),
     );

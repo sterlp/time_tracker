@@ -12,16 +12,6 @@ class LoadingWidget extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            Padding(padding: const EdgeInsets.all(32),
-              child: OrientationBuilder(
-                builder: (context, o) {
-                  return AspectRatio(
-                    aspectRatio: o == Orientation.portrait ? 2 / 1 : 5 / 1,
-                    child: const Image(image: AssetImage('assets/icon/time_tracker_icon.png')),
-                  );
-                },
-              ),
-            ),
             const SizedBox(
               child: CircularProgressIndicator(strokeWidth: 8.0),
               height: 60,

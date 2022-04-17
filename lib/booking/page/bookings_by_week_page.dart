@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:sqflite_entities/converter/date_util.dart';
 import 'package:time_tracker/booking/dao/time_booking_dao.dart';
 import 'package:time_tracker/booking/entity/time_booking_statistics.dart';
+import 'package:time_tracker/booking/widget/bookings_statistic_widget.dart';
 import 'package:time_tracker/common/widget/label_text_widget.dart';
 import 'package:time_tracker/common/widget_functions.dart';
 import 'package:time_tracker/home/widget/loading_widget.dart';
@@ -55,7 +56,7 @@ class _BookingsWeekPageState extends State<BookingsWeekPage> {
         if (index == 0) {
           return Column(
             children: [
-              _buildHeader(value),
+              BookingsStatisticWidget(value),
               _buildWeekItem(item),
             ],
           );
@@ -63,57 +64,6 @@ class _BookingsWeekPageState extends State<BookingsWeekPage> {
           return _buildWeekItem(item);
         }
       }
-    );
-  }
-
-  Widget _buildHeader(List<DailyBookingStatistic> value) {
-    const padding = EdgeInsets.fromLTRB(16, 8, 16, 0);
-    final headStyle = Theme.of(context).textTheme.headline6;
-    final overHoursTotal = DailyBookingStatistic.sumOverHours(value);
-    var avgWorkTime = Duration.zero;
-    var avgBreakTime = Duration.zero;
-
-    if (value.isNotEmpty) {
-      avgWorkTime = Duration(
-        minutes: (DailyBookingStatistic.sumWorkedTime(value).inMinutes / value.length).round(),
-      );
-      avgBreakTime = Duration(
-        minutes: (DailyBookingStatistic.sumBreakTime(value).inMinutes / value.length).round(),
-      );
-    }
-    return Column(
-      children: [
-        Padding(
-          padding: padding,
-          child: Row(
-            children: [
-              Expanded(child: Text('Überstunden gesamt:', style: headStyle,)),
-              Text(toDurationHoursAndMinutes(overHoursTotal), textScaleFactor: 1.3,),
-            ],
-          ),
-        ),
-
-        Padding(
-          padding: padding,
-          child: Row(
-            children: [
-              Expanded(child: Text('Ø Arbeitszeit:', style: headStyle,)),
-              Text(toDurationHoursAndMinutes(avgWorkTime), textScaleFactor: 1.3,),
-            ],
-          ),
-        ),
-
-        Padding(
-          padding: padding,
-          child: Row(
-            children: [
-              Expanded(child: Text('Ø Pausenzeit:', style: headStyle,)),
-              Text(toDurationHoursAndMinutes(avgBreakTime), textScaleFactor: 1.3,),
-            ],
-          ),
-        ),
-
-      ],
     );
   }
 
