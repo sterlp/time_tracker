@@ -3,30 +3,17 @@ import 'package:time_tracker/booking/entity/time_booking_statistics.dart';
 import 'package:time_tracker/util/time_util.dart';
 
 class BookingsStatisticWidget extends StatelessWidget {
-  final List<DailyBookingStatistic> value;
-
-  const BookingsStatisticWidget(this.value, {Key? key}) : super(key: key);
+  final DailyBookingStatisticList listStats;
+  const BookingsStatisticWidget(this.listStats, {Key? key})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    final overHoursTotal = DailyBookingStatistic.sumOverHours(value);
-    var avgWorkTime = Duration.zero;
-    var avgBreakTime = Duration.zero;
-
-    if (value.isNotEmpty) {
-      avgWorkTime = Duration(
-        minutes: (DailyBookingStatistic.sumWorkedTime(value).inMinutes / value.length).round(),
-      );
-      avgBreakTime = Duration(
-        minutes: (DailyBookingStatistic.sumBreakTime(value).inMinutes / value.length).round(),
-      );
-    }
-
     return Column(
       children: [
-        KeyValueWidget('Überstunden gesamt:', toDurationHoursAndMinutes(overHoursTotal)),
-        KeyValueWidget('Ø Arbeitszeit:', toDurationHoursAndMinutes(avgWorkTime)),
-        KeyValueWidget('Ø Pausenzeit:', toDurationHoursAndMinutes(avgBreakTime)),
+        KeyValueWidget('Überstunden gesamt:', toDurationHoursAndMinutes(listStats.sumOverHours)),
+        KeyValueWidget('Ø Arbeitszeit:', toDurationHoursAndMinutes(listStats.avgWorkTime)),
+        KeyValueWidget('Ø Pausenzeit:', toDurationHoursAndMinutes(listStats.avgBreakTime)),
       ],
     );
   }
@@ -65,4 +52,3 @@ class KeyValueWidget extends StatelessWidget {
     );
   }
 }
-

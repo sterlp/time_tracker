@@ -90,14 +90,14 @@ Future<void> main() async {
     var stats = await subject.stats();
     // THEN
     expect(stats.length, 3);
-    var overHours = DailyBookingStatistic.sumOverHours(stats);
+    var overHours = DailyBookingStatisticList.of(stats).sumOverHours;
     expect(overHours, equals(const Duration(hours: -2, minutes: -45)));
 
     // WHEN
     stats = await subject.stats(DateTime(2021, 3, 3));
     // THEN
     expect(stats.length, 2);
-    overHours = DailyBookingStatistic.sumOverHours(stats);
+    overHours = DailyBookingStatisticList.of(stats).sumOverHours;
     expect(overHours, equals(const Duration(hours: -1, minutes: -45)));
   });
 }

@@ -1,6 +1,7 @@
 import 'package:sqflite_entities/entity/query.dart';
 import 'package:time_tracker/booking/dao/time_booking_dao.dart';
 import 'package:time_tracker/booking/entity/time_booking.dart';
+import 'package:time_tracker/booking/entity/time_booking_statistics.dart';
 import 'package:time_tracker/db/db_v2.dart';
 
 class BookingService {
@@ -33,5 +34,8 @@ class BookingService {
   }
   Future<TimeBooking> delete(TimeBooking booking) {
     return _timeBookingDao.deleteEntity(booking);
+  }
+  Future<List<DailyBookingStatistic>> statisticByDay() {
+    return _timeBookingDao.stats();
   }
 }

@@ -50,7 +50,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Time Tracker Zeiterfassung',
+      title: 'Zeiterfassung',
       darkTheme: ThemeData.dark(),
       theme: ThemeData.light(),
       supportedLocales: const [

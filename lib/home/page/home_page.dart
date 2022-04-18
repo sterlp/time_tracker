@@ -11,6 +11,7 @@ import 'package:time_tracker/booking/page/booking_widget_page.dart';
 import 'package:time_tracker/common/feedback.dart';
 import 'package:time_tracker/export/export_service.dart';
 import 'package:time_tracker/log/logger.dart';
+import 'package:time_tracker/week/widget/week_list_widget.dart';
 
 class HomePage extends StatefulWidget {
   final AppContainer _container;
@@ -30,7 +31,8 @@ class _HomePageState extends State<HomePage> {
     super.initState();
     _pages = [
       BookingWidgetPage(widget._container),
-      BookingsHistoryPage(widget._container)
+      WeekListWidget(widget._container),
+      BookingsHistoryPage(widget._container),
     ];
     initializeDateFormatting('de');
   }
@@ -41,7 +43,7 @@ class _HomePageState extends State<HomePage> {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Time Tracker Zeiterfassung'),
+        title: const Text('Zeiterfassung'),
         actions: [
           IconButton(
             onPressed: () async {
@@ -73,7 +75,11 @@ class _HomePageState extends State<HomePage> {
             label: 'Heute',
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.history),
+            icon: Icon(Icons.view_week),
+            label: 'Wochenübersicht',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.view_day),
             label: 'Buchungshistorie',
           ),
         ],

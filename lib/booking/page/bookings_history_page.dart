@@ -55,7 +55,7 @@ class _BookingsHistoryPageState extends State<BookingsHistoryPage> {
         if (index == 0) {
           return Column(
             children: [
-              BookingsStatisticWidget(value),
+              BookingsStatisticWidget(DailyBookingStatisticList.of(value)),
               _buildWeekItem(item),
             ],
           );
@@ -69,7 +69,7 @@ class _BookingsHistoryPageState extends State<BookingsHistoryPage> {
   Widget _buildWeekItem(DailyBookingStatistic item) {
     return DailyBookingStatisticWidget(item,
       onLongPress: () async {
-        await showBookingListPage(context, widget._container, from: item.start, to: item.end);
+        await showBookingListPage(context, widget._container, item.start, item.end);
         if (mounted) _reload();
       }
     );

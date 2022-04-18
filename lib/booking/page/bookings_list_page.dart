@@ -1,6 +1,7 @@
 import 'package:dependency_container/dependency_container.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:sqflite_entities/converter/date_util.dart';
 import 'package:sqflite_entities/entity/query.dart';
 import 'package:time_tracker/booking/bean/booking_service.dart';
 import 'package:time_tracker/booking/entity/time_booking.dart';
@@ -12,25 +13,26 @@ import 'package:time_tracker/home/widget/loading_widget.dart';
 Future<void> showBookingListPage(
     BuildContext context,
     AppContainer container,
-    {DateTime? from, DateTime? to}) {
+    DateTime from, DateTime to,) {
   return Navigator.push<void>(
     context,
-    MaterialPageRoute(builder: (context) => BookingListPage(container, from: from, to: to,)),
+    MaterialPageRoute(builder: (context) => BookingListPage(container, from, to,)),
   );
 }
 
 
 class BookingListPage extends StatefulWidget {
   final AppContainer _container;
-  final DateTime? from;
-  final DateTime? to;
-  const BookingListPage(this._container, {Key? key, this.from, this.to}) : super(key: key);
+  final DateTime from;
+  final DateTime to;
+  const BookingListPage(this._container, this.from, this.to, {Key? key}) : super(key: key);
 
   @override
   _BookingListPageState createState() => _BookingListPageState();
 }
 
 class _BookingListPageState extends State<BookingListPage> {
+  final _df = DateTimeUtil.getFormat('EEEE, dd.MM', 'de');
   ValueNotifier<List<TimeBooking>>? _bookings;
 
   @override
@@ -45,12 +47,7 @@ class _BookingListPageState extends State<BookingListPage> {
   }
 
   Future<void> _reload() async {
-    List<TimeBooking> items;
-    if (widget.from == null || widget.to == null) {
-      items = await widget._container.get<BookingService>().all(order: SortOrder.ASC);
-    } else {
-      items = await widget._container.get<BookingService>().fromTo(widget.from!, widget.to!);
-    }
+    final items = await widget._container.get<BookingService>().fromTo(widget.from, widget.to);
 
     if (_bookings == null) {
       setState(() {
@@ -67,12 +64,13 @@ class _BookingListPageState extends State<BookingListPage> {
       return const LoadingWidget();
     } else {
       return Scaffold(
-        appBar: AppBar(),
+        appBar: AppBar(
+          title: Text(_df.format(widget.to)),
+        ),
         body: DailyBookingsList(
           _bookings!,
           _doEdit,
           _doDelete,
-          showFirstDayHeader: true,
         ),
         floatingActionButton: FloatingActionButton(
           onPressed: _newBooking,
@@ -86,14 +84,14 @@ class _BookingListPageState extends State<BookingListPage> {
     final saved = await showEditBookingPage(
       context,
       widget._container,
-      booking: widget.to == null ? null : TimeBooking(widget.to!, endTime: widget.to!.add(Duration(hours: 1))),
+      booking: TimeBooking(widget.to, endTime: widget.to.add(Duration(hours: 1))),
     );
-    if (saved != null && mounted) _reload();
+    if (saved != null && mounted) await _reload();
   }
   Future<void> _doEdit(TimeBooking booking) async {
     final r = await showEditBookingPage(context, widget._container, booking: booking);
     if (r != null && mounted) {
-      _reload();
+      await _reload();
     }
   }
   Future<void> _doDelete(TimeBooking booking) async {

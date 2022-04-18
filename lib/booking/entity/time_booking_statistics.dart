@@ -6,18 +6,6 @@ class DailyBookingStatistic {
   final Duration workedTime;
   final Duration planedWorkTime;
 
-  static Duration sumWorkedTime(List<DailyBookingStatistic> elements) {
-    if (elements.isEmpty) return Duration.zero;
-    return elements.map((e) => e.workedTime).reduce((v, e) => v + e);
-  }
-  static Duration sumOverHours(List<DailyBookingStatistic> elements) {
-    if (elements.isEmpty) return Duration.zero;
-    return elements.map((e) => e.overHours).reduce((v, e) => v + e);
-  }
-  static Duration sumBreakTime(List<DailyBookingStatistic> value) {
-    if (value.isEmpty) return Duration.zero;
-    return value.map((e) => e.breakTime).reduce((v, e) => v + e);
-  }
   DailyBookingStatistic(this.day,
       this.start,
       this.end,
@@ -27,3 +15,33 @@ class DailyBookingStatistic {
   Duration get overHours => workedTime - planedWorkTime;
   Duration get breakTime => end.difference(start) - workedTime;
 }
+
+class DailyBookingStatisticList {
+  List<DailyBookingStatistic> _elements = [];
+  Duration _sumWorkedTime = Duration.zero;
+  Duration _sumOverHours = Duration.zero;
+  Duration _sumBreakTime = Duration.zero;
+
+  Duration get sumWorkedTime => _sumWorkedTime;
+  Duration get sumOverHours => _sumOverHours;
+  Duration get sumBreakTime => _sumBreakTime;
+  int get count => _elements.length;
+
+  Duration get avgWorkTime => count > 0
+      ? Duration(minutes: (_sumWorkedTime.inMinutes / count).round())
+      : Duration.zero;
+  Duration get avgBreakTime => count > 0
+      ? Duration(minutes: (_sumBreakTime.inMinutes / count).round())
+      : Duration.zero;
+
+  DailyBookingStatisticList.of(List<DailyBookingStatistic> elements) {
+    _elements = elements;
+
+    for(DailyBookingStatistic e in elements) {
+      _sumWorkedTime += e.workedTime;
+      _sumOverHours += e.overHours;
+      _sumBreakTime += e.breakTime;
+    }
+  }
+}
+

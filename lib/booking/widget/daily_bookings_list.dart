@@ -10,16 +10,14 @@ class DailyBookingsList extends StatelessWidget {
   final ValueListenable<List<TimeBooking>> items;
   final Function(TimeBooking b) editFn;
   final Function(TimeBooking b) deleteFn;
-  final bool showFirstDayHeader;
 
   const DailyBookingsList(this.items, this.editFn, this.deleteFn,
-      {Key? key, this.showFirstDayHeader = false,})
+      {Key? key})
       : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     String? lastDay;
-    final df = DateTimeUtil.getFormat('EEEE, dd.MM', 'de');
     return ValueListenableBuilder<List<TimeBooking>>(
       valueListenable: items,
       builder: (context, value, child) {
@@ -28,21 +26,20 @@ class DailyBookingsList extends StatelessWidget {
           itemCount: items.length,
           itemBuilder: (context, index) {
             final day = items[index].day;
-            if (lastDay == null) {
-              if (showFirstDayHeader) lastDay = '';
-              else lastDay = day;
-            }
-            if (lastDay != day) {
-              lastDay = day;
-              return Column(
+            Widget result;
+            if (lastDay != null && lastDay != day) {
+              final df = DateTimeUtil.getFormat('EEEE, dd.MM', 'de');
+              result = Column(
                 children: [
                   DividerWithLabel(df.format(items[index].start)),
                   TimeBookingListItem(items[index], editFn, deleteFn)
                 ],
               );
+              lastDay = day;
             } else {
-              return TimeBookingListItem(items[index], editFn, deleteFn);
+              result = TimeBookingListItem(items[index], editFn, deleteFn);
             }
+            return result;
           },
         );
       },

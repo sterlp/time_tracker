@@ -22,14 +22,15 @@ void main() {
     _container.add<BookingService>(_bookingServiceMock);
     _bookings = [];
     registerFallbackValue(SortOrder.DESC);
-    when(() => _bookingServiceMock.all(order: any(named: 'order'))).thenAnswer((_) => Future.value(_bookings));
+    when(() => _bookingServiceMock.fromTo(
+        any(), any())).thenAnswer((_) => Future.value(_bookings));
   });
 
   testWidgets('Load empty bookings', (WidgetTester tester) async {
     // GIVEN
     await tester.pumpWidget(MaterialApp(
       title: 'test',
-      home: BookingListPage(_container))
+      home: BookingListPage(_container, DateTime.now(), DateTime.now()))
     );
     // THEN
     expect(find.text('Lade ...'), findsOneWidget);

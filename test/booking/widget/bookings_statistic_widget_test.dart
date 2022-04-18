@@ -8,9 +8,9 @@ import 'package:time_tracker/booking/widget/time_account.dart';
 void main() {
   testWidgets('Load BookingsStatisticWidget', (WidgetTester tester) async {
     // GIVEN
-    await tester.pumpWidget(const MaterialApp(
+    await tester.pumpWidget(MaterialApp(
         title: 'test',
-        home: BookingsStatisticWidget([])
+        home: BookingsStatisticWidget(DailyBookingStatisticList.of([])),
       ),
     );
 
@@ -30,10 +30,13 @@ void main() {
     const hours6 = Duration(hours: 6);
     await tester.pumpWidget(MaterialApp(
         title: 'test',
-        home: BookingsStatisticWidget([
-          DailyBookingStatistic('2022-04-04', april4, april4.add(hours6), hours6, hours6),
-          DailyBookingStatistic('2022-04-05', april5, april5.add(hours6), Duration(hours: 4 ,minutes: 30), Duration(hours: 8)),
-        ])
+        home: BookingsStatisticWidget(
+            DailyBookingStatisticList.of([
+              DailyBookingStatistic('2022-04-04', april4, april4.add(hours6), hours6, hours6),
+              DailyBookingStatistic('2022-04-05', april5, april5.add(hours6),
+                const Duration(hours: 4 ,minutes: 30), const Duration(hours: 8)),
+          ])
+        )
       ),
     );
 
