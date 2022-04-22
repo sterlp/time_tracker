@@ -31,7 +31,7 @@ class TimeBookingListItem extends StatelessWidget {
       );
     } else {
       title = Row(children: _expandItems([
-          const Text('Buchung:'),
+          const Text('Dauer:'),
           Text(bookingDuration)
         ]),
       );

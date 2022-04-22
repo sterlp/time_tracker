@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:time_tracker/booking/dao/time_booking_dao.dart';
 import 'package:time_tracker/booking/entity/time_booking_statistics.dart';
 import 'package:time_tracker/booking/page/bookings_list_page.dart';
+import 'package:time_tracker/booking/page/edit_booking_page.dart';
 import 'package:time_tracker/booking/widget/bookings_statistic_widget.dart';
 import 'package:time_tracker/booking/widget/daily_booking_statistic_widget.dart';
 import 'package:time_tracker/home/widget/loading_widget.dart';
@@ -40,7 +41,16 @@ class _BookingsHistoryPageState extends State<BookingsHistoryPage> {
         if (value == null) {
           return const LoadingWidget();
         } else {
-          return _buildWeekList(value);
+          return Scaffold(
+            appBar: AppBar(
+              title: const Text('Historie'),
+            ),
+            body: _buildWeekList(value),
+            floatingActionButton: FloatingActionButton(
+              onPressed: () => showBookingPageWithCallback(context, widget._container, _reload),
+              child: const Icon(Icons.add),
+            ),
+          );
         }
       },
     );

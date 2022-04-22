@@ -18,7 +18,7 @@ class DateTimeUtil {
     else return f.format(d);
   }
 
-  static String formatWithString(DateTime? date, String format, [String? locale]) {
+  static String formatWithString(DateTime? date, String format, [String? locale = 'de']) {
     if (date == null) return '';
     return getFormat(format, locale).format(date);
   }

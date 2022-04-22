@@ -11,7 +11,7 @@ import 'package:time_tracker/booking/page/booking_widget_page.dart';
 import 'package:time_tracker/common/feedback.dart';
 import 'package:time_tracker/export/export_service.dart';
 import 'package:time_tracker/log/logger.dart';
-import 'package:time_tracker/week/widget/week_list_widget.dart';
+import 'package:time_tracker/week/page/week_list_page.dart';
 
 class HomePage extends StatefulWidget {
   final AppContainer _container;
@@ -31,7 +31,7 @@ class _HomePageState extends State<HomePage> {
     super.initState();
     _pages = [
       BookingWidgetPage(widget._container),
-      WeekListWidget(widget._container),
+      WeekListPage(widget._container),
       BookingsHistoryPage(widget._container),
     ];
     initializeDateFormatting('de');
@@ -39,34 +39,7 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
-    final _log = LoggerFactory.get<HomePage>();
-
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Zeiterfassung'),
-        actions: [
-          IconButton(
-            onPressed: () async {
-              // SUPER BETA
-              final directory = await getApplicationDocumentsDirectory();
-              var f = File('${directory.path}/Datenexport.csv');
-              if (await f.exists()) await f.delete();
-
-              final exportService = widget._container.get<ExportService>();
-              final csvData = await exportService.exportAll();
-
-              await f.create();
-              f = await f.writeAsString(csvData, flush: true);
-              _log.info("Written file ${f.lengthSync()} ${f.path}");
-              await Share.shareFiles(
-                  [f.path],
-                  subject: 'Datenexport.csv', mimeTypes: ['text/csv'],);
-              f.delete();
-            },
-            icon: const Icon(Icons.download),
-          ),
-        ],
-      ),
       body: _pages[_index],
       bottomNavigationBar: BottomNavigationBar(
         items: const <BottomNavigationBarItem>[

@@ -48,11 +48,8 @@ class _BookingListPageState extends State<BookingListPage> {
 
   Future<void> _reload() async {
     final items = await widget._container.get<BookingService>().fromTo(widget.from, widget.to);
-
     if (_bookings == null) {
-      setState(() {
-        _bookings = ValueNotifier(items);
-      });
+      if (mounted) setState(() => _bookings = ValueNotifier(items));
     } else {
       _bookings!.value = items;
     }
@@ -80,19 +77,14 @@ class _BookingListPageState extends State<BookingListPage> {
     }
   }
   Future<void> _newBooking() async {
-    FeedbackFixed.touch(context);
-    final saved = await showEditBookingPage(
-      context,
-      widget._container,
-      booking: TimeBooking(widget.to, endTime: widget.to.add(Duration(hours: 1))),
+    await showBookingPageWithCallback(context, widget._container, _reload,
+      booking: TimeBooking(widget.to, endTime: widget.to.add(const Duration(hours: 1))),
     );
-    if (saved != null && mounted) await _reload();
   }
   Future<void> _doEdit(TimeBooking booking) async {
-    final r = await showEditBookingPage(context, widget._container, booking: booking);
-    if (r != null && mounted) {
-      await _reload();
-    }
+    await  showBookingPageWithCallback(context, widget._container, _reload,
+      booking: booking,
+    );
   }
   Future<void> _doDelete(TimeBooking booking) async {
     await widget._container.get<BookingService>().delete(booking);

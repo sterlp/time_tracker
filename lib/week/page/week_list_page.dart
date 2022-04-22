@@ -3,24 +3,36 @@ import 'package:flutter/material.dart';
 import 'package:sqflite_entities/converter/date_util.dart';
 import 'package:time_tracker/booking/bean/booking_service.dart';
 import 'package:time_tracker/booking/page/bookings_list_page.dart';
+import 'package:time_tracker/booking/page/edit_booking_page.dart';
 import 'package:time_tracker/common/widget/expanded_row_widget.dart';
 import 'package:time_tracker/common/widget/label_text_widget.dart';
 import 'package:time_tracker/common/widget/labeled_card_widget.dart';
 import 'package:time_tracker/week/entity/week_overview_stats.dart';
 
-class WeekListWidget extends StatefulWidget {
+class WeekListPage extends StatefulWidget {
   final AppContainer _container;
-  const WeekListWidget(this._container, {Key? key}) : super(key: key);
+  const WeekListPage(this._container, {Key? key}) : super(key: key);
 
   @override
-  State<WeekListWidget> createState() => _WeekListWidgetState();
+  State<WeekListPage> createState() => _WeekListPageState();
 }
 
-class _WeekListWidgetState extends State<WeekListWidget> {
+class _WeekListPageState extends State<WeekListPage> {
   final data = ValueNotifier<List<WeekOverviewStats>>([]);
 
   @override
   Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(title: const Text('Wochenübersicht')),
+      body: _buildWeekListView(context),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () => showBookingPageWithCallback(context, widget._container, _reload),
+        child: const Icon(Icons.add),
+      ),
+    );
+  }
+
+  Widget _buildWeekListView(BuildContext context) {
     return ValueListenableBuilder<List<WeekOverviewStats>>(
       valueListenable: data,
       builder: (context, value, child) {
@@ -35,8 +47,8 @@ class _WeekListWidgetState extends State<WeekListWidget> {
                 children: [
                   ExpandedRowWidget(
                     children: [
-                      LabelTextWidget('Erster Tag', DateTimeUtil.formatWithString(item.start, 'dd.MM.yyyy')),
-                      LabelTextWidget('Letzter Tag', DateTimeUtil.formatWithString(item.end, 'dd.MM.yyyy')),
+                      LabelTextWidget('Erster Arbeitastag', DateTimeUtil.formatWithString(item.start, 'E dd.MM.yyyy')),
+                      LabelTextWidget('Letzter Arbeitastag', DateTimeUtil.formatWithString(item.end, 'E dd.MM.yyyy')),
                     ],
                   ),
                   ExpandedRowWidget(
@@ -58,7 +70,8 @@ class _WeekListWidgetState extends State<WeekListWidget> {
                 if (mounted) _reload();
               },
             );
-        });
+          },
+        );
       },
     );
   }

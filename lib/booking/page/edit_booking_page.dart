@@ -20,6 +20,17 @@ Future<TimeBooking?> showEditBookingPage(
   );
 }
 
+Future<void> showBookingPageWithCallback(
+    BuildContext context,
+    AppContainer container,
+    VoidCallback? onChanged,
+    {TimeBooking? booking,}) async {
+
+  FeedbackFixed.touch(context);
+  final r = await showEditBookingPage(context, container, booking: booking);
+  if (r != null && onChanged != null) onChanged();
+}
+
 class EditBookingPage extends StatefulWidget {
   final AppContainer _container;
   final TimeBooking _booking;

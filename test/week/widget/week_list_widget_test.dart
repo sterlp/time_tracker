@@ -8,7 +8,7 @@ import 'package:time_tracker/booking/bean/booking_service.dart';
 import 'package:time_tracker/booking/entity/time_booking_statistics.dart';
 import 'package:time_tracker/booking/widget/bookings_statistic_widget.dart';
 import 'package:time_tracker/booking/widget/time_account.dart';
-import 'package:time_tracker/week/widget/week_list_widget.dart';
+import 'package:time_tracker/week/page/week_list_page.dart';
 
 import '../../test_helper.dart';
 
@@ -30,7 +30,7 @@ void main() {
     // GIVEN
     await tester.pumpWidget(MaterialApp(
         title: 'test',
-        home: Scaffold(body: WeekListWidget(container)),
+        home: Scaffold(body: WeekListPage(container)),
       ),
     );
 
