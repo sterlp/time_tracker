@@ -36,7 +36,6 @@ class _TimerButtonState extends State<TimerButton> {
             setState(() {
               _now = newNow;
             });
-            print('Update $_now');
           }
         }
       }

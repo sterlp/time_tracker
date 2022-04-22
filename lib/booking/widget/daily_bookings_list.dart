@@ -17,7 +17,9 @@ class DailyBookingsList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final df = DateTimeUtil.getFormat('EEEE, dd.MM', 'de');
     String? lastDay;
+
     return ValueListenableBuilder<List<TimeBooking>>(
       valueListenable: items,
       builder: (context, value, child) {
@@ -28,17 +30,16 @@ class DailyBookingsList extends StatelessWidget {
             final day = items[index].day;
             Widget result;
             if (lastDay != null && lastDay != day) {
-              final df = DateTimeUtil.getFormat('EEEE, dd.MM', 'de');
               result = Column(
                 children: [
                   DividerWithLabel(df.format(items[index].start)),
                   TimeBookingListItem(items[index], editFn, deleteFn)
                 ],
               );
-              lastDay = day;
             } else {
               result = TimeBookingListItem(items[index], editFn, deleteFn);
             }
+            lastDay = day;
             return result;
           },
         );

@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:sqflite_entities/converter/date_util.dart';
 import 'package:time_tracker/booking/entity/time_booking_statistics.dart';
+import 'package:time_tracker/common/widget/expanded_row_widget.dart';
 import 'package:time_tracker/common/widget/label_text_widget.dart';
-import 'package:time_tracker/util/widget_util.dart';
+import 'package:time_tracker/common/widget/labeled_card_widget.dart';
 
 class DailyBookingStatisticWidget extends StatelessWidget {
   final DailyBookingStatistic item;
@@ -12,47 +13,33 @@ class DailyBookingStatisticWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final _df = DateTimeUtil.getFormat('EEEE, dd.MM.yyyy', 'de');
-    final headStyle = Theme.of(context).textTheme.headline6;
     final breakTime = item.end.difference(item.start) - item.workedTime;
 
-    return Card(
-      margin: const EdgeInsets.fromLTRB(16, 16, 16, 0),
-      elevation: 8,
-      child: InkWell(
-        onLongPress: onLongPress,
-        child: Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: Column(
+    return LabeledCardWidget(
+      _df.format(item.start),
+      Column(
+        children: [
+          ExpandedRowWidget(
             children: [
-              Text(_df.format(item.start), style: headStyle,),
-              Padding(
-                padding: const EdgeInsets.symmetric(vertical: 8),
-                child: Row(
-                  children: expandWidgets([
-                    LabelTextWidget.ofDate('Start', item.start),
-                    LabelTextWidget.ofDate('Ende', item.end)
-                  ]),
-                ),
-              ),
-              Row(
-                children: expandWidgets([
-                  LabelTextWidget.ofDuration('Arbeitszeit', item.workedTime),
-                  LabelTextWidget.ofDuration('Überstunden', item.overHours)
-                ]),
-              ),
-              Padding(
-                padding: const EdgeInsets.symmetric(vertical: 8),
-                child: Row(
-                  children: expandWidgets([
-                    LabelTextWidget.ofDuration('Pause', breakTime),
-                    LabelTextWidget.ofDuration('Soll', item.planedWorkTime),
-                  ]),
-                ),
-              ),
+              LabelTextWidget.ofDate('Start', item.start),
+              LabelTextWidget.ofDate('Ende', item.end)
             ],
           ),
-        ),
+          ExpandedRowWidget(
+            children: [
+              LabelTextWidget.ofDuration('Arbeitszeit', item.workedTime),
+              LabelTextWidget.ofDuration('Überstunden', item.overHours)
+            ],
+          ),
+            ExpandedRowWidget(
+              children: [
+                LabelTextWidget.ofDuration('Pause', breakTime),
+                LabelTextWidget.ofDuration('Soll', item.planedWorkTime),
+              ],
+            )
+        ],
       ),
+      onLongPress: onLongPress,
     );
   }
 }

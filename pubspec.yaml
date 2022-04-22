@@ -32,8 +32,9 @@ dependencies:
     sdk: flutter
   intl: ^0.17.0
   sqflite: ^2.0.2
+  week_of_year: ^2.0.0
   # https://plus.fluttercommunity.dev/docs/overview/
-  share_plus: ^4.0.1
+  share_plus: ^4.0.4
   csv: ^5.0.1
   path_provider: ^2.0.9
   sqflite_entities:

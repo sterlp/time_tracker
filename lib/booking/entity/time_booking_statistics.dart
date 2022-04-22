@@ -14,6 +14,11 @@ class DailyBookingStatistic {
 
   Duration get overHours => workedTime - planedWorkTime;
   Duration get breakTime => end.difference(start) - workedTime;
+
+  @override
+  String toString() {
+    return 'DailyBookingStatistic[start=$start, end=$end, workedTime=$workedTime]';
+  }
 }
 
 class DailyBookingStatisticList {
@@ -26,6 +31,7 @@ class DailyBookingStatisticList {
   Duration get sumOverHours => _sumOverHours;
   Duration get sumBreakTime => _sumBreakTime;
   int get count => _elements.length;
+  List<DailyBookingStatistic> get elements => _elements;
 
   Duration get avgWorkTime => count > 0
       ? Duration(minutes: (_sumWorkedTime.inMinutes / count).round())
@@ -34,14 +40,13 @@ class DailyBookingStatisticList {
       ? Duration(minutes: (_sumBreakTime.inMinutes / count).round())
       : Duration.zero;
 
-  DailyBookingStatisticList.of(List<DailyBookingStatistic> elements) {
-    _elements = elements;
+  DailyBookingStatisticList.of(List<DailyBookingStatistic> v) {
+    _elements = v;
 
-    for(DailyBookingStatistic e in elements) {
+    for(DailyBookingStatistic e in _elements) {
       _sumWorkedTime += e.workedTime;
       _sumOverHours += e.overHours;
       _sumBreakTime += e.breakTime;
     }
   }
 }
-

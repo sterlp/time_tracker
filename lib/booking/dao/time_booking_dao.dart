@@ -18,7 +18,7 @@ class TimeBookingDao extends AbstractDao<TimeBooking> {
       SET ${DbBookingTableV2.targetHoursInMin} = ?
       WHERE ${DbBookingTableV2.day} = ?
       """,
-      [newTarget.inMinutes, day]);
+      [newTarget.inMinutes, day],);
   }
 
   Future<List<TimeBooking>> all() {

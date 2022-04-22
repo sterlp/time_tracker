@@ -65,7 +65,7 @@ class _BookingListPageState extends State<BookingListPage> {
     } else {
       return Scaffold(
         appBar: AppBar(
-          title: Text(_df.format(widget.to)),
+          title: Text(_df.format(widget.from)),
         ),
         body: DailyBookingsList(
           _bookings!,

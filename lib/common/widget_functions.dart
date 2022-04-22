@@ -12,3 +12,10 @@ Widget paddingRow({List<Widget> children = const [], EdgeInsets padding = const 
     children: children.map((e) => Padding(padding: padding, child: e,)).toList(),
   );
 }
+/*
+List<Widget> expandWidgets(List<Widget> widgets) {
+  final results = <Widget>[];
+  for (final w in widgets) results.add(Expanded(child: w));
+  return results;
+}
+*/
