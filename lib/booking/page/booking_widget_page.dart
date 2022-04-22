@@ -45,7 +45,7 @@ class BookingWidgetPage extends StatelessWidget {
                 return DailyConfigOverview(
                   todayBean.workHours,
                   startTime,
-                  todayBean.sumTimeBookingsWorkTime()
+                  todayBean.sumTimeBookingsWorkTime(),
                 );
               },
             ),

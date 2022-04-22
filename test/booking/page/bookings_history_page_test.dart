@@ -37,7 +37,7 @@ void main() {
     // THEN
     expect(find.text('Lade ...'), findsNothing);
     expect(find.byType(Card), findsNothing);
-    expect(find.byType(Text), findsNothing);
+    expect(find.text('Historie'), findsOneWidget);
   });
 
   testWidgets('Load two stats', (WidgetTester tester) async {
