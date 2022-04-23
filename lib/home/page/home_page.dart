@@ -1,16 +1,9 @@
-import 'dart:io';
 import 'package:dependency_container/dependency_container.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/date_symbol_data_local.dart';
-import 'package:path_provider/path_provider.dart';
-import 'package:share_plus/share_plus.dart';
-import 'package:time_tracker/booking/dao/time_booking_dao.dart';
 import 'package:time_tracker/booking/page/bookings_history_page.dart';
-import 'package:time_tracker/booking/page/bookings_list_page.dart';
 import 'package:time_tracker/booking/page/booking_widget_page.dart';
 import 'package:time_tracker/common/feedback.dart';
-import 'package:time_tracker/export/export_service.dart';
-import 'package:time_tracker/log/logger.dart';
 import 'package:time_tracker/week/page/week_list_page.dart';
 
 class HomePage extends StatefulWidget {

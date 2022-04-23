@@ -47,20 +47,26 @@ class _WeekListPageState extends State<WeekListPage> {
                 children: [
                   ExpandedRowWidget(
                     children: [
-                      LabelTextWidget('Erster Arbeitastag', DateTimeUtil.formatWithString(item.start, 'E dd.MM.yyyy')),
-                      LabelTextWidget('Letzter Arbeitastag', DateTimeUtil.formatWithString(item.end, 'E dd.MM.yyyy')),
+                      LabelTextWidget('erster Arbeitstag', DateTimeUtil.formatWithString(item.start, 'E dd.MM.yyyy')),
+                      LabelTextWidget('letzter Arbeitstag', DateTimeUtil.formatWithString(item.end, 'E dd.MM.yyyy')),
                     ],
                   ),
                   ExpandedRowWidget(
                     children: [
-                      LabelTextWidget.ofDuration('Gearbeitet', item.statisticList.sumWorkedTime),
-                      LabelTextWidget.ofDuration('Ø Gearbeitet', item.statisticList.avgWorkTime),
+                      LabelTextWidget.ofDuration('gearbeitet', item.statisticList.sumWorkedTime),
+                      LabelTextWidget.ofDuration('Ø gearbeitet', item.statisticList.avgWorkTime),
                     ],
                   ),
                   ExpandedRowWidget(
                     children: [
                       LabelTextWidget.ofDuration('Pause', item.statisticList.sumBreakTime),
                       LabelTextWidget.ofDuration('Ø Pause', item.statisticList.avgBreakTime),
+                    ],
+                  ),
+                  ExpandedRowWidget(
+                    children: [
+                      LabelTextWidget.ofDuration('Überstunden', item.statisticList.sumOverHours),
+                      LabelTextWidget('Buchungen', item.statisticList.count.toString()),
                     ],
                   ),
                 ],
