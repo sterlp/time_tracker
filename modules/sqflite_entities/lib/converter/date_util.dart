@@ -23,7 +23,7 @@ class DateTimeUtil {
     return getFormat(format, locale).format(date);
   }
 
-  static DateFormat getFormat(String format, [String? locale]) {
+  static DateFormat getFormat(String format, [String? locale = 'de']) {
     final key = '$format$locale';
     DateFormat? f = _formatterCache[key];
     if (f == null) {

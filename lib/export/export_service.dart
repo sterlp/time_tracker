@@ -4,6 +4,7 @@ import 'package:path_provider/path_provider.dart';
 import 'package:sqflite_entities/converter/date_util.dart';
 import 'package:sqflite_entities/entity/query.dart';
 import 'package:time_tracker/booking/bean/booking_service.dart';
+import 'package:time_tracker/booking/entity/time_booking.dart';
 import 'package:time_tracker/log/logger.dart';
 import 'package:time_tracker/util/time_util.dart';
 
@@ -29,8 +30,7 @@ class ExportService {
     return f;
   }
 
-  Future<String> exportAll() async {
-    final bookings = await _bookingService.all(order: SortOrder.ASC);
+  String toCsvData(List<TimeBooking> bookings) {
     final List<List<String>?> result = [['Kalenderwoche', 'Tag', 'Wochentag', 'Start', 'Ende', 'Arbeitszeit']];
 
     final format = DateTimeUtil.getFormat('dd.MM.yyyy HH:mm');
@@ -50,5 +50,10 @@ class ExportService {
     ).convert(result);
 
     return csvData;
+  }
+
+  Future<String> exportAll() async {
+    final bookings = await _bookingService.all(order: SortOrder.ASC);
+    return toCsvData(bookings);
   }
 }

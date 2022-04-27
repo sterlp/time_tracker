@@ -2,7 +2,6 @@ import 'dart:async';
 import 'dart:math';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:sqflite_entities/converter/date_util.dart';
 import 'package:time_tracker/booking/bean/today_bean.dart';
 import 'package:time_tracker/booking/widget/time_account.dart';
@@ -26,6 +25,7 @@ class _TimerButtonState extends State<TimerButton> {
 
   @override
   void initState() {
+    super.initState();
     _refreshTimer = Timer.periodic(
       const Duration(seconds: 5),
         (timer) {
@@ -40,8 +40,6 @@ class _TimerButtonState extends State<TimerButton> {
         }
       }
     );
-
-    super.initState();
   }
 
   @override
@@ -62,13 +60,13 @@ class _TimerButtonState extends State<TimerButton> {
           //mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Padding(
-                padding: const EdgeInsets.fromLTRB(0, 16, 0, 0),
-                child: Text(_headerFormat.format(_now),
-                    style: textStyle,),),
+              padding: const EdgeInsets.fromLTRB(0, 16, 0, 0),
+              child: Text(_headerFormat.format(_now),
+                  style: textStyle,),),
             Padding(
-                padding: const EdgeInsets.fromLTRB(0, 0, 0, 24),
-                child: Text('${toHoursWithMinutes(_now)} Uhr',
-                    style: textStyle)),
+              padding: const EdgeInsets.fromLTRB(0, 0, 0, 24),
+              child: Text('${toHoursWithMinutes(_now)} Uhr',
+                  style: textStyle)),
             Stack(
               alignment: AlignmentDirectional.center,
               children: [

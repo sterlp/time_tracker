@@ -1,6 +1,7 @@
 import 'package:dependency_container/dependency_container.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:share_plus/share_plus.dart';
 import 'package:sqflite_entities/converter/date_util.dart';
 import 'package:sqflite_entities/entity/query.dart';
 import 'package:time_tracker/booking/bean/booking_service.dart';
@@ -8,6 +9,7 @@ import 'package:time_tracker/booking/entity/time_booking.dart';
 import 'package:time_tracker/booking/page/edit_booking_page.dart';
 import 'package:time_tracker/booking/widget/daily_bookings_list.dart';
 import 'package:time_tracker/common/feedback.dart';
+import 'package:time_tracker/export/export_service.dart';
 import 'package:time_tracker/home/widget/loading_widget.dart';
 
 Future<void> showBookingListPage(
@@ -63,6 +65,12 @@ class _BookingListPageState extends State<BookingListPage> {
       return Scaffold(
         appBar: AppBar(
           title: Text(_df.format(widget.from)),
+          actions: [
+            IconButton(
+              onPressed: _bookings!.value.isNotEmpty ? _export : null,
+              icon: const Icon(Icons.download),
+            ),
+          ],
         ),
         body: DailyBookingsList(
           _bookings!,
@@ -75,6 +83,18 @@ class _BookingListPageState extends State<BookingListPage> {
         ),
       );
     }
+  }
+  Future<void> _export() async {
+    final fD = DateTimeUtil.getFormat('dd.MM');
+    final tD = DateTimeUtil.getFormat('dd.MM.yyyy');
+    final fileName = 'Datenexport ${fD.format(widget.from)} bis ${tD.format(widget.to)}.csv';
+    final csvData = widget._container.get<ExportService>().toCsvData(_bookings!.value);
+    final f = await widget._container.get<ExportService>().writeToFile(csvData, fileName: fileName);
+    await Share.shareFiles(
+      [f.path],
+      subject: fileName,
+      mimeTypes: ['text/csv'],);
+    f.delete();
   }
   Future<void> _newBooking() async {
     await showBookingPageWithCallback(context, widget._container, _reload,

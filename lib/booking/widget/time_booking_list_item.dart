@@ -27,7 +27,7 @@ class TimeBookingListItem extends StatelessWidget {
       title = Row(children: _expandItems([
           const Text('Beginn:'),
           Text(bookingStart)
-        ])
+        ]),
       );
     } else {
       title = Row(children: _expandItems([
