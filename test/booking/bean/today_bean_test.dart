@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:intl/date_symbol_data_local.dart';
 import 'package:time_tracker/booking/bean/booking_service.dart';
 import 'package:time_tracker/booking/bean/today_bean.dart';
 import 'package:time_tracker/booking/dao/time_booking_dao.dart';
@@ -20,6 +21,7 @@ Future<void> main() async {
   });
 
   setUp(() async {
+    await initializeDateFormatting('de');
     await dao.deleteAll();
     subject = TodayBean(service);
   });
@@ -149,12 +151,19 @@ Future<void> main() async {
 
   test('Will change day', () async {
     // GIVEN
+    await testData.newBookingOf(const Duration(hours: -3), const Duration(hours: 1));
+    await testData.newBookingOf(const Duration(hours: -1), const Duration(hours: 1));
+    await testData.newBooking(1, const Duration(hours: 1));
     expect(DateUtils.isSameDay(subject.day, DateTime.now()), isTrue);
+
     // WHEN
-    final date = DateTime.now().add(const Duration(days: -3));
+    await subject.reload();
+    expect(subject.value.length, 2);
+    final date = DateTime.now().add(const Duration(days: 1));
     await subject.changeDay(date);
     // THEN
     expect(DateUtils.isSameDay(subject.day, date), isTrue);
+    expect(subject.value.length, 1);
   });
 
   test('Change day selects right booking', () async {

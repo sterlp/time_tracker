@@ -34,7 +34,7 @@ class BookingListPage extends StatefulWidget {
 }
 
 class _BookingListPageState extends State<BookingListPage> {
-  final _df = DateTimeUtil.getFormat('EEEE, dd.MM', 'de');
+  final _df = DateTimeUtil.getFormat('EEEE, dd.MM');
   ValueNotifier<List<TimeBooking>>? _bookings;
 
   @override

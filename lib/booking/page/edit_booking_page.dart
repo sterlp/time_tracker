@@ -34,7 +34,7 @@ Future<void> showBookingPageWithCallback(
 class EditBookingPage extends StatefulWidget {
   final AppContainer _container;
   final TimeBooking _booking;
-  final dateTimeFormat = DateTimeUtil.getFormat('EEEE dd.MM.yyyy HH:mm', 'de');
+  final dateTimeFormat = DateTimeUtil.getFormat('EEEE dd.MM.yyyy HH:mm');
 
   EditBookingPage(this._container, this._booking, {Key? key}) : super(key: key);
 

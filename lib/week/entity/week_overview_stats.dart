@@ -17,7 +17,7 @@ class WeekOverviewStats {
   DateTime get end {
     var r = DateTime(1900); // ensure we have a very old date to begin with
     for (final e in statisticList.elements) {
-      if (e.start.isAfter(r)) r = e.start;
+      if (e.end.isAfter(r)) r = e.end;
     }
     return r;
   }

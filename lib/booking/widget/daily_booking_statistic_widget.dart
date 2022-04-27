@@ -12,7 +12,7 @@ class DailyBookingStatisticWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final _df = DateTimeUtil.getFormat('EEEE, dd.MM.yyyy', 'de');
+    final _df = DateTimeUtil.getFormat('EEEE, dd.MM.yyyy');
     final breakTime = item.end.difference(item.start) - item.workedTime;
 
     return LabeledCardWidget(

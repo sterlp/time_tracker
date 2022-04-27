@@ -37,7 +37,8 @@ class TodayBean extends ValueNotifier<List<TimeBooking>> {
     final dbData = await _bookingService.loadDay(_day);
     _selectFirstOpenBooking(dbData);
     if (dbData.isNotEmpty) _workHours = dbData[0].targetWorkTime;
-    return value = dbData;
+    value = dbData;
+    return dbData;
   }
 
   void _selectFirstOpenBooking(List<TimeBooking> bookings) {

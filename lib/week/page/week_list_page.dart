@@ -66,7 +66,7 @@ class _WeekListPageState extends State<WeekListPage> {
                   ExpandedRowWidget(
                     children: [
                       LabelTextWidget.ofDuration('Überstunden', item.statisticList.sumOverHours),
-                      LabelTextWidget('Buchungen', item.statisticList.count.toString()),
+                      LabelTextWidget('Tage gearbeitet', item.statisticList.count.toString()),
                     ],
                   ),
                 ],

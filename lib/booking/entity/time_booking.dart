@@ -4,7 +4,7 @@ import 'package:sqflite_entities/entity/abstract_entity.dart';
 import 'package:time_tracker/db/db_v2.dart';
 
 class TimeBooking extends AbstractEntity {
-  static final dayFormat = DateTimeUtil.getFormat('yyyy-MM-dd');
+  static final dayFormat = DateTimeUtil.getFormat('yyyy-MM-dd', null);
 
   DateTime start;
   DateTime? end;

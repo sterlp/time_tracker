@@ -17,7 +17,7 @@ class DailyBookingsList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final df = DateTimeUtil.getFormat('EEEE, dd.MM', 'de');
+    final df = DateTimeUtil.getFormat('EEEE, dd.MM');
     String? lastDay;
 
     return ValueListenableBuilder<List<TimeBooking>>(

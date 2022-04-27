@@ -26,7 +26,7 @@ void main() {
     // GIVEN
     expect(DateFormat('yyyy'), isNot(DateFormat('yyyy')));
     // THEN
-    expect(DateTimeUtil.getFormat('yyyy'), DateTimeUtil.getFormat('yyyy'));
-    expect(DateTimeUtil.getFormat('yyyy'), DateTimeUtil.getFormat('yyyy'));
+    expect(DateTimeUtil.getFormat('yyyy', null), DateTimeUtil.getFormat('yyyy', null));
+    expect(DateTimeUtil.getFormat('yyyy', null), DateTimeUtil.getFormat('yyyy', null));
   });
 }
