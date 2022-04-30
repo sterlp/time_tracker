@@ -96,10 +96,6 @@ class _EditBookingPageState extends State<EditBookingPage> {
                 duration: _booking.targetWorkTime,
                 decoration: const InputDecoration(label: Text('Tagessoll')),
                 onChanged: _setWorkTime,
-                validator: (d) {
-                  if (d == null || d.inMinutes == 0) return 'Arbeitszeit muss größer 0 sein.';
-                  return null;
-                },
               ),
               Padding(
                 padding: const EdgeInsets.symmetric(vertical: 16),

@@ -1,6 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
+extension ToDecimal on Duration {
+  double toDecimal() {
+    return this.inSeconds / 3600;
+  }
+}
+
 class DateTimeUtil {
   DateTimeUtil._();
 

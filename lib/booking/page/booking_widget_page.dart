@@ -8,6 +8,7 @@ import 'package:time_tracker/booking/widget/daily_bookings_list.dart';
 import 'package:time_tracker/booking/widget/daily_config_overview.dart';
 import 'package:time_tracker/booking/widget/timer_button.dart';
 import 'package:time_tracker/export/export_service.dart';
+import 'package:time_tracker/export/widget/export_dialog_widget.dart';
 
 class BookingWidgetPage extends StatelessWidget {
   final AppContainer _container;
@@ -22,13 +23,7 @@ class BookingWidgetPage extends StatelessWidget {
         title: const Text('Zeiterfassung'),
         actions: [
           IconButton(
-            onPressed: () async {
-              final f = await _container.get<ExportService>().exportAllToFile();
-              await Share.shareFiles(
-                [f.path],
-                subject: 'Datenexport.csv', mimeTypes: ['text/csv'],);
-              f.delete();
-            },
+            onPressed: () => showExportDialogWidget(context, _container),
             icon: const Icon(Icons.download),
           ),
         ],
