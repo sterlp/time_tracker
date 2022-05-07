@@ -7,7 +7,7 @@ import 'package:sqflite_entities/entity/query.dart';
 import 'package:time_tracker/booking/bean/booking_service.dart';
 import 'package:time_tracker/booking/entity/time_booking.dart';
 import 'package:time_tracker/db/db_v2.dart';
-import 'package:time_tracker/export/export_day_statistic.dart';
+import 'package:time_tracker/export/entity/export_day_statistic.dart';
 import 'package:time_tracker/log/logger.dart';
 import 'package:time_tracker/util/time_util.dart';
 

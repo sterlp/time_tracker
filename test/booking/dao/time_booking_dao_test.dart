@@ -21,7 +21,7 @@ Future<void> main() async {
   test('Test Save TimeBookingDao', () async {
     final b = await subject.save(TimeBooking(DateTime(2021, 3, 1, 8))
       ..targetWorkTime = const Duration(hours: 6)
-      ..end = DateTime(2021, 3, 1, 12));
+      ..end = DateTime(2021, 3, 1, 12),);
     final saved = await subject.getById(b.id!);
 
     expect(saved?.id, b.id);

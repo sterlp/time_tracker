@@ -4,7 +4,16 @@ import 'package:time_tracker/booking/entity/time_booking.dart';
 import 'package:time_tracker/booking/entity/time_booking_statistics.dart';
 
 class ExportDailyStats {
-  static final timeFormat = DateTimeUtil.getFormat('HH:mm');
+  static final _timeFormat = DateTimeUtil.getFormat('HH:mm');
+  static String formatTime(DateTime? time) {
+    if (time == null) return '';
+    else return _timeFormat.format(time);
+  }
+  /// Formats a duration as decimal number using a "," as separator
+  static String toDecimal(Duration duration) {
+    return duration.toDecimal().toStringAsFixed(2).replaceFirst(".", ",");
+  }
+
   final List<TimeBooking> bookings;
   final DailyBookingStatistic stats;
 
@@ -14,12 +23,12 @@ class ExportDailyStats {
       ? stats.planedWorkTime.toDecimal().toStringAsFixed(2).replaceFirst(".", ",") : '';
   String get workedTime => hasBookings
       ? stats.workedTime.toDecimal().toStringAsFixed(2).replaceFirst(".", ",") : '';
-  String get startTime => hasBookings ? timeFormat.format(stats.start) : '';
-  String get endTime => hasBookings ? timeFormat.format(stats.end) : '';
+  String get startTime => hasBookings ? formatTime(stats.start) : '';
+  String get endTime => hasBookings ? formatTime(stats.end) : '';
 
-  String get startBreak => hasBreak ? timeFormat.format(bookings[0].start) : '';
-  String get endBreak => hasBreak ? timeFormat.format(bookings[0].start.add(stats.breakTime)) : '';
-  String get breakTime => hasBreak ? stats.breakTime.toDecimal().toStringAsFixed(2).replaceFirst(".", ",") : '';
+  String get startBreak => hasBreak ? formatTime(bookings[0].end) : '';
+  String get endBreak => hasBreak ? formatTime(bookings[0].end?.add(stats.breakTime)) : '';
+  String get breakTime => hasBreak ? toDecimal(stats.breakTime) : '';
 
   ExportDailyStats(this.bookings, this.stats);
 
