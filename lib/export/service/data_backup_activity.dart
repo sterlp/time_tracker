@@ -9,7 +9,7 @@ import 'package:time_tracker/util/time_util.dart';
 
 class DataBackupActivity {
   static final _log = LoggerFactory.get<DataBackupActivity>();
-  static final _dateTimeFormat = 'dd.MM.yyyy HH:mm';
+  static const _dateTimeFormat = 'dd.MM.yyyy HH:mm';
   static final _format = DateTimeUtil.getFormat(_dateTimeFormat);
 
   String toCsvData(List<TimeBooking> bookings) {

@@ -1,6 +1,5 @@
 import 'dart:io';
 import 'package:csv/csv.dart';
-import 'package:csv/csv_settings_autodetection.dart';
 import 'package:flutter/material.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:sqflite_entities/converter/date_util.dart';
@@ -9,15 +8,16 @@ import 'package:time_tracker/booking/bean/booking_service.dart';
 import 'package:time_tracker/booking/entity/time_booking.dart';
 import 'package:time_tracker/export/entity/export_day_statistic.dart';
 import 'package:time_tracker/export/service/data_backup_activity.dart';
+import 'package:time_tracker/export/service/export_by_month_activity.dart';
 import 'package:time_tracker/log/logger.dart';
-import 'package:time_tracker/util/time_util.dart';
 
 class ExportService {
   static final _log = LoggerFactory.get<ExportService>();
-  final DataBackupActivity _dataBackupActivity;
+  final _monthExportActivity = ExportByMonthActivity();
+  final _dataBackupActivity = DataBackupActivity();
   final BookingService _bookingService;
 
-  ExportService(this._dataBackupActivity, this._bookingService);
+  ExportService(this._bookingService);
 
   Future<File> exportAllToFile({String fileName = 'Datenexport.csv'}) async {
     final csvData = await exportAll();

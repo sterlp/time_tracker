@@ -15,7 +15,6 @@ import 'package:time_tracker/home/widget/loading_widget.dart';
 import 'package:time_tracker/log/logger.dart';
 
 Future<AppContainer> initContext({Future<DbProvider>? dbProvider}) async {
-  await initializeDateFormatting('de_DE');
   final result = AppContainer();
   final db = await (await (dbProvider ??= initDb())).init();
 
@@ -25,11 +24,10 @@ Future<AppContainer> initContext({Future<DbProvider>? dbProvider}) async {
   result.add(config);
 
   // TodayBean
-  result.add(TimeBookingDao(db))
-        .addFactory((c) => BookingService(c.get<TimeBookingDao>()))
-        .addFactory((c) => TodayBean(c.get<BookingService>()).init())
-        .addFactory((c) => DataBackupActivity())
-        .addFactory((c) => ExportService(c.get<DataBackupActivity>(), c.get<BookingService>()))
+  result.add<TimeBookingDao>(TimeBookingDao(db))
+        .addFactory<BookingService>((c) => BookingService(c.get<TimeBookingDao>()))
+        .addFactory<TodayBean>((c) => TodayBean(c.get<BookingService>()).init())
+        .addFactory<ExportService>((c) => ExportService(c.get<BookingService>()))
   ;
 
   return result;
@@ -53,9 +51,7 @@ class MyApp extends StatelessWidget {
       darkTheme: ThemeData.dark(),
       theme: ThemeData.light(),
       supportedLocales: const [
-        Locale('de', 'DE'),
-        Locale('de', ''),
-        Locale('en', ''),
+        Locale('de', '')
       ],
       localizationsDelegates: const [
         GlobalMaterialLocalizations.delegate,

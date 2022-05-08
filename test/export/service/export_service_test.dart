@@ -16,8 +16,7 @@ Future<void> main() async {
   final db = await dbProvider.init();
   final dao = TimeBookingDao(db);
   final bService = BookingService(dao);
-  final bA = DataBackupActivity();
-  final subject = ExportService(bA, bService);
+  final subject = ExportService(bService);
 
   final testData = BookingTestData(dao);
 
