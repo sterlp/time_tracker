@@ -8,14 +8,15 @@ class BookingTestData {
 
   BookingTestData(this.timeBookingDao);
 
-  Future<TimeBooking> newBooking(int daysFromNow, Duration? duration) {
+  Future<TimeBooking> newBooking([int daysFromNow = 0, Duration? duration]) {
     return newBookingOf(Duration(days: daysFromNow), duration);
   }
 
-  Future<TimeBooking> newBookingOf(Duration fromNow, Duration? duration) async {
-    final result = TimeBooking(
-        DateTimeUtil.precisionMinutes(
-            DateTime.now().add(fromNow),),);
+  Future<TimeBooking> newBookingOf(Duration fromNow, Duration? duration) {
+    return newBookingWithStart(DateTimeUtil.precisionMinutes(DateTime.now().add(fromNow),), duration);
+  }
+  Future<TimeBooking> newBookingWithStart(DateTime start, Duration? duration) async {
+    final result = TimeBooking(start);
     if (duration != null) {
       result.workTime = duration;
     }

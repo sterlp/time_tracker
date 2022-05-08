@@ -6,7 +6,6 @@ import 'package:sqflite_entities/converter/date_util.dart';
 import 'package:sqflite_entities/entity/query.dart';
 import 'package:time_tracker/booking/bean/booking_service.dart';
 import 'package:time_tracker/booking/entity/time_booking.dart';
-import 'package:time_tracker/db/db_v2.dart';
 import 'package:time_tracker/export/entity/export_day_statistic.dart';
 import 'package:time_tracker/log/logger.dart';
 import 'package:time_tracker/util/time_util.dart';
@@ -82,7 +81,7 @@ class ExportService {
   }
 
   String toCsvData(List<TimeBooking> bookings) {
-    final List<List<String>?> result = [['Kalenderwoche', 'Tag', 'Wochentag', 'Start', 'Ende', 'Arbeitszeit']];
+    final List<List<String>?> result = [['Kalenderwoche', 'Tag', 'Wochentag', 'Start', 'Ende', 'Arbeitszeit', 'Soll']];
     final format = DateTimeUtil.getFormat('dd.MM.yyyy HH:mm');
     for (final b in bookings) {
       result.add([
@@ -91,8 +90,9 @@ class ExportService {
         b.start.toWeekdayString(),
         DateTimeUtil.format(b.start, format),
         DateTimeUtil.format(b.end, format),
-        toHoursAndMinutes(b.workTime)],
-      );
+        toHoursAndMinutes(b.workTime),
+        toHoursAndMinutes(b.targetWorkTime),
+      ]);
     }
 
     final csvData = const ListToCsvConverter(
