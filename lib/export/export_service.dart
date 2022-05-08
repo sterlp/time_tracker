@@ -50,7 +50,11 @@ class ExportService {
     firstMonth = DateTime(firstMonth.year, firstMonth.month);
     final dFormat = DateTimeUtil.getFormat('dd.MM.yyyy');
     final dName = DateTimeUtil.getFormat('EEEE');
-    final List<List<String>?> result = [['Datum', 'Tag', 'Soll', 'Arbeitsbeginn', 'Arbeitsende', 'Arbeitszeit', 'Pause Start', 'Pause Ende', 'Pausenzeit']];
+    final List<List<String>?> result = [['Datum', 'Tag', 'Soll', 'Arbeitsbeginn', 'Arbeitsende', 'Arbeitszeit',
+      'Pause 1 Start', 'Pause 1 Ende',
+      'Pause 2 Start', 'Pause 2 Ende',
+      'Pause Rest', 'Pause Rest',
+      'Pausenzeit']];
     while(firstMonth.month <= monthNow && yearNow <= yearNow) {
       final dayStats = ExportDailyStats.fromBookings(byDay[TimeBooking.dayFormat.format(firstMonth)] ?? []);
       result.add([
@@ -61,8 +65,13 @@ class ExportService {
         dayStats.endTime,
         dayStats.workedTime,
 
-        dayStats.startBreak,
-        dayStats.endBreak,
+        dayStats.startFirstBreak,
+        dayStats.endFirstBreak,
+        dayStats.startSecondBreak,
+        dayStats.endSecondBreak,
+        dayStats.startRemainingBreak,
+        dayStats.endRemainingBreak,
+
         dayStats.breakTime,
       ]);
       firstMonth = firstMonth.add(const Duration(days: 1));
