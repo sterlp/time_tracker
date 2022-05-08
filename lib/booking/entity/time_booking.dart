@@ -8,9 +8,11 @@ class TimeBooking extends AbstractEntity {
 
   DateTime start;
   DateTime? end;
-  Duration targetWorkTime = const Duration(hours: 8);
+  Duration targetWorkTime;
 
-  TimeBooking(this.start, {DateTime? endTime}) : end = endTime;
+  TimeBooking(this.start, {DateTime? endTime, Duration target = const Duration(hours: 8)})
+      : end = endTime, targetWorkTime = target;
+
   TimeBooking.now() : this(DateTimeUtil.precisionMinutes(DateTime.now()));
 
   String get day => dayFormat.format(start);

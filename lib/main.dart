@@ -8,12 +8,14 @@ import 'package:time_tracker/booking/bean/today_bean.dart';
 import 'package:time_tracker/booking/dao/time_booking_dao.dart';
 import 'package:time_tracker/config/dao/config_dao.dart';
 import 'package:time_tracker/db/time_traker_db.dart';
-import 'package:time_tracker/export/export_service.dart';
+import 'package:time_tracker/export/service/data_backup_activity.dart';
+import 'package:time_tracker/export/service/export_service.dart';
 import 'package:time_tracker/home/page/home_page.dart';
 import 'package:time_tracker/home/widget/loading_widget.dart';
 import 'package:time_tracker/log/logger.dart';
 
 Future<AppContainer> initContext({Future<DbProvider>? dbProvider}) async {
+  await initializeDateFormatting('de_DE');
   final result = AppContainer();
   final db = await (await (dbProvider ??= initDb())).init();
 
@@ -23,16 +25,13 @@ Future<AppContainer> initContext({Future<DbProvider>? dbProvider}) async {
   result.add(config);
 
   // TodayBean
-  final dao = TimeBookingDao(db);
-  result.add(dao);
-  final bookingService = BookingService(dao);
-  result.add(bookingService);
-  final todayBean = TodayBean(bookingService);
-  todayBean.reload();
-  result.add(todayBean);
-  result.add(ExportService(bookingService));
+  result.add(TimeBookingDao(db))
+        .addFactory((c) => BookingService(c.get<TimeBookingDao>()))
+        .addFactory((c) => TodayBean(c.get<BookingService>()).init())
+        .addFactory((c) => DataBackupActivity())
+        .addFactory((c) => ExportService(c.get<DataBackupActivity>(), c.get<BookingService>()))
+  ;
 
-  await initializeDateFormatting('de_DE');
   return result;
 }
 

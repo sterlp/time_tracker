@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:sqflite_entities/entity/query.dart';
 import 'package:time_tracker/booking/bean/booking_service.dart';
-import 'package:time_tracker/export/export_service.dart';
+import 'package:time_tracker/export/service/export_service.dart';
 
 void showExportDialogWidget(BuildContext context, AppContainer container) async {
   showDialog(

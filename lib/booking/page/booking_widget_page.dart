@@ -7,7 +7,7 @@ import 'package:time_tracker/booking/page/edit_booking_page.dart';
 import 'package:time_tracker/booking/widget/daily_bookings_list.dart';
 import 'package:time_tracker/booking/widget/daily_config_overview.dart';
 import 'package:time_tracker/booking/widget/timer_button.dart';
-import 'package:time_tracker/export/export_service.dart';
+import 'package:time_tracker/export/service/export_service.dart';
 import 'package:time_tracker/export/widget/export_dialog_widget.dart';
 
 class BookingWidgetPage extends StatelessWidget {

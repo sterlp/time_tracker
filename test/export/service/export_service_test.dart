@@ -1,9 +1,12 @@
+import 'dart:io';
+
 import 'package:flutter_test/flutter_test.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:time_tracker/booking/bean/booking_service.dart';
 import 'package:time_tracker/booking/dao/time_booking_dao.dart';
 import 'package:time_tracker/booking/entity/time_booking.dart';
-import 'package:time_tracker/export/export_service.dart';
+import 'package:time_tracker/export/service/data_backup_activity.dart';
+import 'package:time_tracker/export/service/export_service.dart';
 
 import '../../booking/booking_test_data.dart';
 import '../../test_helper.dart';
@@ -13,8 +16,10 @@ Future<void> main() async {
   final db = await dbProvider.init();
   final dao = TimeBookingDao(db);
   final bService = BookingService(dao);
+  final bA = DataBackupActivity();
+  final subject = ExportService(bA, bService);
+
   final testData = BookingTestData(dao);
-  final subject = ExportService(bService);
 
 
   tearDownAll(() async {
@@ -53,5 +58,36 @@ Future<void> main() async {
     expect(data, contains("Mittwoch;04.05.2022 13:00;;"));
     // AND we should have the header
     expect(data, contains("Kalenderwoche;Tag;Wochentag;Start;Ende;Arbeitszeit;Soll"));
+  });
+
+  test('Test import data again', () async {
+    // GIVEN
+    final file = await File('test_resources/export_test_data.csv').readAsString();
+    // WHEN
+    final bookings = await subject.importBackup(file);
+    // THEN
+    expect(bookings.length, 3);
+    expect(bookings[0].start, DateTime.parse("2022-05-02 08:00:00"));
+    expect(bookings[0].end, DateTime.parse("2022-05-02 16:00:00"));
+
+    expect(bookings[1].start, DateTime.parse("2022-05-03 09:20:00"));
+    expect(bookings[1].end, DateTime.parse("2022-05-03 17:20:00"));
+
+    expect(bookings[2].start, DateTime.parse("2022-05-04 13:00:00"));
+    expect(bookings[2].end, isNull);
+
+    // AND it should be saved
+    expect(await dao.countAll(), 3);
+  });
+
+  test('Test import should detect duplicates', () async {
+    // GIVEN
+    final file = await File('test_resources/export_test_data.csv').readAsString();
+    // WHEN
+    await subject.importBackup(file);
+    await subject.importBackup(file);
+    // THEN
+    expect(await dao.countAll(), 3);
+
   });
 }

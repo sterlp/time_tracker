@@ -38,4 +38,11 @@ class BookingService {
   Future<List<DailyBookingStatistic>> statisticByDay() {
     return _timeBookingDao.stats();
   }
+
+  Future<TimeBooking?> findByStartEnd(DateTime start, DateTime? end) async {
+    TimeBooking? result;
+    if (end == null) result = await _timeBookingDao.findOpenByStart(start);
+    else result = await _timeBookingDao.findByStartAndEnd(start, end);
+    return result;
+  }
 }

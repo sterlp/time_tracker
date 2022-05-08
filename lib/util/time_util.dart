@@ -12,6 +12,11 @@ String toHoursAndMinutes(Duration duration) {
   final minutes = duration.inMinutes - hours * 60;
   return '${_padWith0(hours)}:${_padWith0(minutes)}';
 }
+Duration hoursAndMinutesToDuration(String? time) {
+  if (time == null || time.length < 3) return Duration.zero;
+  final hm = time.split(':');
+  return Duration(hours: int.parse(hm[0]), minutes: int.parse(hm[1]));
+}
 
 /// Returns the time as <b>00:00</b>
 String toHoursWithMinutes(DateTime? time) {

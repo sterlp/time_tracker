@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'package:csv/csv.dart';
+import 'package:csv/csv_settings_autodetection.dart';
 import 'package:flutter/material.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:sqflite_entities/converter/date_util.dart';
@@ -7,14 +8,16 @@ import 'package:sqflite_entities/entity/query.dart';
 import 'package:time_tracker/booking/bean/booking_service.dart';
 import 'package:time_tracker/booking/entity/time_booking.dart';
 import 'package:time_tracker/export/entity/export_day_statistic.dart';
+import 'package:time_tracker/export/service/data_backup_activity.dart';
 import 'package:time_tracker/log/logger.dart';
 import 'package:time_tracker/util/time_util.dart';
 
 class ExportService {
   static final _log = LoggerFactory.get<ExportService>();
+  final DataBackupActivity _dataBackupActivity;
   final BookingService _bookingService;
 
-  ExportService(this._bookingService);
+  ExportService(this._dataBackupActivity, this._bookingService);
 
   Future<File> exportAllToFile({String fileName = 'Datenexport.csv'}) async {
     final csvData = await exportAll();
@@ -81,29 +84,21 @@ class ExportService {
   }
 
   String toCsvData(List<TimeBooking> bookings) {
-    final List<List<String>?> result = [['Kalenderwoche', 'Tag', 'Wochentag', 'Start', 'Ende', 'Arbeitszeit', 'Soll']];
-    final format = DateTimeUtil.getFormat('dd.MM.yyyy HH:mm');
-    for (final b in bookings) {
-      result.add([
-        'KW ${b.start.weekOfYear}',
-        b.day,
-        b.start.toWeekdayString(),
-        DateTimeUtil.format(b.start, format),
-        DateTimeUtil.format(b.end, format),
-        toHoursAndMinutes(b.workTime),
-        toHoursAndMinutes(b.targetWorkTime),
-      ]);
-    }
-
-    final csvData = const ListToCsvConverter(
-      fieldDelimiter: ';',
-    ).convert(result);
-
-    return csvData;
+    return _dataBackupActivity.toCsvData(bookings);
   }
 
   Future<String> exportAll() async {
     final bookings = await _bookingService.all(order: SortOrder.ASC);
     return toCsvData(bookings);
+  }
+
+  Future<List<TimeBooking>> importBackup(String csvData) async {
+    final toSave = _dataBackupActivity.fromCsvData(csvData);
+    final result = <TimeBooking>[];
+    for (final b in toSave) {
+      final stored = await _bookingService.findByStartEnd(b.start, b.end);
+      if (stored == null) result.add(await _bookingService.save(b));
+    }
+    return result;
   }
 }

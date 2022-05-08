@@ -29,4 +29,10 @@ void main() {
     expect(DateTimeUtil.getFormat('yyyy', null), DateTimeUtil.getFormat('yyyy', null));
     expect(DateTimeUtil.getFormat('yyyy', null), DateTimeUtil.getFormat('yyyy', null));
   });
+
+  test('test hoursAndMinutesToDuration', () {
+    expect(hoursAndMinutesToDuration(null), Duration.zero);
+    expect(hoursAndMinutesToDuration('1:0'), const Duration(hours: 1));
+    expect(hoursAndMinutesToDuration('12:12'), const Duration(hours: 12, minutes: 12));
+  });
 }

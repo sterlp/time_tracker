@@ -82,6 +82,26 @@ class TimeBookingDao extends AbstractDao<TimeBooking> {
     return result;
   }
 
+  Future<TimeBooking?> findOpenByStart(DateTime start) async {
+    final result = await loadAll(
+      where: "${DbBookingTableV2.startDate} = ?",
+      whereArgs: [dateTimeToInt(start)],
+      limit: 1,
+    );
+    if (result.isEmpty) return null;
+    else return result[0];
+  }
+
+  Future<TimeBooking?> findByStartAndEnd(DateTime start, DateTime end) async {
+    final result = await loadAll(
+      where: "${DbBookingTableV2.startDate} = ? AND ${DbBookingTableV2.endDate} = ?",
+      whereArgs: [dateTimeToInt(start), dateTimeToInt(end)],
+      limit: 1,
+    );
+    if (result.isEmpty) return null;
+    else return result[0];
+  }
+
   @override
   TimeBooking fromMap(Map<String, dynamic> values) {
     final result = TimeBooking(parseDateTime(values['start_date'])!);

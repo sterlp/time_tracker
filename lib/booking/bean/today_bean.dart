@@ -27,6 +27,11 @@ class TodayBean extends ValueNotifier<List<TimeBooking>> {
     }
   }
 
+  TodayBean init() {
+    reload();
+    return this;
+  }
+
   Duration sumTimeBookingsWorkTime() {
     var result = Duration.zero;
     for (final b in value) result += b.workTime;

@@ -21,17 +21,20 @@ class Logger {
   num _syncTime = 0;
   String? _syncString;
 
-  void error(String message, dynamic e) {
+  void error(dynamic message, dynamic e) {
     print('[ERROR]  $_name: $message -> $e');
   }
-  void warn(String message) {
-    print('[WARN]  $_name: $message');
+  void warn(dynamic message) {
+    _print('WARN', message);
   }
-  void info(String message) {
-    if (kDebugMode) print('[INFO]  $_name: $message');
+  void info(dynamic message) {
+    _print('INFO', message);
   }
-  void debug(String message) {
-    if (kDebugMode) print('[DEBUG] $_name: $message');
+  void debug(dynamic message) {
+    _print('DEBUG', message);
+  }
+  void _print(String level, dynamic message) {
+    if (kDebugMode) print('[$level] $_name: $message');
   }
 
   void startSync(String name) {
