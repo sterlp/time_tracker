@@ -27,7 +27,7 @@ class _HomePageState extends State<HomePage> {
       WeekListPage(widget._container),
       BookingsHistoryPage(widget._container),
     ];
-    initializeDateFormatting('de');
+    //initializeDateFormatting('de');
   }
 
   @override

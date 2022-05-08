@@ -21,12 +21,9 @@ class BookingWidgetPage extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Zeiterfassung'),
-        actions: [
-          IconButton(
-            onPressed: () => showExportDialogWidget(context, _container),
-            icon: const Icon(Icons.download),
-          ),
-        ],
+      ),
+      drawer: Drawer(
+        child: ExportDataWidget(_container),
       ),
       body: Column(
         children: [

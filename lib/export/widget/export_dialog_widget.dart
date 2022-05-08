@@ -1,66 +1,50 @@
 
+import 'dart:io';
 import 'package:dependency_container/dependency_container.dart';
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:sqflite_entities/entity/query.dart';
 import 'package:time_tracker/booking/bean/booking_service.dart';
 import 'package:time_tracker/export/service/export_service.dart';
 
-void showExportDialogWidget(BuildContext context, AppContainer container) async {
-  showDialog(
-    context: context,
-    builder: (_) => AlertDialog(
-      title: const Text('Daten Export'),
-      content: ExportDataWidget(container),
-    ),
-  );
-}
-
-class ExportDataWidget extends AlertDialog {
+class ExportDataWidget extends StatelessWidget {
   final AppContainer _container;
-  final ValueNotifier<bool> _isExporting = ValueNotifier(false);
-  ExportDataWidget(this._container, {Key? key}) : super(key: key);
+
+  const ExportDataWidget(this._container, {Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return ValueListenableBuilder<bool>(
-        valueListenable: _isExporting,
-        builder: (context, value, child) {
-          if (value) return _exporting(context);
-          else return _exportOptions(context);
-        }
-    );
-    _exporting(context); // _exportOptions(context);
+    return _exportOptions(context);
   }
-  Widget _exporting(BuildContext context) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-      children: [
-        CircularProgressIndicator(),
-        Text('Exportiere Daten ...')
-      ],
-    );
-  }
+
   Widget _exportOptions(BuildContext context) {
     return SingleChildScrollView(
       child: ListBody(
         children: [
-          SimpleDialogOption(
-            // padding: EdgeInsets,
-            child: Text('Alle Daten exportieren (Datensicherung)'),
-            onPressed: () => _export(context),
+          DrawerHeader(
+            child: Text('Menü', style: Theme.of(context).textTheme.headline4,)),
+          ListTile(
+            leading: const Icon(Icons.download_sharp),
+            title: const Text('Alle Daten exportieren'),
+            subtitle: const Text('(Datensicherung)'),
+            onTap: () => _export(context),
           ),
-          SimpleDialogOption(
-            // padding: EdgeInsets,
-            child: Text('Export nach Monat'),
-            onPressed: () => _exportMonth(context),
+          ListTile(
+            leading: const Icon(Icons.download_outlined),
+            title: const Text('Übersicht nach Monat'),
+            onTap: () => _exportMonth(context),
+          ),
+          ListTile(
+            leading: const Icon(Icons.upload_sharp),
+            title: const Text('Datensicherung importieren'),
+            onTap: () => _importBackup(context),
           ),
         ],
       ),
     );
   }
   Future<void> _exportMonth(BuildContext context) async {
-    _isExporting.value = true;
     final bookings = await _container.get<BookingService>().all(order: SortOrder.ASC);
     final csvData = _container.get<ExportService>().toMonthCsvData(bookings);
     final f = await _container.get<ExportService>().writeToFile(csvData, fileName: 'Monats Export.csv');
@@ -68,19 +52,35 @@ class ExportDataWidget extends AlertDialog {
     await Share.shareFiles(
       [f.path],
       subject: 'Monats Export.csv', mimeTypes: ['text/csv'],);
-
-    _isExporting.value = false;
-    Navigator.pop(context);
+    f.delete();
   }
   Future<void> _export(BuildContext context) async {
-    _isExporting.value = true;
     final f = await _container.get<ExportService>().exportAllToFile();
     await Share.shareFiles(
       [f.path],
       subject: 'Datenexport.csv', mimeTypes: ['text/csv'],);
-    await f.delete();
+    f.delete();
+  }
 
-    _isExporting.value = false;
-    Navigator.pop(context);
+  Future<void> _importBackup(BuildContext context) async {
+    FilePickerResult? result = await FilePicker.platform.pickFiles(
+      dialogTitle: 'Daten Export CSV auswählen',
+      type: FileType.custom,
+      allowedExtensions: ['csv'],
+    );
+
+    if (result != null && result.files.single.path != null) {
+      SnackBar message;
+      try {
+        final csvData = await File(result.files.single.path!).readAsString();
+        final imported = await _container.get<ExportService>().importBackup(csvData);
+        message = SnackBar(
+            content: Text('${imported.length} Buchungen importiert.'),);
+      } on Exception catch (e) {
+        message = SnackBar(
+            content: Text('Fehler: $e'),);
+      }
+      ScaffoldMessenger.of(context).showSnackBar(message);
+    }
   }
 }

@@ -102,8 +102,9 @@ class _TimerButtonState extends State<TimerButton> {
   Widget _buildStartButton(BuildContext context) {
     Widget text;
     final today = widget.todayBean;
+    MaterialColor color = Colors.lightGreen;
     if (today.hasCurrentBooking) {
-      // final total = totalWorkTime;
+      color = Colors.amber;
       text = Text('Stopp',
         style: Theme.of(context).textTheme.headline4,);
     } else {
@@ -120,7 +121,8 @@ class _TimerButtonState extends State<TimerButton> {
         enableFeedback: true,
         shape: const CircleBorder(),
         elevation: 6.0,
-        fixedSize: Size(size, size)
+        fixedSize: Size(size, size),
+        primary: color,
       ),
     );
   }
