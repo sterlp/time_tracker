@@ -4,7 +4,7 @@ import 'package:sqflite_entities/converter/date_util.dart';
 import 'package:time_tracker/booking/bean/booking_service.dart';
 import 'package:time_tracker/booking/page/bookings_list_page.dart';
 import 'package:time_tracker/booking/page/edit_booking_page.dart';
-import 'package:time_tracker/common/widget/expanded_row_widget.dart';
+import 'package:time_tracker/booking/widget/work_time_widget.dart';
 import 'package:time_tracker/common/widget/label_text_widget.dart';
 import 'package:time_tracker/common/widget/labeled_card_widget.dart';
 import 'package:time_tracker/week/entity/week_overview_stats.dart';
@@ -36,39 +36,47 @@ class _WeekListPageState extends State<WeekListPage> {
     return ValueListenableBuilder<List<WeekOverviewStats>>(
       valueListenable: data,
       builder: (context, value, child) {
+        const space = TableRow(
+          children: [SizedBox(height: 6,), SizedBox(height: 6,)],
+        );
         return ListView.builder(
           shrinkWrap: true,
           itemCount: value.length,
           itemBuilder: (context, index) {
+            final valueStyle = Theme.of(context).textTheme.subtitle1;
+
             final item = value[index];
             return LabeledCardWidget(
               'KW ${item.week} - ${item.statisticList.elements[0].start.year}',
-              Column(
+              Table(
                 children: [
-                  ExpandedRowWidget(
+                  TableRow(
                     children: [
                       LabelTextWidget('erster Arbeitstag', DateTimeUtil.formatWithString(item.start, 'E dd.MM.yyyy')),
                       LabelTextWidget('letzter Arbeitstag', DateTimeUtil.formatWithString(item.end, 'E dd.MM.yyyy')),
                     ],
                   ),
-                  ExpandedRowWidget(
+                  space,
+                  TableRow(
                     children: [
                       LabelTextWidget.ofDuration('gearbeitet', item.statisticList.sumWorkedTime),
                       LabelTextWidget.ofDuration('Ø gearbeitet', item.statisticList.avgWorkTime),
                     ],
                   ),
-                  ExpandedRowWidget(
+                  space,
+                  TableRow(
                     children: [
                       LabelTextWidget.ofDuration('Pause', item.statisticList.sumBreakTime),
                       LabelTextWidget.ofDuration('Ø Pause', item.statisticList.avgBreakTime),
                     ],
                   ),
-                  ExpandedRowWidget(
+                  space,
+                  TableRow(
                     children: [
-                      LabelTextWidget.ofDuration('Überstunden', item.statisticList.sumOverHours),
+                      LabeledWidget('Überstunden', child: WorkTimeWidget(item.statisticList.sumOverHours, style: valueStyle,)),
                       LabelTextWidget('Tage gearbeitet', item.statisticList.count.toString()),
                     ],
-                  ),
+                  )
                 ],
               ),
               onLongPress: () async {

@@ -36,6 +36,9 @@ class ExportService {
   }
 
   String toMonthCsvData(List<TimeBooking> bookings) {
+    final dFormat = DateTimeUtil.getFormat('dd.MM.yyyy');
+    final dName = DateTimeUtil.getFormat('EEEE');
+
     // first we collect the data into a map, and get the earliest Month
     final Map<String, List<TimeBooking>> byDay = {};
 
@@ -48,17 +51,22 @@ class ExportService {
 
     final monthNow = DateTime.now().month;
     final yearNow = DateTime.now().year;
-
     firstMonth = DateTime(firstMonth.year, firstMonth.month);
-    final dFormat = DateTimeUtil.getFormat('dd.MM.yyyy');
-    final dName = DateTimeUtil.getFormat('EEEE');
+    
+    _log.debug('Creating export from $firstMonth to $monthNow.$yearNow of ${byDay.length} booked days');
+    
     final List<List<String>?> result = [['Datum', 'Tag', 'Soll', 'Arbeitsbeginn', 'Arbeitsende', 'Arbeitszeit',
       'Pause 1 Start', 'Pause 1 Ende',
       'Pause 2 Start', 'Pause 2 Ende',
       'Pause Rest', 'Pause Rest',
       'Pausenzeit']];
-    while(firstMonth.month <= monthNow && yearNow <= yearNow) {
-      final dayStats = ExportDailyStats.fromBookings(byDay[TimeBooking.dayFormat.format(firstMonth)] ?? []);
+
+    while(firstMonth.year < yearNow
+        || (firstMonth.month <= monthNow && firstMonth.year == yearNow)) {
+
+      final dayKey = TimeBooking.dayFormat.format(firstMonth);
+      final dayStats = ExportDailyStats.fromBookings(byDay[dayKey] ?? []);
+
       result.add([
         dFormat.format(firstMonth),
         dName.format(firstMonth),

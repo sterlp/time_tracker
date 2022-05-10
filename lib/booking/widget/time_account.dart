@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:time_tracker/booking/widget/work_time_widget.dart';
 import 'package:time_tracker/util/time_util.dart';
 
 class TimeAccount extends StatelessWidget {
@@ -13,25 +14,18 @@ class TimeAccount extends StatelessWidget {
     final textStyle = Theme.of(context).textTheme.subtitle1;
     final headStyle = Theme.of(context).textTheme.headline6;
 
-    Color? c;
-    if (divToday.inMinutes >= 0) c = Colors.green;
-    else if (divToday.inMinutes < -45) c = Colors.red;
-    // final doneAt = DateTime.now().subtract(done).add(target);
-
     return Table(
       children: [
         TableRow(
           children: [
             Center(child: Text('Soll', style: headStyle,)),
             Center(child: Text('Ist', style: headStyle,)),
-          ]
+          ],
         ),
         TableRow(children: [
-          Center(child: Text(toDurationHoursAndMinutes(divToday),
-            style: textStyle?.apply(color: c),),),
-          Center(child: Text(toDurationHoursAndMinutes(done),
-              style: textStyle,),)
-        ]),
+          Center(child: WorkTimeWidget(divToday, style: textStyle,)),
+          Center(child: Text(toDurationHoursAndMinutes(done), style: textStyle)),
+        ],),
       ],
     );
   }

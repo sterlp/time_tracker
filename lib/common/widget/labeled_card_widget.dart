@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 
 class LabeledCardWidget extends StatelessWidget {
   final String head;
-  final Widget body;
+  final Widget child;
   final GestureLongPressCallback? onLongPress;
-  const LabeledCardWidget(this.head, this.body, {Key? key, this.onLongPress}) : super(key: key);
+  const LabeledCardWidget(this.head, this.child, {Key? key, this.onLongPress}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -19,8 +19,11 @@ class LabeledCardWidget extends StatelessWidget {
           padding: const EdgeInsets.all(16.0),
           child: Column(
             children: [
-              Text(head, style: headStyle,),
-              body,
+              Padding(
+                padding: const EdgeInsets.fromLTRB(0, 0, 0, 8),
+                child: Text(head, style: headStyle,),
+              ),
+              child,
             ],
           ),
         ),

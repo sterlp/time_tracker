@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:flutter_test/flutter_test.dart';
 import 'package:intl/date_symbol_data_local.dart';
+import 'package:sqflite_entities/entity/query.dart';
 import 'package:time_tracker/booking/bean/booking_service.dart';
 import 'package:time_tracker/booking/dao/time_booking_dao.dart';
 import 'package:time_tracker/booking/entity/time_booking.dart';
@@ -88,4 +89,24 @@ Future<void> main() async {
     expect(await dao.countAll(), 3);
 
   });
-}
+
+  test('Test toMonthCsvData over years', () async {
+      // GIVEN
+      final file = await File('test_resources/Datenexport.csv')
+          .readAsString();
+      // WHEN
+      var bookings = await subject.importBackup(file);
+
+      print(bookings.length);
+
+      bookings = await bService.all(order: SortOrder.ASC);
+      final csvData = subject.toMonthCsvData(bookings);
+
+      expect(csvData, contains('01.11.2021'));
+      expect(csvData, contains('02.11.2021'));
+      expect(csvData, contains('30.11.2021;Dienstag;8,00;10:00;18:00;7,00;12:00;13:00;;;;;1,00'));
+      expect(csvData, contains('09.03.2022;Mittwoch;8,00;12:56;16:13;3,28;;;;;;;0,0'));
+      expect(csvData, contains('31.05.2022'));
+      expect(csvData, isNot(contains('06.2022')));
+    });
+  }

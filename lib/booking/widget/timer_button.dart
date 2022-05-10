@@ -1,6 +1,5 @@
 import 'dart:async';
 import 'dart:math';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:sqflite_entities/converter/date_util.dart';
 import 'package:time_tracker/booking/bean/today_bean.dart';
@@ -50,11 +49,15 @@ class _TimerButtonState extends State<TimerButton> {
 
   @override
   Widget build(BuildContext context) {
-    final textStyle = Theme.of(context).textTheme.headline6;
-
     return ValueListenableBuilder(
       valueListenable: widget.todayBean,
       builder: (context, value, child) {
+        final textStyle = Theme.of(context).textTheme.headline6;
+        MaterialColor color = Colors.lightGreen;
+        if (widget.todayBean.hasCurrentBooking) {
+          color = Colors.amber;
+        }
+
         final workHours = widget.todayBean.workHours;
         return Column(
           //mainAxisAlignment: MainAxisAlignment.center,
@@ -66,12 +69,12 @@ class _TimerButtonState extends State<TimerButton> {
             Padding(
               padding: const EdgeInsets.fromLTRB(0, 0, 0, 24),
               child: Text('${toHoursWithMinutes(_now)} Uhr',
-                  style: textStyle)),
+                  style: textStyle),),
             Stack(
               alignment: AlignmentDirectional.center,
               children: [
-                _buildDailyProgress(),
-                _buildStartButton(context),
+                _buildDailyProgress(context, color),
+                _buildStartButton(context, color),
               ],
             ),
             TimeAccount(workHours, totalWorkTime)
@@ -85,7 +88,7 @@ class _TimerButtonState extends State<TimerButton> {
     return widget.todayBean.sumTimeBookingsWorkTime();
   }
 
-  SizedBox _buildDailyProgress() {
+  SizedBox _buildDailyProgress(BuildContext context, MaterialColor color) {
     final size = min(
         MediaQuery.of(context).size.width,
         MediaQuery.of(context).size.height) / 2.5;
@@ -93,18 +96,19 @@ class _TimerButtonState extends State<TimerButton> {
 
     final progress = totalWorkTime.inSeconds / (widget.todayBean.workHours.inSeconds);
     return SizedBox(
-      child: CircularProgressIndicator(value: progress, strokeWidth: stroke,),
+      child: CircularProgressIndicator(
+        value: progress,
+        strokeWidth: stroke,
+        color: color,
+      ),
       height: size + stroke * 2,
       width: size + stroke * 2,
     );
   }
 
-  Widget _buildStartButton(BuildContext context) {
+  Widget _buildStartButton(BuildContext context, MaterialColor color) {
     Widget text;
-    final today = widget.todayBean;
-    MaterialColor color = Colors.lightGreen;
-    if (today.hasCurrentBooking) {
-      color = Colors.amber;
+    if (widget.todayBean.hasCurrentBooking) {
       text = Text('Stopp',
         style: Theme.of(context).textTheme.headline4,);
     } else {
@@ -112,7 +116,7 @@ class _TimerButtonState extends State<TimerButton> {
         style: Theme.of(context).textTheme.headline4,);
     }
     final size = min(MediaQuery.of(context).size.width,
-      MediaQuery.of(context).size.height) / 2.5;
+      MediaQuery.of(context).size.height,) / 2.5;
 
     return ElevatedButton(
       onPressed: FeedbackFixed.wrapTouch(_startPressed, context),
