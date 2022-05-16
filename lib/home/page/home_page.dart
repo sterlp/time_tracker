@@ -1,8 +1,7 @@
 import 'package:dependency_container/dependency_container.dart';
 import 'package:flutter/material.dart';
-import 'package:intl/date_symbol_data_local.dart';
-import 'package:time_tracker/booking/page/bookings_history_page.dart';
 import 'package:time_tracker/booking/page/booking_widget_page.dart';
+import 'package:time_tracker/booking/page/bookings_history_page.dart';
 import 'package:time_tracker/common/feedback.dart';
 import 'package:time_tracker/week/page/week_list_page.dart';
 

@@ -6,8 +6,6 @@ import 'package:intl/date_symbol_data_local.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:time_tracker/booking/bean/booking_service.dart';
 import 'package:time_tracker/booking/entity/time_booking_statistics.dart';
-import 'package:time_tracker/booking/widget/bookings_statistic_widget.dart';
-import 'package:time_tracker/booking/widget/time_account.dart';
 import 'package:time_tracker/week/page/week_list_page.dart';
 
 import '../../test_helper.dart';

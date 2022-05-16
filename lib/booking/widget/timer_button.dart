@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:sqflite_entities/converter/date_util.dart';
 import 'package:time_tracker/booking/bean/today_bean.dart';
@@ -69,7 +70,7 @@ class _TimerButtonState extends State<TimerButton> {
             Padding(
               padding: const EdgeInsets.fromLTRB(0, 0, 0, 24),
               child: Text('${toHoursWithMinutes(_now)} Uhr',
-                  style: textStyle),),
+                  style: textStyle,),),
             Stack(
               alignment: AlignmentDirectional.center,
               children: [
@@ -80,7 +81,7 @@ class _TimerButtonState extends State<TimerButton> {
             TimeAccount(workHours, totalWorkTime)
           ],
         );
-      }
+      },
     );
   }
 
@@ -91,7 +92,7 @@ class _TimerButtonState extends State<TimerButton> {
   SizedBox _buildDailyProgress(BuildContext context, MaterialColor color) {
     final size = min(
         MediaQuery.of(context).size.width,
-        MediaQuery.of(context).size.height) / 2.5;
+        MediaQuery.of(context).size.height,) / 2.5;
     final stroke = size / 10;
 
     final progress = totalWorkTime.inSeconds / (widget.todayBean.workHours.inSeconds);

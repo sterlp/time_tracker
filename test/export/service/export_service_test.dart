@@ -97,11 +97,10 @@ Future<void> main() async {
       // WHEN
       var bookings = await subject.importBackup(file);
 
-      print(bookings.length);
-
       bookings = await bService.all(order: SortOrder.ASC);
       final csvData = subject.toMonthCsvData(bookings);
 
+      // THEN we should have at least two years in the exported data
       expect(csvData, contains('01.11.2021'));
       expect(csvData, contains('02.11.2021'));
       expect(csvData, contains('30.11.2021;Dienstag;8,00;10:00;18:00;7,00;12:00;13:00;;;;;1,00'));

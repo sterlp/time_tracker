@@ -6,16 +6,16 @@ abstract class AbstractMapDao extends AbstractBaseDao<String> {
   final String valueColumnName;
 
   AbstractMapDao(Database db, String tableName,
-      {String keyColumnName = 'key', this.valueColumnName = 'value'})
+      {String keyColumnName = 'key', this.valueColumnName = 'value',})
     : super(db, tableName, keyColumnName);
 
 
   Future<Map<String, String?>> loadAll({
     int? limit,
-    int? offset}) async {
+    int? offset,}) async {
 
     final List<Map<String, dynamic>> results = await db.query(tableName,
-        orderBy: keyColumnName, limit: limit, offset: offset);
+        orderBy: keyColumnName, limit: limit, offset: offset,);
 
     final result = <String, String?>{};
     for (final m in results) {
@@ -33,13 +33,13 @@ abstract class AbstractMapDao extends AbstractBaseDao<String> {
       keyColumnName: key,
       valueColumnName: value
      },
-     conflictAlgorithm: ConflictAlgorithm.replace) > 0;
+     conflictAlgorithm: ConflictAlgorithm.replace,) > 0;
   }
   Future<String?> getValue(String key) async {
     final List<Map<String, dynamic>> results = await db.query(
         tableName,
         where: "$keyColumnName = ?",
-        whereArgs: [key]);
+        whereArgs: [key],);
     assert(results.length <= 1, 'Get by ID should return only one element but returned ${results.length} elements.');
     if (results.isEmpty || results[0][valueColumnName] == null) {
       return null;

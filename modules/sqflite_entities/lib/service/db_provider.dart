@@ -42,11 +42,12 @@ class DbProvider {
     return _completer.future;
   }
 
-  Future<Database> _createDB(Database db, int oldVersion, int newVersion) async {
-    if (kDebugMode) print('DEBUG: createDB from version $oldVersion to $newVersion');
+  Future<Database> _createDB(final Database db, final int oldVersion, final int newVersion) async {
+    var currentVersion = oldVersion; // just to make dart analysis happy ...
+    if (kDebugMode) print('DEBUG: createDB from version $currentVersion to $newVersion');
     for (final update in this.updates) {
       try {
-        oldVersion = await update.execute(oldVersion, db);
+        currentVersion = await update.execute(currentVersion, db);
       } catch (e, stack) {
         if (kDebugMode) print('ERROR: Failed to apply update $oldVersion -> $e\n$stack');
         rethrow;

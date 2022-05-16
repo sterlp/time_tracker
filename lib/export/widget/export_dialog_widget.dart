@@ -1,9 +1,11 @@
 
 import 'dart:io';
+
 import 'package:dependency_container/dependency_container.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:share_plus/share_plus.dart';
+import 'package:sqflite_entities/converter/date_util.dart';
 import 'package:sqflite_entities/entity/query.dart';
 import 'package:time_tracker/booking/bean/booking_service.dart';
 import 'package:time_tracker/export/service/export_service.dart';
@@ -44,7 +46,9 @@ class ExportDataWidget extends StatelessWidget {
       ),
     );
   }
+
   Future<void> _exportMonth(BuildContext context) async {
+    final exportFileName = 'Monats Export ${DateTimeUtil.formatWithString(DateTime.now(), "d.M.y")}.csv';
     final bookings = await _container.get<BookingService>().all(order: SortOrder.ASC);
     final csvData = _container.get<ExportService>().toMonthCsvData(bookings);
     final f = await _container.get<ExportService>().writeToFile(csvData, fileName: 'Monats Export.csv');
@@ -63,7 +67,7 @@ class ExportDataWidget extends StatelessWidget {
   }
 
   Future<void> _importBackup(BuildContext context) async {
-    FilePickerResult? result = await FilePicker.platform.pickFiles(
+    final result = await FilePicker.platform.pickFiles(
       dialogTitle: 'Daten Export CSV auswählen',
       type: FileType.custom,
       allowedExtensions: ['csv'],

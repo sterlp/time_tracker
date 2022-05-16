@@ -1,7 +1,6 @@
 
 import 'package:flutter/material.dart';
 import 'package:time_tracker/booking/entity/time_booking.dart';
-import 'package:time_tracker/booking/page/edit_booking_page.dart';
 import 'package:time_tracker/booking/widget/delete_booking_dialog.dart';
 import 'package:time_tracker/common/feedback.dart';
 import 'package:time_tracker/common/list/dismissible_backgrounds.dart';

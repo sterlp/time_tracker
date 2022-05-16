@@ -9,7 +9,7 @@ class DividerWithLabel extends StatelessWidget {
   final double thickness;
 
   const DividerWithLabel(this.label, {Key? key,
-    this.indent = 8.0, this.endIndent = 8.0, this.thickness = 3.0})
+    this.indent = 8.0, this.endIndent = 8.0, this.thickness = 3.0,})
       : super(key: key);
 
   @override
@@ -17,13 +17,13 @@ class DividerWithLabel extends StatelessWidget {
     return Row(
       children: <Widget>[
         Expanded(
-          child: Divider(thickness: thickness, indent: indent, endIndent: 8)
+          child: Divider(thickness: thickness, indent: indent, endIndent: 8),
         ),
         Text(label, style: Theme.of(context).textTheme.headline6),
         Expanded(
-          child: Divider(thickness: thickness, indent: 8, endIndent: endIndent)
+          child: Divider(thickness: thickness, indent: 8, endIndent: endIndent),
         ),
-      ]
+      ],
     );
   }
 }

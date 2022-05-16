@@ -8,7 +8,7 @@ void main() {
     // GIVEN
     await tester.pumpWidget(const MaterialApp(
         title: 'test',
-        home: TimeAccount(Duration(hours: 8, minutes: 15), Duration(hours: 5)))
+        home: TimeAccount(Duration(hours: 8, minutes: 15), Duration(hours: 5)),),
     );
 
     // WHEN
@@ -26,7 +26,7 @@ void main() {
     // GIVEN
     await tester.pumpWidget(const MaterialApp(
         title: 'test',
-        home: TimeAccount(Duration(hours: 7, minutes: 15), Duration(hours: 5)))
+        home: TimeAccount(Duration(hours: 7, minutes: 15), Duration(hours: 5)),),
     );
     // THEN
     final text = tester.widget<Text>(find.text('-2 Std -15 Min'));
@@ -37,7 +37,7 @@ void main() {
     // Given
     await tester.pumpWidget(const MaterialApp(
         title: 'test',
-        home: TimeAccount(Duration(hours: 4), Duration(hours: 5)))
+        home: TimeAccount(Duration(hours: 4), Duration(hours: 5)),),
     );
     // THEN
     final text = tester.widget<Text>(find.text('1 Std 0 Min'));
@@ -49,7 +49,7 @@ void main() {
     await tester.pumpWidget(MaterialApp(
         title: 'test',
         theme: ThemeData.dark(),
-        home: const TimeAccount(Duration(hours: 4, minutes: 30), Duration(hours: 4)))
+        home: const TimeAccount(Duration(hours: 4, minutes: 30), Duration(hours: 4)),),
     );
     // THEN
     final text = tester.widget<Text>(find.text('0 Std -30 Min'));

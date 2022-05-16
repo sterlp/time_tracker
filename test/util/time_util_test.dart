@@ -19,7 +19,7 @@ void main() {
     expect('0 Std 0 Min', toDurationHoursAndMinutes(Duration.zero));
     expect('5 Std 0 Min', toDurationHoursAndMinutes(const Duration(hours: 5)));
     expect('-3 Std -15 Min', toDurationHoursAndMinutes(
-        const Duration(hours: 5) - const Duration(hours: 8, minutes: 15)));
+        const Duration(hours: 5) - const Duration(hours: 8, minutes: 15),),);
   });
 
   test('test format cache', () {

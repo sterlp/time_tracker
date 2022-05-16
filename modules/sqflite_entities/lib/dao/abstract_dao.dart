@@ -14,7 +14,7 @@ abstract class AbstractDao<T extends AbstractEntity> {
 
   AttachedEntity<T> attach(T entity) {
     return AttachedEntity<T>(entity,
-      reload, save, deleteEntity);
+      reload, save, deleteEntity,);
   }
 
   Future<AttachedEntity<T>?> getAttached(int id) async {
@@ -32,7 +32,7 @@ abstract class AbstractDao<T extends AbstractEntity> {
     final List<Map<String, dynamic>> results = await _db.query(
         tableName,
         where: "id = ?",
-        whereArgs: [id]);
+        whereArgs: [id],);
     assert(results.length <= 1, 'Get by ID should return only one element but returned ${results.length} elements.');
     return results.isEmpty ? null : fromMap(results[0]);
   }
@@ -89,7 +89,7 @@ abstract class AbstractDao<T extends AbstractEntity> {
   }
   Future<T> insert(T entity) async {
     entity.id = await _db.insert(tableName, toMap(entity),
-        conflictAlgorithm: ConflictAlgorithm.replace);
+        conflictAlgorithm: ConflictAlgorithm.replace,);
     return entity;
   }
   Future<T> update(T entity) async {
