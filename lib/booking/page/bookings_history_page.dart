@@ -71,7 +71,7 @@ class _BookingsHistoryPageState extends State<BookingsHistoryPage> {
         } else {
           return _buildWeekItem(item);
         }
-      }
+      },
     );
   }
 
@@ -80,7 +80,7 @@ class _BookingsHistoryPageState extends State<BookingsHistoryPage> {
       onLongPress: () async {
         await showBookingListPage(context, widget._container, item.start, item.end);
         if (mounted) _reload();
-      }
+      },
     );
   }
 }

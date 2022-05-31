@@ -1,5 +1,4 @@
 import 'package:dependency_container/dependency_container.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:sqflite_entities/converter/date_util.dart';
@@ -38,21 +37,12 @@ class _BookingListPageState extends State<BookingListPage> {
   @override
   void initState() {
     super.initState();
-    _reload();
+    _doReload();
   }
   @override
   void dispose() {
     if (_bookings != null) _bookings!.dispose();
     super.dispose();
-  }
-
-  Future<void> _reload() async {
-    final items = await widget._container.get<BookingService>().fromTo(widget.from, widget.to);
-    if (_bookings == null) {
-      if (mounted) setState(() => _bookings = ValueNotifier(items));
-    } else {
-      _bookings!.value = items;
-    }
   }
 
   @override
@@ -65,7 +55,7 @@ class _BookingListPageState extends State<BookingListPage> {
           title: Text(_df.format(widget.from)),
           actions: [
             IconButton(
-              onPressed: _bookings!.value.isNotEmpty ? _export : null,
+              onPressed: _bookings!.value.isNotEmpty ? _doExport : null,
               icon: const Icon(Icons.download),
             ),
           ],
@@ -82,7 +72,17 @@ class _BookingListPageState extends State<BookingListPage> {
       );
     }
   }
-  Future<void> _export() async {
+
+  Future<void> _doReload() async {
+    final items = await widget._container.get<BookingService>().fromTo(widget.from, widget.to);
+    if (_bookings == null) {
+      if (mounted) setState(() => _bookings = ValueNotifier(items));
+    } else {
+      _bookings!.value = items;
+    }
+  }
+
+  Future<void> _doExport() async {
     final fD = DateTimeUtil.getFormat('dd.MM');
     final tD = DateTimeUtil.getFormat('dd.MM.yyyy');
     final fileName = 'Datenexport ${fD.format(widget.from)} bis ${tD.format(widget.to)}.csv';
@@ -94,13 +94,8 @@ class _BookingListPageState extends State<BookingListPage> {
       mimeTypes: ['text/csv'],);
     f.delete();
   }
-  Future<void> _newBooking() async {
-    await showBookingPageWithCallback(context, widget._container, _reload,
-      booking: TimeBooking(widget.to, endTime: widget.to.add(const Duration(hours: 1))),
-    );
-  }
   Future<void> _doEdit(TimeBooking booking) async {
-    await  showBookingPageWithCallback(context, widget._container, _reload,
+    await  showBookingPageWithCallback(context, widget._container, _doReload,
       booking: booking,
     );
   }
@@ -110,7 +105,12 @@ class _BookingListPageState extends State<BookingListPage> {
       ScaffoldMessenger.of(context)
         .showSnackBar(const SnackBar(content: Text('Buchung gelöscht.')),
       );
-      await _reload();
+      await _doReload();
     }
+  }
+  Future<void> _newBooking() async {
+    await showBookingPageWithCallback(context, widget._container, _doReload,
+      booking: TimeBooking(widget.to, endTime: widget.to.add(const Duration(hours: 1))),
+    );
   }
 }

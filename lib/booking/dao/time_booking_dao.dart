@@ -28,7 +28,8 @@ class TimeBookingDao extends AbstractDao<TimeBooking> {
 
   Future<List<TimeBooking>> fromTo(DateTime from, DateTime to) {
     return loadAll(
-      where: "${DbBookingTableV2.startDate} >= ? AND ${DbBookingTableV2.startDate} < ? ",
+      where: "${DbBookingTableV2.startDate} >= ? "
+             "AND (${DbBookingTableV2.startDate} <= ? )",
       whereArgs: [dateTimeToInt(from), dateTimeToInt(to)],
       orderBy: "${DbBookingTableV2.startDate} ASC",
     );

@@ -1,13 +1,10 @@
 import 'dart:async';
-import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:sqflite_entities/converter/date_util.dart';
 import 'package:time_tracker/booking/bean/today_bean.dart';
 import 'package:time_tracker/booking/widget/start_stop_widget.dart';
 import 'package:time_tracker/booking/widget/time_account.dart';
-import 'package:time_tracker/common/feedback.dart';
-import 'package:time_tracker/util/time_util.dart';
 
 
 class TimerButton extends StatefulWidget {
@@ -61,16 +58,19 @@ class _TimerButtonState extends State<TimerButton> {
           //mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Padding(
-              padding: const EdgeInsets.fromLTRB(0, 16, 0, 16),
+              padding: const EdgeInsets.fromLTRB(0, 16, 0, 0),
               child: FittedBox(child:
-                Text(_headerFormat.format(_now),
-                  style: textStyle,),)
+                Text(_headerFormat.format(_now), style: textStyle,),),
             ),
-            StartAndStopWidget(
+            Padding(
+              padding: const EdgeInsets.fromLTRB(0, 12, 0, 12),
+              child: StartAndStopWidget(
                 !widget.todayBean.hasCurrentBooking,
                 widget.todayBean.sumTimeBookingsWorkTime(),
                 widget.todayBean.workHours,
-                _startPressed,),
+                _startPressed,
+              ),
+            ),
             TimeAccount(workHours,
               totalWorkTime,
               widget.todayBean.sumBreakTime(),
