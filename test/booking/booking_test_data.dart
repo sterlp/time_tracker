@@ -16,7 +16,7 @@ class BookingTestData {
     return newBookingWithStart(DateTimeUtil.precisionMinutes(DateTime.now().add(fromNow),), duration);
   }
   Future<TimeBooking> newBookingWithStart(DateTime start, Duration? duration) async {
-    final result = TimeBooking(start);
+    final result = TimeBooking(DateTimeUtil.precisionMinutes(start));
     if (duration != null) {
       result.workTime = duration;
     }

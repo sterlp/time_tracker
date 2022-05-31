@@ -8,7 +8,11 @@ void main() {
     // GIVEN
     await tester.pumpWidget(const MaterialApp(
         title: 'test',
-        home: TimeAccount(Duration(hours: 8, minutes: 15), Duration(hours: 5)),),
+        home: TimeAccount(
+          Duration(hours: 8, minutes: 15),
+          Duration(hours: 5),
+          Duration.zero
+        ),),
     );
 
     // WHEN
@@ -26,7 +30,7 @@ void main() {
     // GIVEN
     await tester.pumpWidget(const MaterialApp(
         title: 'test',
-        home: TimeAccount(Duration(hours: 7, minutes: 15), Duration(hours: 5)),),
+        home: TimeAccount(Duration(hours: 7, minutes: 15), Duration(hours: 5), Duration.zero),),
     );
     // THEN
     final text = tester.widget<Text>(find.text('-2 Std -15 Min'));
@@ -37,7 +41,7 @@ void main() {
     // Given
     await tester.pumpWidget(const MaterialApp(
         title: 'test',
-        home: TimeAccount(Duration(hours: 4), Duration(hours: 5)),),
+        home: TimeAccount(Duration(hours: 4), Duration(hours: 5), Duration.zero),),
     );
     // THEN
     final text = tester.widget<Text>(find.text('1 Std 0 Min'));
@@ -49,11 +53,23 @@ void main() {
     await tester.pumpWidget(MaterialApp(
         title: 'test',
         theme: ThemeData.dark(),
-        home: const TimeAccount(Duration(hours: 4, minutes: 30), Duration(hours: 4)),),
+        home: const TimeAccount(Duration(hours: 4, minutes: 30), Duration(hours: 4), Duration.zero),),
     );
     // THEN
     final text = tester.widget<Text>(find.text('0 Std -30 Min'));
     expect(text.style?.color, Colors.white);
+  });
+
+  testWidgets('TimeAccount shows Pause', (WidgetTester tester) async {
+    // GIVEN
+    await tester.pumpWidget(MaterialApp(
+      title: 'test',
+      theme: ThemeData.dark(),
+      home: const TimeAccount(Duration.zero, Duration.zero, Duration(hours: 1, minutes: 2)),),
+    );
+    // THEN
+    expect(find.text('Pause'), findsOneWidget);
+    expect(find.text('1 Std 2 Min'), findsOneWidget);
   });
 
 }

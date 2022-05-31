@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:intl/date_symbol_data_local.dart';
+import 'package:sqflite_entities/converter/date_util.dart';
 import 'package:time_tracker/booking/bean/booking_service.dart';
 import 'package:time_tracker/booking/bean/today_bean.dart';
 import 'package:time_tracker/booking/dao/time_booking_dao.dart';
@@ -182,13 +183,32 @@ Future<void> main() async {
 
   test('Open bookings will be selected', () async {
     // GIVEN
-    await testData.newBooking(-2, null);
-    await testData.newBooking(-1, null);
+    await testData.newBooking(-2);
+    await testData.newBooking(-1);
     // WHEN
     await subject.reload();
     subject.stopBooking();
     // THEN
     expect(subject.hasCurrentBooking, isTrue);
     expect(subject.value.length, 2);
+  });
+
+  test('Test Calc Break', () async {
+    // GIVEN
+    await testData.newBookingWithStart(DateTime.now().addHours(-3), const Duration(hours: 1));
+    await testData.newBookingWithStart(DateTime.now().addHours(-1), const Duration(hours: 1));
+    // WHEN
+    await subject.reload();
+    // THEN
+    expect(subject.sumBreakTime(), const Duration(hours: 1));
+  });
+
+  test('Open till now is a break', () async {
+    // GIVEN
+    await testData.newBookingWithStart(DateTime.now().addHours(-3), const Duration(hours: 1));
+    // WHEN
+    await subject.reload();
+    // THEN
+    expect(subject.sumBreakTime(), const Duration(hours: 2));
   });
 }

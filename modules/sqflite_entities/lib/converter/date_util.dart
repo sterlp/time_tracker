@@ -6,6 +6,14 @@ extension ToDecimal on Duration {
     return this.inSeconds / 3600;
   }
 }
+extension AddDuration on DateTime {
+  DateTime addDays(int days) {
+    return this.add(Duration(days: days));
+  }
+  DateTime addHours(int hours) {
+    return this.add(Duration(hours: hours));
+  }
+}
 
 class DateTimeUtil {
   DateTimeUtil._();

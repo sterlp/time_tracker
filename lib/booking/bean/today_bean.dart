@@ -5,8 +5,10 @@ import 'package:sqflite_entities/converter/date_util.dart';
 import 'package:time_tracker/booking/bean/booking_service.dart';
 import 'package:time_tracker/booking/entity/time_booking.dart';
 import 'package:time_tracker/common/list_functions.dart';
+import 'package:time_tracker/log/logger.dart';
 
 class TodayBean extends ValueNotifier<List<TimeBooking>> {
+  final _log = LoggerFactory.get<TodayBean>();
   final BookingService _bookingService;
   Duration _workHours = const Duration(hours: 8);
   TimeBooking? _currentRunning;
@@ -18,10 +20,14 @@ class TodayBean extends ValueNotifier<List<TimeBooking>> {
   Duration get workHours => _workHours;
   bool get hasCurrentBooking => _currentRunning != null;
 
-  Future<List<TimeBooking>> changeDay(DateTime day) async {
-    if (DateUtils.isSameDay(_day, day)) return SynchronousFuture(value);
+  bool isDifferentDay(DateTime newDay) {
+    return DateUtils.isSameDay(_day, newDay);
+  }
+
+  Future<List<TimeBooking>> changeDay(DateTime newDay) async {
+    if (DateUtils.isSameDay(_day, newDay)) return SynchronousFuture(value);
     else {
-      _day = DateUtils.dateOnly(day);
+      _day = DateUtils.dateOnly(newDay);
       return reload();
     }
   }
@@ -35,6 +41,24 @@ class TodayBean extends ValueNotifier<List<TimeBooking>> {
     var result = Duration.zero;
     for (final b in value) result += b.workTime;
     return result;
+  }
+  Duration sumBreakTime() {
+    if (value.isEmpty) return Duration.zero;
+
+    Duration breakTime = Duration.zero;
+    TimeBooking? _lastBooking;
+    for (final b in value.reversed) {
+      if (_lastBooking != null) {
+        _log.debug('Diff ${_lastBooking.end} -> ${b.start}');
+        breakTime += b.start.difference(_lastBooking.end!);
+      }
+      _lastBooking = b;
+    }
+    // if the last booking has an end, we add any time spend as break
+    if (_lastBooking != null && _lastBooking.end != null) {
+      breakTime += DateTimeUtil.precisionMinutes(DateTime.now()).difference(_lastBooking.end!);
+    }
+    return breakTime;
   }
 
   Future<List<TimeBooking>> reload() async {

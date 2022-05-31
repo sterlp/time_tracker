@@ -34,7 +34,7 @@ class Logger {
     _print('DEBUG', message);
   }
   void _print(String level, dynamic message) {
-    if (kDebugMode) print('[$level] $_name: $message');
+    if (kDebugMode) debugPrint('[$level] $_name: $message');
   }
 
   void startSync(String name) {

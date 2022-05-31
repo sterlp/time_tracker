@@ -97,10 +97,6 @@ class _EditBookingPageState extends State<EditBookingPage> {
                 decoration: const InputDecoration(label: Text('Tagessoll')),
                 onChanged: _setWorkTime,
               ),
-              Padding(
-                padding: const EdgeInsets.symmetric(vertical: 16),
-                child: TimeAccount(_booking.targetWorkTime, _booking.workTime),
-              )
             ],
           ),
         ),

@@ -12,14 +12,14 @@ void main() {
     expect(find.text('Lade ...'), findsOneWidget);
   });
 
-  testWidgets('Loaded App should show a "Starten"', (WidgetTester tester) async {
+  testWidgets('Loaded App should show a "Start"', (WidgetTester tester) async {
     // GIVEN
     final context = AppContextMock();
     await tester.pumpWidget(MyApp(c: context.initMockContext(),));
     // WHEN
     await tester.pumpAndSettle();
     // THEN
-    expect(find.text('Starten'), findsOneWidget);
+    expect(find.text('Start'), findsOneWidget);
   });
 
   /** has to be an integration test

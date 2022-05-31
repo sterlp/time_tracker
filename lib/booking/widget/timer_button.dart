@@ -4,6 +4,7 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:sqflite_entities/converter/date_util.dart';
 import 'package:time_tracker/booking/bean/today_bean.dart';
+import 'package:time_tracker/booking/widget/start_stop_widget.dart';
 import 'package:time_tracker/booking/widget/time_account.dart';
 import 'package:time_tracker/common/feedback.dart';
 import 'package:time_tracker/util/time_util.dart';
@@ -54,10 +55,6 @@ class _TimerButtonState extends State<TimerButton> {
       valueListenable: widget.todayBean,
       builder: (context, value, child) {
         final textStyle = Theme.of(context).textTheme.headline6;
-        MaterialColor color = Colors.lightGreen;
-        if (widget.todayBean.hasCurrentBooking) {
-          color = Colors.amber;
-        }
 
         final workHours = widget.todayBean.workHours;
         return Column(
@@ -71,14 +68,15 @@ class _TimerButtonState extends State<TimerButton> {
               padding: const EdgeInsets.fromLTRB(0, 0, 0, 24),
               child: Text('${toHoursWithMinutes(_now)} Uhr',
                   style: textStyle,),),
-            Stack(
-              alignment: AlignmentDirectional.center,
-              children: [
-                _buildDailyProgress(context, color),
-                _buildStartButton(context, color),
-              ],
-            ),
-            TimeAccount(workHours, totalWorkTime)
+            StartAndStopWidget(
+                !widget.todayBean.hasCurrentBooking,
+                widget.todayBean.sumTimeBookingsWorkTime(),
+                widget.todayBean.workHours,
+                _startPressed,),
+            TimeAccount(workHours,
+              totalWorkTime,
+              widget.todayBean.sumBreakTime(),
+            )
           ],
         );
       },
@@ -87,49 +85,6 @@ class _TimerButtonState extends State<TimerButton> {
 
   Duration get totalWorkTime {
     return widget.todayBean.sumTimeBookingsWorkTime();
-  }
-
-  SizedBox _buildDailyProgress(BuildContext context, MaterialColor color) {
-    final size = min(
-        MediaQuery.of(context).size.width,
-        MediaQuery.of(context).size.height,) / 2.5;
-    final stroke = size / 10;
-
-    final progress = totalWorkTime.inSeconds / (widget.todayBean.workHours.inSeconds);
-    return SizedBox(
-      child: CircularProgressIndicator(
-        value: progress,
-        strokeWidth: stroke,
-        color: color,
-      ),
-      height: size + stroke * 2,
-      width: size + stroke * 2,
-    );
-  }
-
-  Widget _buildStartButton(BuildContext context, MaterialColor color) {
-    Widget text;
-    if (widget.todayBean.hasCurrentBooking) {
-      text = Text('Stopp',
-        style: Theme.of(context).textTheme.headline4,);
-    } else {
-      text = Text('Starten',
-        style: Theme.of(context).textTheme.headline4,);
-    }
-    final size = min(MediaQuery.of(context).size.width,
-      MediaQuery.of(context).size.height,) / 2.5;
-
-    return ElevatedButton(
-      onPressed: FeedbackFixed.wrapTouch(_startPressed, context),
-      child: text,
-      style: ElevatedButton.styleFrom(
-        enableFeedback: true,
-        shape: const CircleBorder(),
-        elevation: 6.0,
-        fixedSize: Size(size, size),
-        primary: color,
-      ),
-    );
   }
 
   void _startPressed() {

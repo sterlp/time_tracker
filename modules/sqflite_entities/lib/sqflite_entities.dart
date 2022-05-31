@@ -1,2 +1,1 @@
 library sqflite_entities;
-

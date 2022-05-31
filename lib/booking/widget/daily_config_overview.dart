@@ -7,7 +7,7 @@ class DailyConfigOverview extends StatelessWidget {
   final Duration workedToday;
 
   const DailyConfigOverview(this.workHoursToday, this.workStarted, this.workedToday,
-      {Key? key}) : super(key: key);
+      {Key? key,}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
