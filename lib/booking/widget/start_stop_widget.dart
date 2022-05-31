@@ -3,7 +3,7 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:time_tracker/common/feedback.dart';
 
-const _sizeFactor = 3;
+const _sizeFactor = 2.5;
 
 class StartAndStopWidget extends StatelessWidget {
 
@@ -62,7 +62,7 @@ class StartAndStopWidget extends StatelessWidget {
 
     return ElevatedButton(
       onPressed: FeedbackFixed.wrapTouch(_startPress, context),
-      child: text,
+      child: FittedBox(child: text),
       style: ElevatedButton.styleFrom(
         enableFeedback: true,
         shape: const CircleBorder(),

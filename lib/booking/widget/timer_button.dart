@@ -21,7 +21,7 @@ class TimerButton extends StatefulWidget {
 
 class _TimerButtonState extends State<TimerButton> {
   Timer? _refreshTimer;
-  final _headerFormat = DateTimeUtil.getFormat('EEEE, dd.MM.yyyy');
+  final _headerFormat = DateTimeUtil.getFormat('E, HH:mm dd.MM.yyyy');
   var _now = DateTimeUtil.precisionMinutes(DateTime.now());
 
   @override
@@ -61,13 +61,11 @@ class _TimerButtonState extends State<TimerButton> {
           //mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Padding(
-              padding: const EdgeInsets.fromLTRB(0, 16, 0, 0),
-              child: Text(_headerFormat.format(_now),
-                  style: textStyle,),),
-            Padding(
-              padding: const EdgeInsets.fromLTRB(0, 0, 0, 24),
-              child: Text('${toHoursWithMinutes(_now)} Uhr',
-                  style: textStyle,),),
+              padding: const EdgeInsets.fromLTRB(0, 16, 0, 16),
+              child: FittedBox(child:
+                Text(_headerFormat.format(_now),
+                  style: textStyle,),)
+            ),
             StartAndStopWidget(
                 !widget.todayBean.hasCurrentBooking,
                 widget.todayBean.sumTimeBookingsWorkTime(),
