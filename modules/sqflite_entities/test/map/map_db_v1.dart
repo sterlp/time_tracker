@@ -14,6 +14,6 @@ class MapDbV1 extends DbUpdate {
 CREATE TABLE IF NOT EXISTS $tableName (
   $keyColumn varchar(16) PRIMARY KEY,
   $valueColumn text
-);''');
+);''',);
   }
 }

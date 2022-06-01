@@ -54,7 +54,7 @@ class ExportDailyStats {
       workedTime = workedTime + b.workTime;
       if (planedWorkTime < b.targetWorkTime) planedWorkTime = b.targetWorkTime;
     }
-    return ExportDailyStats(bookings, DailyBookingStatistic(day, start, end, workedTime, planedWorkTime));
+    return ExportDailyStats(bookings, DailyBookingStatistic(day, start, end, workedTime, planedWorkTime, bookings.length));
   }
 
   Duration calculateBreakTime([int breakNumber = 1]) {

@@ -5,12 +5,14 @@ class DailyBookingStatistic {
   final DateTime end;
   final Duration workedTime;
   final Duration planedWorkTime;
+  final int bookingsCount;
 
   DailyBookingStatistic(this.day,
       this.start,
       this.end,
       this.workedTime,
-      this.planedWorkTime);
+      this.planedWorkTime,
+      this.bookingsCount);
 
   Duration get overHours => workedTime - planedWorkTime;
   Duration get breakTime => end.difference(start) - workedTime;

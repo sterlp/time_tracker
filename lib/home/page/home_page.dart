@@ -1,5 +1,6 @@
 import 'package:dependency_container/dependency_container.dart';
 import 'package:flutter/material.dart';
+import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:time_tracker/booking/page/booking_widget_page.dart';
 import 'package:time_tracker/booking/page/bookings_history_page.dart';
 import 'package:time_tracker/common/feedback.dart';
@@ -36,11 +37,11 @@ class _HomePageState extends State<HomePage> {
       bottomNavigationBar: BottomNavigationBar(
         items: const <BottomNavigationBarItem>[
           BottomNavigationBarItem(
-            icon: Icon(Icons.calendar_today),
+            icon: Icon(MdiIcons.calendarToday),
             label: 'Heute',
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.view_week),
+            icon: Icon(MdiIcons.calendarWeek),
             label: 'Wochenübersicht',
           ),
           BottomNavigationBarItem(

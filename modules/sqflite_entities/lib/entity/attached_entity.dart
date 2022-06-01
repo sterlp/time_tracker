@@ -15,7 +15,7 @@ class AttachedEntity<Entity extends AbstractEntity>
   AttachedEntity(Entity entity,
       this.doReloadCallback,
       this.doSaveCallback,
-      this.doDeleteCallback) : super(entity);
+      this.doDeleteCallback,) : super(entity);
 
   bool isDeleted() => _deleted;
 

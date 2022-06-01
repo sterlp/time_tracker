@@ -1,13 +1,16 @@
 import 'package:dependency_container/dependency_container.dart';
 import 'package:flutter/material.dart';
+import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:sqflite_entities/converter/date_util.dart';
 import 'package:time_tracker/booking/bean/booking_service.dart';
 import 'package:time_tracker/booking/entity/time_booking.dart';
+import 'package:time_tracker/booking/widget/delete_booking_dialog.dart';
 import 'package:time_tracker/booking/widget/time_account.dart';
 import 'package:time_tracker/common/feedback.dart';
 import 'package:time_tracker/common/widget/date_time_form_field.dart';
 import 'package:time_tracker/common/widget/form/duration_form_field.dart';
 import 'package:time_tracker/log/logger.dart';
+import 'package:time_tracker/util/time_util.dart';
 
 Future<TimeBooking?> showEditBookingPage(
     BuildContext context,
@@ -97,11 +100,36 @@ class _EditBookingPageState extends State<EditBookingPage> {
                 decoration: const InputDecoration(label: Text('Tagessoll')),
                 onChanged: _setWorkTime,
               ),
+              Padding(
+                padding: const EdgeInsets.fromLTRB(0, 16, 0, 0),
+                child: ElevatedButton.icon(
+                  onPressed: _booking.id == null ? null : _doDelete,
+                  icon: const Icon(MdiIcons.delete),
+                  label: const Text('Löschen'),
+                  style: OutlinedButton.styleFrom(
+                    backgroundColor: Colors.redAccent,
+                    minimumSize: const Size.fromHeight(40),
+                  ),
+                ),
+              ),
             ],
           ),
         ),
       )
     );
+  }
+
+  Future<void> _doDelete() async {
+    final r = await showConfirmDeleteBookingDialog(context, _booking);
+    if (r != null && r) {
+      _booking = await widget._container.get<BookingService>().delete(_booking);
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          content: Text('Buchung von ${toHoursWithMinutes(_booking.start)} Uhr gelöscht.'),
+        ),);
+        Navigator.pop(context, null);
+      }
+    }
   }
 
   void _setWorkTime(Duration workTime) {

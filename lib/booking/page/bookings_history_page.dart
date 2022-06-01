@@ -1,5 +1,6 @@
 import 'package:dependency_container/dependency_container.dart';
 import 'package:flutter/material.dart';
+import 'package:time_tracker/booking/bean/booking_service.dart';
 import 'package:time_tracker/booking/dao/time_booking_dao.dart';
 import 'package:time_tracker/booking/entity/time_booking_statistics.dart';
 import 'package:time_tracker/booking/page/bookings_list_page.dart';
@@ -14,6 +15,7 @@ class BookingsHistoryPage extends StatefulWidget {
 
   @override
   _BookingsHistoryPageState createState() => _BookingsHistoryPageState();
+
 }
 
 class _BookingsHistoryPageState extends State<BookingsHistoryPage> {
@@ -78,7 +80,14 @@ class _BookingsHistoryPageState extends State<BookingsHistoryPage> {
   Widget _buildWeekItem(DailyBookingStatistic item) {
     return DailyBookingStatisticWidget(item,
       onLongPress: () async {
-        await showBookingListPage(context, widget._container, item.start, item.end);
+        if (item.bookingsCount > 1) {
+          await showBookingListPage(context, widget._container, item.start, item.end);
+        } else {
+          final bookings = await widget._container
+              .get<BookingService>()
+              .loadDay(item.start);
+          if (mounted) await showEditBookingPage(context, widget._container, booking: bookings.first);
+        }
         if (mounted) _reload();
       },
     );

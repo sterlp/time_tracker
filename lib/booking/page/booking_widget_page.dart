@@ -44,8 +44,8 @@ class BookingWidgetPage extends StatelessWidget {
             child: DailyBookingsList(
               todayBean,
               (b) async {
-                final r = await showEditBookingPage(context, _container, booking: b);
-                if (r != null) todayBean.reload();
+                await showEditBookingPage(context, _container, booking: b);
+                todayBean.reload();
               },
               todayBean.delete,
             ),

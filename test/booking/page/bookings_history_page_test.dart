@@ -49,6 +49,7 @@ void main() {
         DateTime(2021, 10, 4, 13),
         const Duration(hours: 5),
         const Duration(hours: 8),
+        1,
       ),
     );
 
@@ -59,6 +60,7 @@ void main() {
         DateTime(2021, 10, 5, 16),
         const Duration(hours: 6),
         const Duration(hours: 7),
+        1,
       ),
     );
 

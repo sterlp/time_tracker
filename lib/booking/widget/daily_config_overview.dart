@@ -14,19 +14,24 @@ class DailyConfigOverview extends StatelessWidget {
     final textStyle = Theme.of(context).textTheme.subtitle1;
     final valueStyle = Theme.of(context).textTheme.subtitle1;
     final workEndTime = DateTime.now().add(workHoursToday).subtract(workedToday);
-
-    return Table(
-      // border: TableBorder.symmetric(inside: BorderSide(width: 1.0, style: BorderStyle.solid)),
-      children: [
+    final rows = <TableRow>[];
+    if (workStarted != null) {
+      rows.add(
         _keyValueRow(
           Text('Arbeitsbeginn:', style: textStyle,),
-            Text('${toHoursWithMinutes(workStarted)} Uhr', style: valueStyle),
+          Text('${toHoursWithMinutes(workStarted)} Uhr', style: valueStyle),
         ),
-        _keyValueRow(
-          Text('Arbeitsende:', style: textStyle,),
-          Text('${toHoursWithMinutes(workEndTime)} Uhr', style: valueStyle),
-        ),
-      ],
+      );
+    }
+    rows.add(
+      _keyValueRow(
+        Text('Arbeitsende:', style: textStyle,),
+        Text('${toHoursWithMinutes(workEndTime)} Uhr', style: valueStyle),
+      ),
+    );
+    return Table(
+      // border: TableBorder.symmetric(inside: BorderSide(width: 1.0, style: BorderStyle.solid)),
+      children: rows,
     );
   }
 

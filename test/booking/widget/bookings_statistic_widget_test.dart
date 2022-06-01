@@ -1,9 +1,7 @@
-
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:time_tracker/booking/entity/time_booking_statistics.dart';
 import 'package:time_tracker/booking/widget/bookings_statistic_widget.dart';
-import 'package:time_tracker/booking/widget/time_account.dart';
 
 void main() {
   testWidgets('Load BookingsStatisticWidget', (WidgetTester tester) async {
@@ -32,10 +30,10 @@ void main() {
         title: 'test',
         home: BookingsStatisticWidget(
             DailyBookingStatisticList.of([
-              DailyBookingStatistic('2022-04-04', april4, april4.add(hours6), hours6, hours6),
+              DailyBookingStatistic('2022-04-04', april4, april4.add(hours6), hours6, hours6, 1),
               DailyBookingStatistic('2022-04-05', april5, april5.add(hours6),
-                const Duration(hours: 4 ,minutes: 30), const Duration(hours: 8)),
-          ])
+                const Duration(hours: 4 ,minutes: 30), const Duration(hours: 8), 1,),
+          ]),
         )
       ),
     );

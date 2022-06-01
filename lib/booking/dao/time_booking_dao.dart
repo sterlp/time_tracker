@@ -50,7 +50,8 @@ class TimeBookingDao extends AbstractDao<TimeBooking> {
       min(${DbBookingTableV2.startDate}) as ${DbBookingTableV2.startDate},
       max(${DbBookingTableV2.endDate}) as ${DbBookingTableV2.endDate},
       sum(${DbBookingTableV2.workedHoursInMin}) as worked,
-      max(${DbBookingTableV2.targetHoursInMin}) as planed
+      max(${DbBookingTableV2.targetHoursInMin}) as planed,
+      count(1) as bookingsCount
     FROM $tableName
     ''';
     const sortAndGroup = '''
@@ -75,7 +76,8 @@ class TimeBookingDao extends AbstractDao<TimeBooking> {
           parseDateTime(r[DbBookingTableV2.startDate])!,
           parseDateTime(r[DbBookingTableV2.endDate]) ?? DateTime.now(),
           Duration(minutes: r['worked']! as int),
-          Duration(minutes: r['planed']! as int)
+          Duration(minutes: r['planed']! as int),
+          r['bookingsCount']! as int,
         );
         result.add(t);
       }

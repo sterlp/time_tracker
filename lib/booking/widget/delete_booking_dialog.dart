@@ -9,7 +9,7 @@ Future<bool?> showConfirmDeleteBookingDialog(BuildContext context, TimeBooking b
   final bookingStart = '${toHoursWithMinutes(booking.start)} Uhr';
   final bookingDuration = toDurationHoursAndMinutes(booking.workTime);
 
-  return showDialog<bool?>(context: context,
+  return showDialog<bool>(context: context,
     barrierDismissible: false,
     builder: (c) => AlertDialog(
       title: const Text('Buchung Löschen?'),

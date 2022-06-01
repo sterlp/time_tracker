@@ -9,5 +9,6 @@ class TestMapDao extends AbstractMapDao {
         super(db,
           MapDbV1.tableName,
           keyColumnName: MapDbV1.keyColumn,
-          valueColumnName: MapDbV1.valueColumn);
+          valueColumnName: MapDbV1.valueColumn,
+      );
 }
