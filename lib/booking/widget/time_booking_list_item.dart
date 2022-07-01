@@ -14,7 +14,7 @@ class TimeBookingListItem extends StatelessWidget {
   final Function(TimeBooking b) deleteFn;
   final Function(TimeBooking b) editFn;
   const TimeBookingListItem(this.booking, this.editFn, this.deleteFn,
-      {Key? key})
+      {Key? key,})
       : super(key: key);
 
   @override

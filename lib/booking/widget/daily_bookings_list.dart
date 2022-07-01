@@ -12,7 +12,7 @@ class DailyBookingsList extends StatelessWidget {
   final Function(TimeBooking b) deleteFn;
 
   const DailyBookingsList(this.items, this.editFn, this.deleteFn,
-      {Key? key})
+      {Key? key,})
       : super(key: key);
 
   @override
