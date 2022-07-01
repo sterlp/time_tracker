@@ -60,7 +60,8 @@ class ExportService {
       'Pause 1 Start', 'Pause 1 Ende',
       'Pause 2 Start', 'Pause 2 Ende',
       'Pause Rest', 'Pause Rest',
-      'Pausenzeit']];
+      'Pausenzeit']
+    ];
 
     while(firstMonth.year < yearNow
         || (firstMonth.month <= monthNow && firstMonth.year == yearNow)) {

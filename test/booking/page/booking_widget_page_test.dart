@@ -49,7 +49,7 @@ void main() {
     expect(find.text('Start'), findsOneWidget);
     expect(find.text('Soll'), findsOneWidget);
     expect(find.text('Ist'), findsOneWidget);
-    expect(find.text('Beginn:'), findsNothing);
+    expect(find.text('Beginn'), findsNothing);
   });
 
   testWidgets('Load yesterday BookingWidgetPage', (WidgetTester tester) async {
@@ -65,6 +65,6 @@ void main() {
     // THEN
     expect(find.text('Start'), findsNothing);
     expect(find.text('Stopp'), findsOneWidget);
-    expect(find.text('Beginn:'), findsOneWidget);
+    expect(find.text('Beginn'), findsOneWidget);
   });
 }

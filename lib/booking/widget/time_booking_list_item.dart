@@ -6,8 +6,7 @@ import 'package:time_tracker/booking/widget/delete_booking_dialog.dart';
 import 'package:time_tracker/booking/widget/duration_icon_widget.dart';
 import 'package:time_tracker/common/feedback.dart';
 import 'package:time_tracker/common/list/dismissible_backgrounds.dart';
-import 'package:time_tracker/common/widget/key_value_line_widget.dart';
-import 'package:time_tracker/util/time_util.dart';
+import 'package:time_tracker/common/widget/label_text_widget.dart';
 
 class TimeBookingListItem extends StatelessWidget {
 
@@ -40,35 +39,24 @@ class TimeBookingListItem extends StatelessWidget {
     );
   }
 
-  ListTile _buildListTitle(BuildContext context) {
-    final bookingStart = '${toHoursWithMinutes(booking.start)} Uhr';
-    final bookingDuration = toDurationHoursAndMinutes(booking.workTime);
-    Widget title;
-    Widget? subTitle;
+  Widget _buildListTitle(BuildContext context) {
+    Widget end;
     Widget icon;
     if (booking.end == null) {
       icon = const Icon(MdiIcons.clockFast);
-      title = KeyValueLineWidget(
-        const Text('Beginn:'),
-        Text(bookingStart),
-      );
+      end = Expanded(child: Container());
     } else {
       icon = DurationIconWidget(booking.workTime);
-      title = KeyValueLineWidget(
-        const Text('Dauer:'),
-        Text(bookingDuration),
-      );
-      subTitle = KeyValueLineWidget(
-        Text('Start: $bookingStart'),
-        Text('Ende: ${toHoursWithMinutes(booking.end)} Uhr'),
-      );
+      end = Expanded(child: LabelTextWidget.ofTime("Ende", booking.end));
     }
-
-    return ListTile(
-      onLongPress: FeedbackFixed.wrapLongTouch(() => editFn(booking), context),
-      leading: icon,
-      title: title,
-      subtitle: subTitle,
+    return Padding(
+      padding: const EdgeInsets.all(16),
+      child: Row(children: [
+        Padding(padding: const  EdgeInsets.fromLTRB(0, 0, 16, 0), child: icon),
+        Expanded(child: LabelTextWidget.ofTime("Beginn", booking.start)),
+        end,
+        Expanded(child: LabelTextWidget.ofDuration("Dauer", booking.workTime)),
+      ],),
     );
   }
 }
