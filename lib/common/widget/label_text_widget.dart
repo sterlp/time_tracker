@@ -29,6 +29,10 @@ class LabelTextWidget extends StatelessWidget {
 
   const LabelTextWidget(this.label, this.text, {Key? key}) : super(key: key);
 
+  LabelTextWidget.ofTime(this.label, DateTime? date, {Key? key})
+      : text = '${DateTimeUtil.formatWithString(date, 'HH:mm')} Uhr',
+        super(key: key);
+
   LabelTextWidget.ofDate(this.label, DateTime? date, {Key? key})
       : text = DateTimeUtil.formatWithString(date, 'dd.MM.yyyy HH:mm'),
         super(key: key);

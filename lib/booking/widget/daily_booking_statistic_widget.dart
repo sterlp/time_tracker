@@ -21,8 +21,8 @@ class DailyBookingStatisticWidget extends StatelessWidget {
         children: [
           ExpandedRowWidget(
             children: [
-              LabelTextWidget.ofDate('Start', item.start),
-              LabelTextWidget.ofDate('Ende', item.end)
+              LabelTextWidget.ofTime('Start', item.start),
+              LabelTextWidget.ofTime('Ende', item.end)
             ],
           ),
           ExpandedRowWidget(
