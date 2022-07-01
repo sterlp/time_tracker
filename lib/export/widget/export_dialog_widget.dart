@@ -48,14 +48,14 @@ class ExportDataWidget extends StatelessWidget {
   }
 
   Future<void> _exportMonth(BuildContext context) async {
-    final exportFileName = 'Monats Export ${DateTimeUtil.formatWithString(DateTime.now(), "d.M.y")}.csv';
+    final exportFileName = 'Monats Export ${DateTimeUtil.formatWithString(DateTime.now(), "MM.y")}.csv';
     final bookings = await _container.get<BookingService>().all(order: SortOrder.ASC);
     final csvData = _container.get<ExportService>().toMonthCsvData(bookings);
-    final f = await _container.get<ExportService>().writeToFile(csvData, fileName: 'Monats Export.csv');
+    final f = await _container.get<ExportService>().writeToFile(csvData, fileName: exportFileName);
 
     await Share.shareFiles(
       [f.path],
-      subject: 'Monats Export.csv', mimeTypes: ['text/csv'],);
+      subject: exportFileName, mimeTypes: ['text/csv'],);
     f.delete();
   }
   Future<void> _export(BuildContext context) async {
