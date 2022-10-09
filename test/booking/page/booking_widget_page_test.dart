@@ -15,27 +15,30 @@ import 'package:time_tracker/booking/page/booking_widget_page.dart';
 import '../../test_helper.dart';
 
 void main() {
-  AppContainer _container = AppContainer();
-  BookingService _bookingService = BookingServiceMock();
-  TodayBean _todayBean = TodayBean(_bookingService);
-  List<TimeBooking> _loadDay = [];
+  AppContainer container = AppContainer();
+  BookingService bookingService = BookingServiceMock();
+  var configMock = TimeTrackerConfigMock();
+  TodayBean todayBean = TodayBean(bookingService, configMock);
+  List<TimeBooking> loadDay = [];
 
   setUpAll(() => initializeDateFormatting());
   setUp(() {
-    _container = AppContainer();
-    _bookingService = BookingServiceMock();
-    _todayBean = TodayBean(_bookingService);
+    container = AppContainer();
+    bookingService = BookingServiceMock();
+    configMock = TimeTrackerConfigMock();
+    when(() => configMock.getDailyWorkHours()).thenReturn(const Duration(hours: 7));
+    todayBean = TodayBean(bookingService, configMock);
 
-    when(() => _bookingService.loadDay(any())).thenAnswer((i) => Future.value(_loadDay));
+    when(() => bookingService.loadDay(any())).thenAnswer((i) => Future.value(loadDay));
 
-    _container.add<BookingService>(_bookingService);
-    _container.add<TodayBean>(_todayBean);
+    container.add<BookingService>(bookingService);
+    container.add<TodayBean>(todayBean);
   });
 
   Future<void> _loadBookingWidgetPage(WidgetTester tester) {
     return tester.pumpWidget(MaterialApp(
         title: 'test',
-        home: BookingWidgetPage(_container),
+        home: BookingWidgetPage(container),
       ),
     );
   }
@@ -57,10 +60,10 @@ void main() {
     await _loadBookingWidgetPage(tester);
     await tester.pumpAndSettle();
     // WHEN
-    _loadDay = [
+    loadDay = [
       TimeBooking(DateTime.now().addDays(-1))
     ];
-    _todayBean.changeDay(DateTime.now().addDays(-1));
+    todayBean.changeDay(DateTime.now().addDays(-1));
     await tester.pumpAndSettle();
     // THEN
     expect(find.text('Start'), findsNothing);

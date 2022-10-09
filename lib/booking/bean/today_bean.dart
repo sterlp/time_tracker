@@ -5,16 +5,19 @@ import 'package:sqflite_entities/converter/date_util.dart';
 import 'package:time_tracker/booking/bean/booking_service.dart';
 import 'package:time_tracker/booking/entity/time_booking.dart';
 import 'package:time_tracker/common/list_functions.dart';
+import 'package:time_tracker/config/entity/config_entity.dart';
 import 'package:time_tracker/log/logger.dart';
 
 class TodayBean extends ValueNotifier<List<TimeBooking>> {
   final _log = LoggerFactory.get<TodayBean>();
   final BookingService _bookingService;
-  Duration _workHours = const Duration(hours: 8);
+  final TimeTrackerConfig _config;
+
+  var _workHours = const Duration(hours: 8);
   TimeBooking? _currentRunning;
   var _day = DateUtils.dateOnly(DateTime.now());
 
-  TodayBean(this._bookingService) : super([]);
+  TodayBean(this._bookingService, this._config) : super([]);
 
   DateTime get day => _day;
   Duration get workHours => _workHours;
@@ -34,7 +37,22 @@ class TodayBean extends ValueNotifier<List<TimeBooking>> {
 
   TodayBean init() {
     reload();
+    _onConfigChange();
+    _config.addListener(() => _onConfigChange());
     return this;
+  }
+
+  void _onConfigChange() {
+    final newWorkTime = _config.getDailyWorkHours();
+    if (_workHours.inMinutes != newWorkTime.inMinutes) {
+      _log.debug('Changing work time from $_workHours to $newWorkTime');
+      _workHours = newWorkTime;
+      for (final b in value) {
+        b.targetWorkTime = _workHours;
+        _bookingService.save(b);
+      }
+      notifyListeners();
+    }
   }
 
   Duration sumTimeBookingsWorkTime() {
@@ -46,17 +64,17 @@ class TodayBean extends ValueNotifier<List<TimeBooking>> {
     if (value.isEmpty) return Duration.zero;
 
     Duration breakTime = Duration.zero;
-    TimeBooking? _lastBooking;
+    TimeBooking? lastBooking;
     for (final b in value.reversed) {
-      if (_lastBooking != null) {
-        _log.debug('Diff ${_lastBooking.end} -> ${b.start}');
-        breakTime += b.start.difference(_lastBooking.end!);
+      if (lastBooking != null) {
+        _log.debug('Diff ${lastBooking.end} -> ${b.start}');
+        breakTime += b.start.difference(lastBooking.end!);
       }
-      _lastBooking = b;
+      lastBooking = b;
     }
     // if the last booking has an end, we add any time spend as break
-    if (_lastBooking != null && _lastBooking.end != null) {
-      breakTime += DateTimeUtil.precisionMinutes(DateTime.now()).difference(_lastBooking.end!);
+    if (lastBooking != null && lastBooking.end != null) {
+      breakTime += DateTimeUtil.precisionMinutes(DateTime.now()).difference(lastBooking.end!);
     }
     return breakTime;
   }

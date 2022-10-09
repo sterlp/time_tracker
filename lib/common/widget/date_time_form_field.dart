@@ -22,8 +22,8 @@ class DateTimeFormField extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     if (dateTime != null) {
-      _controller.text = DateTimeUtil.formatWithString(dateTime,
-          'EEEE, dd.MM.yyyy, HH:mm') + ' Uhr';
+      _controller.text =
+        "${DateTimeUtil.formatWithString(dateTime, 'EEEE, dd.MM.yyyy, HH:mm')} Uhr";
     }
     return TextFormField(
       controller: _controller,

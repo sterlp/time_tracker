@@ -5,6 +5,7 @@ import 'package:sqflite_entities/converter/date_util.dart';
 import 'package:time_tracker/booking/bean/booking_service.dart';
 import 'package:time_tracker/booking/bean/today_bean.dart';
 import 'package:time_tracker/booking/dao/time_booking_dao.dart';
+import 'package:time_tracker/config/dao/config_dao.dart';
 
 import '../../test_helper.dart';
 import '../booking_test_data.dart';
@@ -12,10 +13,11 @@ import '../booking_test_data.dart';
 Future<void> main() async {
   final dbProvider = await initTestDB();
   final db = await dbProvider.init();
+  final configDao = ConfigDao(db);
   final dao = TimeBookingDao(db);
   final service = BookingService(dao);
   final testData = BookingTestData(dao);
-  var subject = TodayBean(service);
+  TodayBean subject = TodayBeanMock();
 
   tearDownAll(() async {
     await dbProvider.close();
@@ -24,7 +26,7 @@ Future<void> main() async {
   setUp(() async {
     await initializeDateFormatting('de');
     await dao.deleteAll();
-    subject = TodayBean(service);
+    subject = TodayBean(service, await configDao.loadConfig());
   });
 
   test('Start booking should create a new one in the DB', () async {
@@ -127,7 +129,7 @@ Future<void> main() async {
     await subject.startNewBooking();
     await subject.startNewBooking();
     // WHEN
-    subject = TodayBean(service);
+    subject = TodayBean(service, await configDao.loadConfig());
     await subject.reload();
     // THEN
     expect(subject.value.length, 3);
@@ -171,7 +173,7 @@ Future<void> main() async {
     // GIVEN
     await testData.newBooking(-2, const Duration(days: -2));
     await testData.newBooking(-2, const Duration(days: -2));
-    final runningBooking = await testData.newBooking(-1, null);
+    final runningBooking = await testData.newBooking(-1);
     // WHEN
     final bookings = await subject.reload();
     // THEN

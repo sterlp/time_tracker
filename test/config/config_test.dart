@@ -26,17 +26,20 @@ void main() {
     final subject = ConfigDao(db!);
     
     final config = await subject.loadConfig();
-    expect(config.getDailyWorkHours(), 8);
+    expect(config.getDailyWorkHours(), const Duration(hours: 8));
   });
 
   test('Test change config', () async {
-
+    // GIVEN
+    const newWorkTime = Duration(hours: 5, minutes: 30);
     final subject = ConfigDao(db!);
+
+    // WHEN
     var config = await subject.loadConfig();
+    await config.setDailyWorkHours(newWorkTime);
 
-    await config.setDailyWorkHours(6);
-
+    // THEN
     config = await subject.loadConfig();
-    expect(config.getDailyWorkHours(), 6);
+    expect(config.getDailyWorkHours(), newWorkTime);
   });
 }

@@ -1,8 +1,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:sqflite_entities/dao/abstract_map_dao.dart';
 
-class AttachedMap
-    extends ValueNotifier<Map<String, String?>> {
+class AttachedMap extends ValueNotifier<Map<String, String?>> {
 
   final AbstractMapDao dao;
 

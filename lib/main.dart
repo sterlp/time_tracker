@@ -6,6 +6,7 @@ import 'package:time_tracker/booking/bean/booking_service.dart';
 import 'package:time_tracker/booking/bean/today_bean.dart';
 import 'package:time_tracker/booking/dao/time_booking_dao.dart';
 import 'package:time_tracker/config/dao/config_dao.dart';
+import 'package:time_tracker/config/entity/config_entity.dart';
 import 'package:time_tracker/db/time_traker_db.dart';
 import 'package:time_tracker/export/service/export_service.dart';
 import 'package:time_tracker/home/page/home_page.dart';
@@ -18,13 +19,13 @@ Future<AppContainer> initContext({Future<DbProvider>? dbProvider}) async {
 
   // CONFIG
   final configDao = ConfigDao(db);
-  final config = await configDao.loadConfig();
+  final TimeTrackerConfig config = await configDao.loadConfig();
   result.add(config);
 
   // TodayBean
   result.add<TimeBookingDao>(TimeBookingDao(db))
         .addFactory<BookingService>((c) => BookingService(c.get<TimeBookingDao>()))
-        .addFactory<TodayBean>((c) => TodayBean(c.get<BookingService>()).init())
+        .addFactory<TodayBean>((c) => TodayBean(c.get<BookingService>(), c.get<TimeTrackerConfig>()).init())
         .addFactory<ExportService>((c) => ExportService(c.get<BookingService>()))
   ;
 

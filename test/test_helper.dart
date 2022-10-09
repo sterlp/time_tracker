@@ -25,6 +25,8 @@ Future<AppContainer> initTestContext() async {
 class CreditServiceMock with Mock implements ConfigDao {}
 class TimeBookingDaoMock with Mock implements TimeBookingDao {}
 class BookingServiceMock with Mock implements BookingService {}
+class TimeTrackerConfigMock with Mock implements TimeTrackerConfig{}
+class TodayBeanMock with Mock implements TodayBean {}
 
 class AppContextMock {
   final configDao = CreditServiceMock();
@@ -47,7 +49,7 @@ class AppContextMock {
     result.add<ConfigDao>(configDao);
     result.add<TimeBookingDao>(timeBookingDao);
     result.add<BookingService>(bs);
-    result.add<TodayBean>(TodayBean(bs));
+    result.add<TodayBean>(TodayBean(bs, config!));
     return Future.value(result);
   }
 }
