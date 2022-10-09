@@ -4,6 +4,7 @@ import 'dart:io';
 import 'package:dependency_container/dependency_container.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
+import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:sqflite_entities/converter/date_util.dart';
 import 'package:sqflite_entities/entity/query.dart';
@@ -34,7 +35,7 @@ class _ExportDataWidgetState extends State<ExportDataWidget> {
           DrawerHeader(
               child: Text('Menü', style: Theme.of(context).textTheme.headline4,)),
           ListTile(
-            leading: const Icon(Icons.hourglass_bottom),
+            leading: const Icon(MdiIcons.wrenchClock),
             title: const Text('Tagesarbeitszeit'),
             subtitle: Text(toDurationHoursAndMinutes(config.getDailyWorkHours())),
             onTap: () => _updateWorkTime(context),

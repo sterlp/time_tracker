@@ -12,7 +12,7 @@ class TimerButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final _headerFormat = DateTimeUtil.getFormat('E, HH:mm dd.MM.yyyy');
+    final headerFormat = DateTimeUtil.getFormat('E, HH:mm dd.MM.yyyy');
     return ValueListenableBuilder(
       valueListenable: todayBean,
       builder: (context, value, child) {
@@ -25,7 +25,7 @@ class TimerButton extends StatelessWidget {
             Padding(
               padding: const EdgeInsets.fromLTRB(0, 16, 0, 0),
               child: FittedBox(child:
-              Text(_headerFormat.format(DateTime.now()), style: textStyle,),),
+              Text(headerFormat.format(DateTime.now()), style: textStyle,),),
             ),
             Padding(
               padding: const EdgeInsets.fromLTRB(0, 12, 0, 12),
