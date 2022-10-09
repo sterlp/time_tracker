@@ -26,7 +26,7 @@ void main() {
     final now = DateTime.now();
     await tester.pumpWidget(newTimeBookingList([
       TimeBookingListItem(TimeBooking(now), (b) { }, (b) {}),
-    ]));
+    ]),);
 
     // WHEN
     await tester.pumpAndSettle();

@@ -45,7 +45,7 @@ class DailyBookingStatisticList {
   DailyBookingStatisticList.of(List<DailyBookingStatistic> v) {
     _elements = v;
 
-    for(DailyBookingStatistic e in _elements) {
+    for(final e in _elements) {
       _sumWorkedTime += e.workedTime;
       _sumOverHours += e.overHours;
       _sumBreakTime += e.breakTime;

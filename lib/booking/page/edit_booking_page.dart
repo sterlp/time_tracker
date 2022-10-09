@@ -5,11 +5,9 @@ import 'package:sqflite_entities/converter/date_util.dart';
 import 'package:time_tracker/booking/bean/booking_service.dart';
 import 'package:time_tracker/booking/entity/time_booking.dart';
 import 'package:time_tracker/booking/widget/delete_booking_dialog.dart';
-import 'package:time_tracker/booking/widget/time_account.dart';
 import 'package:time_tracker/common/feedback.dart';
 import 'package:time_tracker/common/widget/date_time_form_field.dart';
 import 'package:time_tracker/common/widget/form/duration_form_field.dart';
-import 'package:time_tracker/log/logger.dart';
 import 'package:time_tracker/util/time_util.dart';
 
 Future<TimeBooking?> showEditBookingPage(
@@ -46,7 +44,6 @@ class EditBookingPage extends StatefulWidget {
 }
 
 class _EditBookingPageState extends State<EditBookingPage> {
-  final _log = LoggerFactory.get<EditBookingPage>();
   final _formKey = GlobalKey<FormState>();
   TimeBooking _booking = TimeBooking.now();
   bool _valid = false;
