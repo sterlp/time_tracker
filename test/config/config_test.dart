@@ -27,7 +27,6 @@ void main() {
     
     final config = await subject.loadConfig();
     expect(config.getDailyWorkHours(), 8);
-    expect(config.getWeeklyWorkHours(), 40);
   });
 
   test('Test change config', () async {
@@ -36,10 +35,8 @@ void main() {
     var config = await subject.loadConfig();
 
     await config.setDailyWorkHours(6);
-    await config.setWeeklyWorkHours(30);
 
     config = await subject.loadConfig();
     expect(config.getDailyWorkHours(), 6);
-    expect(config.getWeeklyWorkHours(), 30);
   });
 }

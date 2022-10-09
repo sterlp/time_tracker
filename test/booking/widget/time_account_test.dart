@@ -11,8 +11,9 @@ void main() {
         home: TimeAccount(
           Duration(hours: 8, minutes: 15),
           Duration(hours: 5),
-          Duration.zero
-        ),),
+          Duration.zero,
+        ),
+      ),
     );
 
     // WHEN

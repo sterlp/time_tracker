@@ -49,14 +49,20 @@ class TimeBookingListItem extends StatelessWidget {
       icon = DurationIconWidget(booking.workTime);
       end = Expanded(child: LabelTextWidget.ofTime("Ende", booking.end));
     }
-    return Padding(
-      padding: const EdgeInsets.all(16),
-      child: Row(children: [
-        Padding(padding: const  EdgeInsets.fromLTRB(0, 0, 16, 0), child: icon),
-        Expanded(child: LabelTextWidget.ofTime("Beginn", booking.start)),
-        end,
-        Expanded(child: LabelTextWidget.ofDuration("Dauer", booking.workTime)),
-      ],),
+    return InkWell(
+        child: Padding(
+          padding: const EdgeInsets.all(16),
+          child: Row(children: [
+            Padding(padding: const  EdgeInsets.fromLTRB(0, 0, 16, 0), child: icon),
+            Expanded(child: LabelTextWidget.ofTime("Beginn", booking.start)),
+            end,
+            Expanded(child: LabelTextWidget.ofDuration("Dauer", booking.workTime)),
+          ],),
+        ),
+      onLongPress: () {
+        FeedbackFixed.touch(context);
+        editFn(booking);
+      },
     );
   }
 }
