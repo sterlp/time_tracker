@@ -4,7 +4,7 @@ import 'package:material_design_icons_flutter/material_design_icons_flutter.dart
 import 'package:time_tracker/booking/page/booking_widget_page.dart';
 import 'package:time_tracker/booking/page/bookings_history_page.dart';
 import 'package:time_tracker/common/feedback.dart';
-import 'package:time_tracker/week/page/week_list_page.dart';
+import 'package:time_tracker/statistic/page/statistic_list_page.dart';
 
 class HomePage extends StatefulWidget {
   final AppContainer _container;
@@ -24,7 +24,7 @@ class _HomePageState extends State<HomePage> {
     super.initState();
     _pages = [
       BookingWidgetPage(widget._container),
-      WeekListPage(widget._container),
+      StatisticListPage(widget._container),
       BookingsHistoryPage(widget._container),
     ];
     //initializeDateFormatting('de');
@@ -42,7 +42,7 @@ class _HomePageState extends State<HomePage> {
           ),
           BottomNavigationBarItem(
             icon: Icon(MdiIcons.calendarWeek),
-            label: 'Wochenübersicht',
+            label: 'Statistik',
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.view_day),

@@ -44,13 +44,13 @@ class _BookingWidgetPageState extends State<BookingWidgetPage> {
   @override
   Widget build(BuildContext context) {
     final todayBean = widget._container.get<TodayBean>();
-    final _container = widget._container;
+    final container = widget._container;
     return Scaffold(
       appBar: AppBar(
         title: const Text('Zeiterfassung'),
       ),
       drawer: Drawer(
-        child: ExportDataWidget(_container),
+        child: ExportDataWidget(container),
       ),
       body: Column(
         children: [
@@ -73,7 +73,7 @@ class _BookingWidgetPageState extends State<BookingWidgetPage> {
             child: DailyBookingsList(
               todayBean,
                   (b) async {
-                await showEditBookingPage(context, _container, booking: b);
+                await showEditBookingPage(context, container, booking: b);
                 todayBean.reload();
               },
               todayBean.delete,

@@ -6,7 +6,7 @@ import 'package:intl/date_symbol_data_local.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:time_tracker/booking/bean/booking_service.dart';
 import 'package:time_tracker/booking/entity/time_booking_statistics.dart';
-import 'package:time_tracker/week/page/week_list_page.dart';
+import 'package:time_tracker/statistic/page/statistic_list_page.dart';
 
 import '../../test_helper.dart';
 
@@ -28,7 +28,7 @@ void main() {
     // GIVEN
     await tester.pumpWidget(MaterialApp(
         title: 'test',
-        home: Scaffold(body: WeekListPage(container)),
+        home: Scaffold(body: StatisticListPage(container)),
       ),
     );
 

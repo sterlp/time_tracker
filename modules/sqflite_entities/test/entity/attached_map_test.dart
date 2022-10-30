@@ -32,15 +32,15 @@ void main() {
 
       // CREATE
       await attachedMap.setValue('foo', 'baar');
-      expect(await dao.countAll(), 1);
+      expect(await dao.countAll(), 4);
       expect(await dao.getValue('foo'), 'baar');
 
       await attachedMap.setValue('foo2', 'baar2');
-      expect(await dao.countAll(), 2);
+      expect(await dao.countAll(), 5);
 
       // UPDATE
       await attachedMap.setValue('foo', 'baar2');
-      expect(await dao.countAll(), 2);
+      expect(await dao.countAll(), 5);
       expect(await dao.getValue('foo'), 'baar2');
 
       // READ
@@ -50,7 +50,7 @@ void main() {
 
       // DELETE
       await attachedMap.delete('foo');
-      expect(await dao.countAll(), 1);
+      expect(await dao.countAll(), 4);
       expect(await dao.getValue('foo'), isNull);
   });
 

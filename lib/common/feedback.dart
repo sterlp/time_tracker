@@ -7,7 +7,7 @@ class FeedbackFixed {
 
   /// Wraps a [Function] to provide platform specific feedback for a
   /// click before the provided callback is executed.
-  static VoidCallback? wrapTouch<T>(Function? callback, BuildContext context) {
+  static VoidCallback? wrapTouch<T>(Function()? callback, BuildContext context) {
     if (callback == null)
       return null;
     return () {

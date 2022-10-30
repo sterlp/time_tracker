@@ -1,6 +1,6 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:time_tracker/booking/entity/time_booking_statistics.dart';
-import 'package:time_tracker/week/entity/week_overview_stats.dart';
+import 'package:time_tracker/statistic/entity/overview_stats.dart';
 
 void main() {
   testWidgets('WeekOverviewStats empty', (WidgetTester tester) async {

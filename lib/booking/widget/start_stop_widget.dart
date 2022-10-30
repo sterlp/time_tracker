@@ -10,7 +10,7 @@ class StartAndStopWidget extends StatelessWidget {
   final Duration _workTime;
   final Duration _targetWorkTime;
   final bool _showStart;
-  final Function _startPress;
+  final Function() _startPress;
 
   const StartAndStopWidget(this._showStart,
       this._workTime, this._targetWorkTime, this._startPress,

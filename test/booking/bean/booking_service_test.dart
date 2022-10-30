@@ -4,7 +4,7 @@ import 'package:intl/date_symbol_data_local.dart';
 import 'package:time_tracker/booking/bean/booking_service.dart';
 import 'package:time_tracker/booking/dao/time_booking_dao.dart';
 import 'package:time_tracker/booking/entity/time_booking.dart';
-import 'package:time_tracker/week/entity/week_overview_stats.dart';
+import 'package:time_tracker/statistic/entity/overview_stats.dart';
 
 import '../../test_helper.dart';
 import '../booking_test_data.dart';

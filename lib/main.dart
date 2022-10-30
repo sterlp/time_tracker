@@ -62,8 +62,8 @@ class MyApp extends StatelessWidget {
         builder: (context, snapshot) {
           if (snapshot.hasError) {
             _log.error('Failed to load App', snapshot.error);
-          }
-          if (snapshot.hasData) {
+            return LoadingWidget(caption: snapshot.error.toString());
+          } else if (snapshot.hasData) {
             return HomePage(snapshot.data!);
           } else {
             return const LoadingWidget();
