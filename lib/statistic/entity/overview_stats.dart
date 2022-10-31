@@ -1,9 +1,39 @@
+import 'package:sqflite_entities/converter/date_util.dart';
 import 'package:time_tracker/booking/entity/time_booking_statistics.dart';
 import 'package:week_of_year/week_of_year.dart';
 
+List<T> _split<T extends StatsEntity>(
+    List<DailyBookingStatistic> elements,
+    bool Function(DateTime newDate, DateTime currentDate) splitter,
+    T Function(DateTime d, List<DailyBookingStatistic> elements) builder) {
+  final List<T> result = [];
+
+  if (elements.isNotEmpty) {
+    var currentDate = elements[0].start;
+    List<DailyBookingStatistic> stats = [];
+
+    for (final s in elements) {
+      final newDate = s.start;
+      if (splitter(newDate, currentDate)) {
+        result.add(builder(currentDate, stats));
+        currentDate = newDate;
+        stats = [s];
+      } else {
+        stats.add(s);
+      }
+    }
+    if (stats.isNotEmpty) {
+      result.add(builder(currentDate, stats));
+    }
+  }
+  return result;
+}
+
 abstract class StatsEntity {
+  final DateTime time;
   final DailyBookingStatisticList statisticList;
-  StatsEntity(this.statisticList);
+
+  StatsEntity(this.time, this.statisticList);
 
   String get title;
 
@@ -14,6 +44,7 @@ abstract class StatsEntity {
     }
     return r;
   }
+
   DateTime get end {
     var r = DateTime(1900); // ensure we have a very old date to begin with
     for (final e in statisticList.elements) {
@@ -21,73 +52,39 @@ abstract class StatsEntity {
     }
     return r;
   }
+  @override
+  String toString() {
+    return '${runtimeType.toString()}[time=$time, statisticList=${statisticList.elements.length}]';
+  }
 }
 
 class MonthOverviewStats extends StatsEntity {
-  final int month;
-  MonthOverviewStats(this.month, List<DailyBookingStatistic> elements) :
-        super(DailyBookingStatisticList.of(elements));
+  MonthOverviewStats(DateTime time, List<DailyBookingStatistic> elements)
+      : super(time, DailyBookingStatisticList.of(elements));
 
   @override
-  String get title => '$month - ${statisticList.elements[0].start.year}';
+  String get title => '${DateTimeUtil.formatWithString(time, 'MMMM')} - ${time.year}';
 
   static List<MonthOverviewStats> split(List<DailyBookingStatistic> elements) {
-    final List<MonthOverviewStats> result = [];
-
-    if (elements.isNotEmpty) {
-      var month = elements[0].start.month;
-      List<DailyBookingStatistic> stats = [];
-      for (final s in elements) {
-        final newMonth = s.start.month;
-        if (month == newMonth) {
-          stats.add(s);
-        } else {
-          result.add(MonthOverviewStats(month, stats));
-          month = newMonth;
-          stats = [s];
-        }
-      }
-    }
-    return result;
+    return _split(elements,
+            (newDate, currentDate) => currentDate.year != newDate.year
+                || currentDate.month != newDate.month,
+            (d, elements) => MonthOverviewStats(d, elements),);
   }
 }
-class WeekOverviewStats extends StatsEntity {
-  final int week;
-  @override
-  String get title => 'KW $week - ${statisticList.elements[0].start.year}';
-  @override
-  String toString() {
-    return 'WeekOverviewStats[week=$week, statisticList=${statisticList.elements.length}]';
-  }
 
-  WeekOverviewStats(this.week, List<DailyBookingStatistic> elements) :
-    super(DailyBookingStatisticList.of(elements));
+class WeekOverviewStats extends StatsEntity {
+  @override
+  String get title => 'KW ${time.weekOfYear} - ${statisticList.elements[0].start.year}';
+  @override
+
+  WeekOverviewStats(DateTime week, List<DailyBookingStatistic> elements)
+      : super(week, DailyBookingStatisticList.of(elements));
 
   static List<WeekOverviewStats> split(List<DailyBookingStatistic> elements) {
-    final List<WeekOverviewStats> result = [];
-
-    if (elements.isNotEmpty) {
-      var currentWeek = elements[0].start.weekOfYear;
-      List<DailyBookingStatistic> week = [];
-
-      for (final s in elements) {
-        final newWeek = s.start.weekOfYear;
-        if (currentWeek == newWeek) {
-          week.add(s);
-        } else {
-          // close this week stats
-          final ws = WeekOverviewStats(currentWeek, week);
-          result.add(ws);
-          // we start a new one
-          week = [s];
-          currentWeek = newWeek;
-        }
-      }
-      // if something is left, add it as last week
-      if (week.isNotEmpty) {
-        result.add(WeekOverviewStats(currentWeek, week));
-      }
-    }
-    return result;
+    return _split(elements,
+          (newDate, currentDate) => currentDate.year != newDate.year
+            || currentDate.weekOfYear != newDate.weekOfYear,
+          (d, elements) => WeekOverviewStats(d, elements),);
   }
 }

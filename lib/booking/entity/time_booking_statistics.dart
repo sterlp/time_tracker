@@ -1,4 +1,6 @@
 
+import 'package:sqflite_entities/converter/date_util.dart';
+
 class DailyBookingStatistic {
   final String day;
   final DateTime start;
@@ -13,6 +15,13 @@ class DailyBookingStatistic {
       this.workedTime,
       this.planedWorkTime,
       this.bookingsCount);
+
+  DailyBookingStatistic.ofStartAndDuration(this.start, Duration duration)
+    : day = DateTimeUtil.formatWithString(start, 'yyyy-MM-dd'),
+      end = start.add(duration),
+      workedTime = duration,
+      planedWorkTime = const Duration(hours: 8),
+      bookingsCount = 1;
 
   Duration get overHours => workedTime - planedWorkTime;
   Duration get breakTime => end.difference(start) - workedTime;

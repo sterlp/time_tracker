@@ -1,6 +1,7 @@
 import 'package:dependency_container/dependency_container.dart';
 import 'package:flutter/material.dart';
 import 'package:time_tracker/booking/bean/booking_service.dart';
+import 'package:time_tracker/booking/entity/time_booking_statistics.dart';
 import 'package:time_tracker/booking/page/bookings_list_page.dart';
 import 'package:time_tracker/booking/page/edit_booking_page.dart';
 import 'package:time_tracker/log/logger.dart';
@@ -22,7 +23,9 @@ class StatisticListPage extends StatefulWidget {
 
 class _StatisticListPageState extends State<StatisticListPage> {
   static final _log = LoggerFactory.get<StatisticListPage>();
-  final data = ValueNotifier<List<WeekOverviewStats>>([]);
+  final _data = ValueNotifier<List<StatsEntity>>([]);
+  List<DailyBookingStatistic>? _stats;
+  var _statsMode = _Statistic.week;
 
   @override
   Widget build(BuildContext context) {
@@ -35,9 +38,12 @@ class _StatisticListPageState extends State<StatisticListPage> {
               color: Colors.white,
             ),
             onChanged: (v) {
-              _log.debug("Changed to $v");
+              if (_statsMode != v) {
+                _statsMode = v!;
+                _reload();
+              }
             },
-            value: _Statistic.week,
+            value: _statsMode,
             items: const [
               DropdownMenuItem(value: _Statistic.week, child: Text("Wochenübersicht")),
               DropdownMenuItem(value: _Statistic.month, child: Text("Monatsübersicht")),
@@ -55,12 +61,9 @@ class _StatisticListPageState extends State<StatisticListPage> {
   }
 
   Widget _buildWeekListView(BuildContext context) {
-    return ValueListenableBuilder<List<WeekOverviewStats>>(
-      valueListenable: data,
+    return ValueListenableBuilder<List<StatsEntity>>(
+      valueListenable: _data,
       builder: (context, value, child) {
-        const space = TableRow(
-          children: [SizedBox(height: 6,), SizedBox(height: 6,)],
-        );
         return ListView.builder(
           shrinkWrap: true,
           itemCount: value.length,
@@ -86,7 +89,12 @@ class _StatisticListPageState extends State<StatisticListPage> {
   }
 
   Future<void> _reload() async {
-    final stats = await widget._container.get<BookingService>().statisticByDay();
-    data.value = WeekOverviewStats.split(stats);
+    _stats ??= await widget._container.get<BookingService>().statisticByDay();
+    _log.debug("_reload: $_statsMode with ${_stats!.length} elements ...");
+    if (_statsMode == _Statistic.week) {
+      _data.value = WeekOverviewStats.split(_stats!);
+    } else {
+      _data.value = MonthOverviewStats.split(_stats!);
+    }
   }
 }
