@@ -56,7 +56,6 @@ class StatisticWidget extends StatelessWidget {
               LabelTextWidget.ofDuration('Ø Pause', item.statisticList.avgBreakTime),
             ],
           ),
-          space,
         ],
       ),
       onLongPress: onLongPress,

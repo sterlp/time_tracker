@@ -41,7 +41,7 @@ class _HomePageState extends State<HomePage> {
             label: 'Heute',
           ),
           BottomNavigationBarItem(
-            icon: Icon(MdiIcons.calendarWeek),
+            icon: Icon(MdiIcons.calendar),
             label: 'Statistik',
           ),
           BottomNavigationBarItem(

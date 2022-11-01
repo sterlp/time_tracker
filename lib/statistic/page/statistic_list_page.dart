@@ -1,5 +1,6 @@
 import 'package:dependency_container/dependency_container.dart';
 import 'package:flutter/material.dart';
+import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:time_tracker/booking/bean/booking_service.dart';
 import 'package:time_tracker/booking/entity/time_booking_statistics.dart';
 import 'package:time_tracker/booking/page/bookings_list_page.dart';
@@ -10,7 +11,7 @@ import 'package:time_tracker/statistic/widget/statistic_widget.dart';
 
 enum _Statistic {
   week,
-  month
+  month,
 }
 
 class StatisticListPage extends StatefulWidget {
@@ -29,28 +30,28 @@ class _StatisticListPageState extends State<StatisticListPage> {
 
   @override
   Widget build(BuildContext context) {
+    const month = Text("Monatsübersicht");
+    const week = Text("Wochenübersicht");
+
     return Scaffold(
       appBar: AppBar(
-        title: Theme(
-          child: DropdownButton<_Statistic>(
-            underline: Container(
-              height: 2,
-              color: Colors.white,
-            ),
-            onChanged: (v) {
+        title: _statsMode == _Statistic.week ? week : month,
+        actions: [
+          PopupMenuButton<_Statistic>(
+            onSelected: (v) {
               if (_statsMode != v) {
-                _statsMode = v!;
+                _statsMode = v;
                 _reload();
               }
             },
-            value: _statsMode,
-            items: const [
-              DropdownMenuItem(value: _Statistic.week, child: Text("Wochenübersicht")),
-              DropdownMenuItem(value: _Statistic.month, child: Text("Monatsübersicht")),
+            itemBuilder: (context) => const [
+              PopupMenuItem<_Statistic>(value: _Statistic.week,
+                  child: ListTile(leading: Icon(MdiIcons.calendarWeek), title: Text("Wochenübersicht")),),
+              PopupMenuItem<_Statistic>(value: _Statistic.month,
+                child: ListTile(leading: Icon(MdiIcons.calendarMonth), title: Text("Monatsübersicht")),),
             ],
-          ),
-          data: ThemeData.dark(),
-        ),
+          )
+        ],
       ),
       body: _buildWeekListView(context),
       floatingActionButton: FloatingActionButton(
@@ -84,8 +85,10 @@ class _StatisticListPageState extends State<StatisticListPage> {
   }
 
   Future<void> _reload() async {
-    _stats ??= await widget._container.get<BookingService>().statisticByDay();
-    _log.debug("_reload: $_statsMode with ${_stats!.length} elements ...");
+    if (_stats == null) {
+      _stats = await widget._container.get<BookingService>().statisticByDay();
+      _log.debug("_reload: $_statsMode with ${_stats!.length} elements ...");
+    }
     if (_statsMode == _Statistic.week) {
       _items = WeekOverviewStats.split(_stats!);
     } else {
