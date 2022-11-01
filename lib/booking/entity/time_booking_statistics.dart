@@ -35,17 +35,23 @@ class DailyBookingStatistic {
 class DailyBookingStatisticList {
   List<DailyBookingStatistic> _elements = [];
   Duration _sumWorkedTime = Duration.zero;
+  Duration _sumPlannedWorkTime = Duration.zero;
   Duration _sumOverHours = Duration.zero;
   Duration _sumBreakTime = Duration.zero;
 
   Duration get sumWorkedTime => _sumWorkedTime;
   Duration get sumOverHours => _sumOverHours;
   Duration get sumBreakTime => _sumBreakTime;
+  Duration get sumPlannedWorkTime => _sumPlannedWorkTime;
+
   int get count => _elements.length;
   List<DailyBookingStatistic> get elements => _elements;
 
   Duration get avgWorkTime => count > 0
       ? Duration(minutes: (_sumWorkedTime.inMinutes / count).round())
+      : Duration.zero;
+  Duration get avgPlannedWorkTime => count > 0
+      ? Duration(minutes: (_sumPlannedWorkTime.inMinutes / count).round())
       : Duration.zero;
   Duration get avgBreakTime => count > 0
       ? Duration(minutes: (_sumBreakTime.inMinutes / count).round())
@@ -58,6 +64,7 @@ class DailyBookingStatisticList {
       _sumWorkedTime += e.workedTime;
       _sumOverHours += e.overHours;
       _sumBreakTime += e.breakTime;
+      _sumPlannedWorkTime += e.planedWorkTime;
     }
   }
 }

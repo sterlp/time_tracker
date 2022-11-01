@@ -31,8 +31,22 @@ class StatisticWidget extends StatelessWidget {
           space,
           TableRow(
             children: [
-              LabelTextWidget.ofDuration('gearbeitet', item.statisticList.sumWorkedTime),
-              LabelTextWidget.ofDuration('Ø gearbeitet', item.statisticList.avgWorkTime),
+              LabelTextWidget('Tage gearbeitet', item.statisticList.count.toString()),
+              LabeledWidget('Überstunden', child: WorkTimeWidget(item.statisticList.sumOverHours, style: valueStyle,)),
+            ],
+          ),
+          space,
+          TableRow(
+            children: [
+              LabelTextWidget.ofDuration('Std gearbeitet', item.statisticList.sumWorkedTime),
+              LabelTextWidget.ofDuration('Ø Std gearbeitet', item.statisticList.avgWorkTime),
+            ],
+          ),
+          space,
+          TableRow(
+            children: [
+              LabelTextWidget.ofDuration('Sollarbeitszeit', item.statisticList.sumPlannedWorkTime),
+              LabelTextWidget.ofDuration('Ø Sollarbeitszeit', item.statisticList.avgPlannedWorkTime),
             ],
           ),
           space,
@@ -43,12 +57,6 @@ class StatisticWidget extends StatelessWidget {
             ],
           ),
           space,
-          TableRow(
-            children: [
-              LabeledWidget('Überstunden', child: WorkTimeWidget(item.statisticList.sumOverHours, style: valueStyle,)),
-              LabelTextWidget('Tage gearbeitet', item.statisticList.count.toString()),
-            ],
-          )
         ],
       ),
       onLongPress: onLongPress,
