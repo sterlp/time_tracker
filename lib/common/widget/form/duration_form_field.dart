@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:time_tracker/common/feedback.dart';
-import 'package:time_tracker/util/time_util.dart';
+import 'package:time_tracker/common/time_util.dart';
 
 class DurationFormField extends StatelessWidget {
   final ValueChanged<Duration>? onChanged;

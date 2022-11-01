@@ -1,11 +1,11 @@
 import 'package:dependency_container/dependency_container.dart';
 import 'package:flutter/material.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
-import 'package:time_tracker/booking/bean/booking_service.dart';
+import 'package:time_tracker/booking/service/booking_service.dart';
 import 'package:time_tracker/booking/entity/time_booking_statistics.dart';
 import 'package:time_tracker/booking/page/bookings_list_page.dart';
 import 'package:time_tracker/booking/page/edit_booking_page.dart';
-import 'package:time_tracker/log/logger.dart';
+import 'package:time_tracker/common/logger.dart';
 import 'package:time_tracker/statistic/entity/overview_stats.dart';
 import 'package:time_tracker/statistic/widget/statistic_widget.dart';
 

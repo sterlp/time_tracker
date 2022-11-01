@@ -3,7 +3,7 @@ import 'dart:io';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:sqflite_entities/entity/query.dart';
-import 'package:time_tracker/booking/bean/booking_service.dart';
+import 'package:time_tracker/booking/service/booking_service.dart';
 import 'package:time_tracker/booking/dao/time_booking_dao.dart';
 import 'package:time_tracker/booking/entity/time_booking.dart';
 import 'package:time_tracker/export/service/export_service.dart';

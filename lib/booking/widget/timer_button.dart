@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:sqflite_entities/converter/date_util.dart';
-import 'package:time_tracker/booking/bean/today_bean.dart';
+import 'package:time_tracker/booking/service/today_bean.dart';
 import 'package:time_tracker/booking/widget/start_stop_widget.dart';
 import 'package:time_tracker/booking/widget/time_account.dart';
 

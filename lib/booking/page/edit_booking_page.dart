@@ -2,13 +2,13 @@ import 'package:dependency_container/dependency_container.dart';
 import 'package:flutter/material.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:sqflite_entities/converter/date_util.dart';
-import 'package:time_tracker/booking/bean/booking_service.dart';
+import 'package:time_tracker/booking/service/booking_service.dart';
 import 'package:time_tracker/booking/entity/time_booking.dart';
 import 'package:time_tracker/booking/widget/delete_booking_dialog.dart';
 import 'package:time_tracker/common/feedback.dart';
 import 'package:time_tracker/common/widget/date_time_form_field.dart';
 import 'package:time_tracker/common/widget/form/duration_form_field.dart';
-import 'package:time_tracker/util/time_util.dart';
+import 'package:time_tracker/common/time_util.dart';
 
 Future<TimeBooking?> showEditBookingPage(
     BuildContext context,

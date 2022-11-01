@@ -65,7 +65,7 @@ extension DateTimeExtension on DateTime {
   int get weekOfYear {
     // Add 3 to always compare with January 4th, which is always in week 1
     // Add 7 to index weeks starting with 1 instead of 0
-    final woy = ((ordinalDate - weekday + 10) ~/ 7);
+    final woy = (ordinalDate - weekday + 10) ~/ 7;
 
     // If the week number equals zero, it means that the given date belongs to the preceding (week-based) year.
     if (woy == 0) {

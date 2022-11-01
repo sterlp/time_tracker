@@ -2,7 +2,7 @@ import 'package:dependency_container/dependency_container.dart';
 import 'package:flutter/material.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:sqflite_entities/converter/date_util.dart';
-import 'package:time_tracker/booking/bean/booking_service.dart';
+import 'package:time_tracker/booking/service/booking_service.dart';
 import 'package:time_tracker/booking/entity/time_booking.dart';
 import 'package:time_tracker/booking/page/edit_booking_page.dart';
 import 'package:time_tracker/booking/widget/daily_bookings_list.dart';

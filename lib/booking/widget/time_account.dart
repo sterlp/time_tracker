@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:time_tracker/booking/widget/work_time_widget.dart';
-import 'package:time_tracker/util/time_util.dart';
+import 'package:time_tracker/common/time_util.dart';
 
 class TimeAccount extends StatelessWidget {
   final Duration target;

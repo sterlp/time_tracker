@@ -1,6 +1,6 @@
 import 'package:dependency_container/dependency_container.dart';
 import 'package:flutter/material.dart';
-import 'package:time_tracker/booking/bean/booking_service.dart';
+import 'package:time_tracker/booking/service/booking_service.dart';
 import 'package:time_tracker/booking/dao/time_booking_dao.dart';
 import 'package:time_tracker/booking/entity/time_booking_statistics.dart';
 import 'package:time_tracker/booking/page/bookings_list_page.dart';

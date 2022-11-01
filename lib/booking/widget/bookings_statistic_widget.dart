@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:time_tracker/booking/entity/time_booking_statistics.dart';
-import 'package:time_tracker/util/time_util.dart';
+import 'package:time_tracker/common/time_util.dart';
 
 class BookingsStatisticWidget extends StatelessWidget {
   final DailyBookingStatisticList listStats;

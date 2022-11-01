@@ -15,9 +15,9 @@ class AttachedMap extends ValueNotifier<Map<String, String?>> {
   Future<String?> setValue(String key, String? inValue) async {
     if (this.value[key] != inValue) {
       this.value[key] = inValue;
-      notifyListeners();
 
       if (await dao.setValue(key, inValue)) {
+        notifyListeners();
         return inValue;
       } else {
         throw 'Failed to set $key to $inValue';

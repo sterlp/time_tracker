@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:sqflite_entities/converter/date_util.dart';
-import 'package:time_tracker/util/time_util.dart';
+import 'package:time_tracker/common/time_util.dart';
 
 class LabeledWidget extends StatelessWidget {
   final String label;

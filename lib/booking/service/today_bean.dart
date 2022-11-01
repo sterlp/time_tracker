@@ -2,11 +2,11 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:sqflite_entities/converter/date_util.dart';
-import 'package:time_tracker/booking/bean/booking_service.dart';
+import 'package:time_tracker/booking/service/booking_service.dart';
 import 'package:time_tracker/booking/entity/time_booking.dart';
 import 'package:time_tracker/common/list_functions.dart';
 import 'package:time_tracker/config/entity/config_entity.dart';
-import 'package:time_tracker/log/logger.dart';
+import 'package:time_tracker/common/logger.dart';
 
 class TodayBean extends ValueNotifier<List<TimeBooking>> {
   final _log = LoggerFactory.get<TodayBean>();
