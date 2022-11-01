@@ -34,7 +34,7 @@ class ExportByMonthActivity {
     final dName = DateTimeUtil.getFormat('EEEE');
     final List<List<String>?> result = [header];
     while(firstMonth.month <= monthNow && yearNow <= yearNow) {
-      final dayStats = ExportDailyStats.fromBookings(byDay[TimeBooking.dayFormat.format(firstMonth)] ?? []);
+      final dayStats = ExportDailyStats.fromBookings(byDay[firstMonth.toIsoDateString()] ?? []);
       result.add([
         dFormat.format(firstMonth),
         dName.format(firstMonth),

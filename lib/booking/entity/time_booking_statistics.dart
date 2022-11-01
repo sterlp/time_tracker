@@ -17,7 +17,7 @@ class DailyBookingStatistic {
       this.bookingsCount);
 
   DailyBookingStatistic.ofStartAndDuration(this.start, Duration duration)
-    : day = DateTimeUtil.formatWithString(start, 'yyyy-MM-dd'),
+    : day = start.toIsoDateString(),
       end = start.add(duration),
       workedTime = duration,
       planedWorkTime = const Duration(hours: 8),

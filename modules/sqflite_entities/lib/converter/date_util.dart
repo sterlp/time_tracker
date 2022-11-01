@@ -13,12 +13,28 @@ extension AddDuration on DateTime {
   DateTime addHours(int hours) {
     return this.add(Duration(hours: hours));
   }
+
+  /// Returns the date as `yyyy-MM-dd`
+  String toIsoDateString() {
+    final y = this.year;
+    final m = this.month;
+    final d = this.day;
+    return "$y-${DateTimeUtil.twoDigits(m)}-${DateTimeUtil.twoDigits(d)}";
+  }
 }
 
 class DateTimeUtil {
   DateTimeUtil._();
 
   static final Map<String, DateFormat> _formatterCache = {};
+
+  static String twoDigits(int value) {
+    if (value < 10) {
+      return "0$value";
+    } else {
+      return value.toString();
+    }
+  }
 
   static DateTime midnight(DateTime dateTime) {
     return DateTime(dateTime.year, dateTime.month, dateTime.day, 23, 59, 59);

@@ -1,4 +1,5 @@
 import 'package:sqflite_common/sqlite_api.dart';
+import 'package:sqflite_entities/converter/date_util.dart';
 import 'package:sqflite_entities/converter/sqlite_converter.dart';
 import 'package:sqflite_entities/dao/abstract_dao.dart';
 import 'package:time_tracker/booking/entity/time_booking.dart';
@@ -38,7 +39,7 @@ class TimeBookingDao extends AbstractDao<TimeBooking> {
   Future<List<TimeBooking>> loadDay(DateTime dateTime) {
     return loadAll(
         where: "day = ? OR end_date is null",
-        whereArgs: [TimeBooking.dayFormat.format(dateTime)],
+        whereArgs: [dateTime.toIsoDateString()],
         orderBy: _orderByStartDate,
     );
   }
@@ -67,7 +68,7 @@ class TimeBookingDao extends AbstractDao<TimeBooking> {
     } else {
       query += 'WHERE ${DbBookingTableV2.day} <> ? AND ${DbBookingTableV2.endDate} IS NOT NULL';
       query += sortAndGroup;
-      qResult = await db.rawQuery(query, [TimeBooking.dayFormat.format(withoutDay)]);
+      qResult = await db.rawQuery(query, [withoutDay.toIsoDateString()]);
     }
     if (qResult.isNotEmpty) {
       for (final r in qResult) {

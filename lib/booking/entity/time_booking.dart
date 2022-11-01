@@ -4,8 +4,6 @@ import 'package:sqflite_entities/entity/abstract_entity.dart';
 import 'package:time_tracker/db/db_v2.dart';
 
 class TimeBooking extends AbstractEntity {
-  static final dayFormat = DateTimeUtil.getFormat('yyyy-MM-dd', null);
-
   DateTime start;
   DateTime? end;
   Duration targetWorkTime;
@@ -15,7 +13,7 @@ class TimeBooking extends AbstractEntity {
 
   TimeBooking.now() : this(DateTimeUtil.precisionMinutes(DateTime.now()));
 
-  String get day => dayFormat.format(start);
+  String get day => start.toIsoDateString();
   Duration get workTime {
     final currentEnd = end ?? DateTimeUtil.precisionMinutes(DateTime.now());
     return currentEnd.difference(start);
