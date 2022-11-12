@@ -36,6 +36,7 @@ class TimeBookingDao extends AbstractDao<TimeBooking> {
     );
   }
 
+  /// loads the last open booking for the given date
   Future<List<TimeBooking>> loadDay(DateTime dateTime) {
     return loadAll(
         where: "day = ? OR end_date is null",

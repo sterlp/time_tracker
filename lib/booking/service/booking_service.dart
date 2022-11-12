@@ -45,4 +45,13 @@ class BookingService {
     else result = await _timeBookingDao.findByStartAndEnd(start, end);
     return result;
   }
+
+  Future<TimeBooking?> getBookingByStartDate(DateTime start) async {
+    TimeBooking? result = await _timeBookingDao.findOpenByStart(start);
+    if (result == null) {
+      final day = await _timeBookingDao.loadDay(start);
+      if (day.isNotEmpty) result = day[0];
+    }
+    return result;
+  }
 }

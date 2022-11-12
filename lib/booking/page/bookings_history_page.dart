@@ -1,10 +1,10 @@
 import 'package:dependency_container/dependency_container.dart';
 import 'package:flutter/material.dart';
-import 'package:time_tracker/booking/service/booking_service.dart';
 import 'package:time_tracker/booking/dao/time_booking_dao.dart';
 import 'package:time_tracker/booking/entity/time_booking_statistics.dart';
 import 'package:time_tracker/booking/page/bookings_list_page.dart';
 import 'package:time_tracker/booking/page/edit_booking_page.dart';
+import 'package:time_tracker/booking/service/booking_service.dart';
 import 'package:time_tracker/booking/widget/bookings_statistic_widget.dart';
 import 'package:time_tracker/booking/widget/daily_booking_statistic_widget.dart';
 import 'package:time_tracker/home/widget/loading_widget.dart';
@@ -83,14 +83,13 @@ class _BookingsHistoryPageState extends State<BookingsHistoryPage> {
         if (item.bookingsCount > 1) {
           await showBookingListPage(context, widget._container, item.start, item.end);
         } else {
-          final bookings = await widget._container
+          final booking = await widget._container
               .get<BookingService>()
-              .loadDay(item.start);
-          if (mounted) await showEditBookingPage(context, widget._container, booking: bookings.first);
+              .getBookingByStartDate(item.start);
+          if (mounted) await showEditBookingPage(context, widget._container, booking: booking);
         }
         if (mounted) _reload();
       },
     );
   }
 }
-
