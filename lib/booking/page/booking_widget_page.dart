@@ -41,18 +41,10 @@ class _BookingWidgetPageState extends State<BookingWidgetPage> {
     super.dispose();
   }
 
-  @override
-  Widget build(BuildContext context) {
+  Widget _top(BuildContext context) {
     final todayBean = widget._container.get<TodayBean>();
-    final container = widget._container;
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('Zeiterfassung'),
-      ),
-      drawer: Drawer(
-        child: ExportDataWidget(container),
-      ),
-      body: Column(
+    return Expanded(
+      child: Column(
         children: [
           TimerButton(todayBean),
           Padding(
@@ -69,18 +61,55 @@ class _BookingWidgetPageState extends State<BookingWidgetPage> {
               },
             ),
           ),
-          Expanded(
-            child: DailyBookingsList(
-              todayBean,
-                  (b) async {
-                await showEditBookingPage(context, container, booking: b);
-                todayBean.reload();
-              },
-              todayBean.delete,
-            ),
-          ),
         ],
       ),
+    );
+  }
+  
+  Widget _bookingList(BuildContext context) {
+    final todayBean = widget._container.get<TodayBean>();
+    final container = widget._container;
+    return Expanded(
+      child: DailyBookingsList(
+        todayBean,
+            (b) async {
+          await showEditBookingPage(context, container, booking: b);
+          todayBean.reload();
+        },
+        todayBean.delete,
+      ),
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final container = widget._container;
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Zeiterfassung'),
+      ),
+      drawer: Drawer(
+        child: ExportDataWidget(container),
+      ),
+      body: OrientationBuilder(
+        builder: (context, orientation) {
+          if (orientation == Orientation.portrait) {
+            return Column(
+              children: [
+                _top(context), 
+                _bookingList(context)
+              ],
+            );
+          } else {
+            return Row(
+              children: [
+                _top(context), 
+                _bookingList(context)
+              ],
+            );
+          }
+        },
+        ),
     );
   }
 }
