@@ -5,7 +5,6 @@ import 'package:sqflite_entities/service/db_provider.dart';
 import 'package:time_tracker/booking/dao/time_booking_dao.dart';
 import 'package:time_tracker/booking/service/booking_service.dart';
 import 'package:time_tracker/booking/service/today_bean.dart';
-import 'package:time_tracker/booking/widget/start_stop_widget.dart';
 import 'package:time_tracker/common/logger.dart';
 import 'package:time_tracker/config/dao/config_dao.dart';
 import 'package:time_tracker/config/entity/config_entity.dart';
@@ -65,17 +64,7 @@ class MyApp extends StatelessWidget {
             _log.error('Failed to load App', snapshot.error);
             return LoadingWidget(caption: snapshot.error.toString());
           } else if (snapshot.hasData) {
-            //return HomePage(snapshot.data!);
-            return Column(
-              children: [
-                Expanded(child: Container(color: Colors.white,)),
-                Expanded(child: StartAndStopWidget(true, Duration(hours: 7), Duration(hours: 8), () => null),),
-                Expanded(child: Container(color: Colors.white,)),
-                StartAndStopWidget(true, Duration(hours: 7), Duration(hours: 8), () => null),
-                Expanded(child: Container(color: Colors.white,))
-              ],
-            );
-
+            return HomePage(snapshot.data!);
           } else {
             return const LoadingWidget();
           }

@@ -1,10 +1,10 @@
 import 'dart:math';
-
 import 'package:flutter/material.dart';
 import 'package:time_tracker/common/feedback.dart';
 import 'package:time_tracker/common/logger.dart';
 
 class StartAndStopWidget extends StatelessWidget {
+  static final _log = LoggerFactory.get<StartAndStopWidget>();
   final Duration _workTime;
   final Duration _targetWorkTime;
   final bool _showStart;
@@ -18,30 +18,42 @@ class StartAndStopWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final color = _showStart ? Colors.lightGreen : Colors.amber;
-    final size = _size(context);
-    return Stack(
-      alignment: AlignmentDirectional.center,
-      children: [
-        // ensure the full widget size, as the progress indicator wont
-        SizedBox(width: size, height: size),
-        _buildDailyProgress(context, Colors.deepOrange),
-        _buildStartButton(context, color),
-      ],
+    return LayoutBuilder(
+        builder: (BuildContext context, BoxConstraints constraints) {
+          final size = constraints.biggest;
+          if (_isInvalidSize(size)) return Container();
+          return Stack(
+            alignment: AlignmentDirectional.center,
+            children: [
+              // ensure the full widget size, as the progress indicator wont
+              SizedBox(width: _circleSize(size), height: _circleSize(size)),
+              _buildDailyProgress(size, color),
+              _buildStartButton(context, size, color),
+            ],
+          );
+        },
     );
   }
 
-  double _size(BuildContext context) {
-    return min(
-      MediaQuery.of(context).size.width,
-      MediaQuery.of(context).size.height,) / 2;
+  bool _isInvalidSize(Size size) {
+    if (size.width < 0 || size.height < 0) return true;
+    if (size.width == double.infinity && size.height  == double.infinity) return true;
+    return false;
   }
-  double _strokeSize(BuildContext context) {
-    return max(10.0, _size(context) / 15);
+  double _circleSize(Size size) {
+    return min(size.height, size.width);
+  }
+  double _strokeSize(Size size) {
+    return max(5.0, _circleSize(size) / 15);
   }
 
-  Widget _buildDailyProgress(BuildContext context, MaterialColor color) {
-    final stroke = _strokeSize(context);
-    final size = _size(context) - stroke;
+  Widget _buildDailyProgress(Size size, MaterialColor color) {
+    final stroke = _strokeSize(size);
+    final circleSize = _circleSize(size) - stroke;
+
+    _log.debug('progress size $size');
+    _log.debug('progress width ${size.width}');
+    _log.debug('progress height ${size.height}');
 
     final progress = _workTime.inSeconds / _targetWorkTime.inSeconds;
     return SizedBox(
@@ -50,12 +62,12 @@ class StartAndStopWidget extends StatelessWidget {
         strokeWidth: stroke,
         color: color,
       ),
-      height: size,
-      width: size,
+      height: circleSize,
+      width: circleSize,
     );
   }
 
-  Widget _buildStartButton(BuildContext context, MaterialColor color) {
+  Widget _buildStartButton(BuildContext context, Size size, MaterialColor color) {
     Widget text;
     if (_showStart) {
       text = Text('Start',
@@ -64,7 +76,7 @@ class StartAndStopWidget extends StatelessWidget {
       text = Text('Stopp',
         style: Theme.of(context).textTheme.headline4,);
     }
-    final size = _size(context) - _strokeSize(context) * 4;
+    final widgetSize = _circleSize(size) - _strokeSize(size) * 3;
 
     return ElevatedButton(
       onPressed: FeedbackFixed.wrapTouch(_startPress, context),
@@ -73,7 +85,7 @@ class StartAndStopWidget extends StatelessWidget {
         enableFeedback: true,
         shape: const CircleBorder(),
         elevation: 8.0,
-        fixedSize: Size(size, size),
+        fixedSize: Size(widgetSize, widgetSize),
         backgroundColor: color,
       ),
     );
