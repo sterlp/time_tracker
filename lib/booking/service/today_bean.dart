@@ -20,7 +20,7 @@ class TodayBean extends ValueNotifier<List<TimeBooking>> {
   TodayBean(this._bookingService, this._config) : super([]);
 
   DateTime get day => _day;
-  Duration get workHours => _workHours;
+  Duration get targetWorkHours => _workHours;
   bool get hasCurrentBooking => _currentRunning != null;
 
   bool isDifferentDay(DateTime newDay) {

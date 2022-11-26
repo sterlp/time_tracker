@@ -18,21 +18,20 @@ class TimerButton extends StatelessWidget {
       builder: (context, value, child) {
         final textStyle = Theme.of(context).textTheme.headline6;
 
-        final workHours = todayBean.workHours;
+        final workHours = todayBean.targetWorkHours;
         return Column(
           //mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Padding(
-              padding: const EdgeInsets.fromLTRB(0, 16, 0, 0),
+              padding: const EdgeInsets.fromLTRB(0, 8, 0, 4),
               child: FittedBox(child:
               Text(headerFormat.format(DateTime.now()), style: textStyle,),),
             ),
-            Padding(
-              padding: const EdgeInsets.fromLTRB(0, 12, 0, 12),
+            Expanded(
               child: StartAndStopWidget(
                 !todayBean.hasCurrentBooking,
                 todayBean.sumTimeBookingsWorkTime(),
-                todayBean.workHours,
+                todayBean.targetWorkHours,
                 _startPressed,
               ),
             ),

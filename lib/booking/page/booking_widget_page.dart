@@ -4,7 +4,6 @@ import 'package:dependency_container/dependency_container.dart';
 import 'package:flutter/material.dart';
 import 'package:sqflite_entities/converter/date_util.dart';
 import 'package:time_tracker/booking/service/today_bean.dart';
-import 'package:time_tracker/booking/entity/time_booking.dart';
 import 'package:time_tracker/booking/page/edit_booking_page.dart';
 import 'package:time_tracker/booking/widget/daily_bookings_list.dart';
 import 'package:time_tracker/booking/widget/daily_config_overview.dart';
@@ -40,11 +39,24 @@ class _BookingWidgetPageState extends State<BookingWidgetPage> {
     _refreshTimer?.cancel();
     super.dispose();
   }
+  
+  Widget _bookingList(BuildContext context) {
+    final todayBean = widget._container.get<TodayBean>();
+    final container = widget._container;
+    return DailyBookingsList(
+      todayBean,
+      (b) async {
+        await showEditBookingPage(context, container, booking: b);
+        todayBean.reload();
+      },
+      todayBean.delete,
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
-    final todayBean = widget._container.get<TodayBean>();
     final container = widget._container;
+    final todayBean = widget._container.get<TodayBean>();
     return Scaffold(
       appBar: AppBar(
         title: const Text('Zeiterfassung'),
@@ -52,35 +64,25 @@ class _BookingWidgetPageState extends State<BookingWidgetPage> {
       drawer: Drawer(
         child: ExportDataWidget(container),
       ),
-      body: Column(
-        children: [
-          TimerButton(todayBean),
-          Padding(
-            padding: const EdgeInsets.fromLTRB(0, 24, 0, 16),
-            child: ValueListenableBuilder<List<TimeBooking>>(
-              valueListenable: todayBean,
-              builder: (context, value, child) {
-                final startTime = value.isNotEmpty ? value.first.start : null;
-                return DailyConfigOverview(
-                  todayBean.workHours,
-                  startTime,
-                  todayBean.sumTimeBookingsWorkTime(),
-                );
-              },
-            ),
-          ),
-          Expanded(
-            child: DailyBookingsList(
-              todayBean,
-                  (b) async {
-                await showEditBookingPage(context, container, booking: b);
-                todayBean.reload();
-              },
-              todayBean.delete,
-            ),
-          ),
-        ],
-      ),
+      body: OrientationBuilder(
+        builder: (context, orientation) {
+          if (orientation == Orientation.portrait) {
+            return Column(
+              children: [
+                Expanded(child: TimerButton(todayBean)),
+                Expanded(child: _bookingList(context))
+              ],
+            );
+          } else {
+            return Row(
+              children: [
+                Expanded(child: TimerButton(todayBean)),
+                Expanded(child: _bookingList(context))
+              ],
+            );
+          }
+        },
+        ),
     );
   }
 }
