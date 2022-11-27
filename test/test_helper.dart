@@ -11,7 +11,7 @@ import 'package:time_tracker/booking/dao/time_booking_dao.dart';
 import 'package:time_tracker/booking/entity/time_booking.dart';
 import 'package:time_tracker/config/dao/config_dao.dart';
 import 'package:time_tracker/config/entity/config_entity.dart';
-import 'package:time_tracker/db/time_traker_db.dart';
+import 'package:time_tracker/db/time_tracker_db.dart';
 import 'package:time_tracker/main.dart';
 
 Future<DbProvider> initTestDB() async {

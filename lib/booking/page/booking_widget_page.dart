@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:dependency_container/dependency_container.dart';
 import 'package:flutter/material.dart';
 import 'package:sqflite_entities/converter/date_util.dart';
+import 'package:time_tracker/booking/entity/time_booking.dart';
 import 'package:time_tracker/booking/service/today_bean.dart';
 import 'package:time_tracker/booking/page/edit_booking_page.dart';
 import 'package:time_tracker/booking/widget/daily_bookings_list.dart';
@@ -39,17 +40,41 @@ class _BookingWidgetPageState extends State<BookingWidgetPage> {
     _refreshTimer?.cancel();
     super.dispose();
   }
+
+  Widget _topView(TodayBean todayBean) {
+    return TimerButton(todayBean);
+  }
   
   Widget _bookingList(BuildContext context) {
     final todayBean = widget._container.get<TodayBean>();
     final container = widget._container;
-    return DailyBookingsList(
-      todayBean,
-      (b) async {
-        await showEditBookingPage(context, container, booking: b);
-        todayBean.reload();
-      },
-      todayBean.delete,
+    return Column(
+      children: [
+        Padding(
+          padding: const EdgeInsets.fromLTRB(0, 8, 0, 0),
+          child: ValueListenableBuilder<List<TimeBooking>>(
+            valueListenable: todayBean,
+            builder: (context, value, child) {
+              final startTime = value.isNotEmpty ? value.first.start : null;
+              return DailyConfigOverview(
+                todayBean.targetWorkHours,
+                startTime,
+                todayBean.sumTimeBookingsWorkTime(),
+              );
+            },
+          ),
+        ),
+        Expanded(
+          child: DailyBookingsList(
+            todayBean,
+            (b) async {
+              await showEditBookingPage(context, container, booking: b);
+              todayBean.reload();
+            },
+            todayBean.delete,
+          ),
+        ),
+      ],
     );
   }
 
@@ -69,14 +94,14 @@ class _BookingWidgetPageState extends State<BookingWidgetPage> {
           if (orientation == Orientation.portrait) {
             return Column(
               children: [
-                Expanded(child: TimerButton(todayBean)),
+                Expanded(child: _topView(todayBean)),
                 Expanded(child: _bookingList(context))
               ],
             );
           } else {
             return Row(
               children: [
-                Expanded(child: TimerButton(todayBean)),
+                Expanded(child: _topView(todayBean)),
                 Expanded(child: _bookingList(context))
               ],
             );

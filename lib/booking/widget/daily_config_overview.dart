@@ -2,18 +2,18 @@ import 'package:flutter/material.dart';
 import 'package:time_tracker/common/time_util.dart';
 
 class DailyConfigOverview extends StatelessWidget {
-  final Duration workHoursToday;
+  final Duration targetWorkHours;
   final DateTime? workStarted;
   final Duration workedToday;
 
-  const DailyConfigOverview(this.workHoursToday, this.workStarted, this.workedToday,
+  const DailyConfigOverview(this.targetWorkHours, this.workStarted, this.workedToday,
       {Key? key,}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     final textStyle = Theme.of(context).textTheme.subtitle1;
     final valueStyle = Theme.of(context).textTheme.subtitle1;
-    final workEndTime = DateTime.now().add(workHoursToday).subtract(workedToday);
+    final workEndTime = DateTime.now().add(targetWorkHours).subtract(workedToday);
     final rows = <TableRow>[];
     if (workStarted != null) {
       rows.add(
@@ -38,18 +38,23 @@ class DailyConfigOverview extends StatelessWidget {
   TableRow _keyValueRow(Widget key, Widget value) {
     return TableRow(
       children: [
-        Container(
-          alignment: Alignment.centerRight,
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 2),
-            child: key,
-          ),
-        ),
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 2),
-          child: value,
-        ),
+        _rowLabel(key),
+        _rowValue(value),
       ],
     );
+  }
+
+  Padding _rowValue(Widget value) {
+    return Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 2),
+        child: value,
+      );
+  }
+
+  Container _rowLabel(Widget key) {
+    return Container(
+        alignment: Alignment.centerRight,
+        child: _rowValue(key),
+      );
   }
 }

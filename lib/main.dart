@@ -8,7 +8,7 @@ import 'package:time_tracker/booking/service/today_bean.dart';
 import 'package:time_tracker/common/logger.dart';
 import 'package:time_tracker/config/dao/config_dao.dart';
 import 'package:time_tracker/config/entity/config_entity.dart';
-import 'package:time_tracker/db/time_traker_db.dart';
+import 'package:time_tracker/db/time_tracker_db.dart';
 import 'package:time_tracker/export/service/export_service.dart';
 import 'package:time_tracker/home/page/home_page.dart';
 import 'package:time_tracker/home/widget/loading_widget.dart';
