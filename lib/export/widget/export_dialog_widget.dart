@@ -86,6 +86,7 @@ class _ExportDataWidgetState extends State<ExportDataWidget> {
     await Share.shareXFiles([XFile(f.path, mimeType: 'text/csv', name: exportFileName)],);
     f.delete();
   }
+
   Future<void> _createDataBackup() async {
     final now = DateTime.now();
     final f = await widget._container.get<ExportService>().exportAllToFile(

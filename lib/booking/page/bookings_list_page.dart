@@ -44,6 +44,7 @@ class _BookingListPageState extends State<BookingListPage> {
     super.initState();
     _doReload();
   }
+
   @override
   void dispose() {
     if (_bookings != null) _bookings!.dispose();
@@ -94,10 +95,9 @@ class _BookingListPageState extends State<BookingListPage> {
     final fileName = 'Datenexport ${fD.format(widget._from)} bis ${tD.format(widget._to)}.csv';
     final csvData = widget._container.get<ExportService>().toCsvData(_bookings!.value);
     final f = await widget._container.get<ExportService>().writeToFile(csvData, fileName: fileName);
-    await Share.shareFiles(
-      [f.path],
-      subject: fileName,
-      mimeTypes: ['text/csv'],);
+    await Share.shareXFiles(
+      [XFile(f.path, mimeType: 'text/csv', name: fileName)],
+    );
     f.delete();
   }
   Future<void> _doEdit(TimeBooking booking) async {
