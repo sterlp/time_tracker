@@ -69,9 +69,10 @@ class _BookingWidgetPageState extends State<BookingWidgetPage> {
             todayBean,
             (b) async {
               await showEditBookingPage(context, container, booking: b);
-              todayBean.reload();
+              if (mounted) todayBean.reload();
             },
             todayBean.delete,
+            ignoreDay: todayBean.day.toIsoDateString(),
           ),
         ),
       ],

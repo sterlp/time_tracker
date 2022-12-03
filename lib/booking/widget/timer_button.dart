@@ -23,10 +23,11 @@ class TimerButton extends StatelessWidget {
           //mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Padding(
-              padding: const EdgeInsets.fromLTRB(0, 8, 0, 4),
+              padding: const EdgeInsets.fromLTRB(0, 8, 0, 0),
               child: FittedBox(child:
               Text(headerFormat.format(DateTime.now()), style: textStyle,),),
             ),
+            const SizedBox(height: 8,),
             Expanded(
               child: StartAndStopWidget(
                 !todayBean.hasCurrentBooking,
@@ -35,6 +36,7 @@ class TimerButton extends StatelessWidget {
                 _startPressed,
               ),
             ),
+            const SizedBox(height: 8,),
             TimeAccount(workHours,
               totalWorkTime,
               todayBean.sumBreakTime(),
