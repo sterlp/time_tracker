@@ -48,7 +48,10 @@ class _BookingsHistoryPageState extends State<BookingsHistoryPage> {
             ),
             body: _buildWeekList(value),
             floatingActionButton: FloatingActionButton(
-              onPressed: () => showBookingPageWithCallback(context, widget._container, _reload),
+              onPressed: () async {
+                await showBookingPageWithCallback(context, widget._container);
+                if (mounted) _reload();
+              },
               child: const Icon(Icons.add),
             ),
           );

@@ -55,7 +55,10 @@ class _StatisticListPageState extends State<StatisticListPage> {
       ),
       body: _buildWeekListView(context),
       floatingActionButton: FloatingActionButton(
-        onPressed: () => showBookingPageWithCallback(context, widget._container, _reload),
+        onPressed: () async {
+          await showBookingPageWithCallback(context, widget._container);
+          await _reload();
+        },
         child: const Icon(Icons.add),
       ),
     );

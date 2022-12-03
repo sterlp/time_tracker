@@ -10,15 +10,15 @@ class DailyBookingsList extends StatelessWidget {
   final ValueListenable<List<TimeBooking>> items;
   final Function(TimeBooking b) editFn;
   final Function(TimeBooking b) deleteFn;
+  final String ignoreDay;
 
   const DailyBookingsList(this.items, this.editFn, this.deleteFn,
-      {Key? key,})
-      : super(key: key);
+      {Key? key, this.ignoreDay = "none", }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     final df = DateTimeUtil.getFormat('EEEE, dd.MM');
-    String? lastDay;
+    String lastDay = "none";
 
     return ValueListenableBuilder<List<TimeBooking>>(
       valueListenable: items,
@@ -29,15 +29,15 @@ class DailyBookingsList extends StatelessWidget {
           itemBuilder: (context, index) {
             final day = items[index].day;
             Widget result;
-            if (lastDay != null && lastDay != day) {
+            if (_addItemWithoutDivider(lastDay, day)) {
+              result = TimeBookingListItem(items[index], editFn, deleteFn);
+            } else {
               result = Column(
                 children: [
                   DividerWithLabel(df.format(items[index].start)),
                   TimeBookingListItem(items[index], editFn, deleteFn)
                 ],
               );
-            } else {
-              result = TimeBookingListItem(items[index], editFn, deleteFn);
             }
             lastDay = day;
             return result;
@@ -46,4 +46,6 @@ class DailyBookingsList extends StatelessWidget {
       },
     );
   }
+
+  bool _addItemWithoutDivider(String lastDay, String day) => lastDay == day || ignoreDay == day;
 }
