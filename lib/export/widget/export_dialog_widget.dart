@@ -9,9 +9,9 @@ import 'package:share_plus/share_plus.dart';
 import 'package:sqflite_entities/converter/date_util.dart';
 import 'package:sqflite_entities/entity/query.dart';
 import 'package:time_tracker/booking/service/booking_service.dart';
+import 'package:time_tracker/common/time_util.dart';
 import 'package:time_tracker/config/entity/config_entity.dart';
 import 'package:time_tracker/export/service/export_service.dart';
-import 'package:time_tracker/common/time_util.dart';
 
 class ExportDataWidget extends StatefulWidget {
   final AppContainer _container;
@@ -33,7 +33,7 @@ class _ExportDataWidgetState extends State<ExportDataWidget> {
       child: ListBody(
         children: [
           DrawerHeader(
-              child: Text('Menü', style: Theme.of(context).textTheme.headline4,)),
+            child: Text('Menü', style: Theme.of(context).textTheme.headline4,),),
           ListTile(
             leading: const Icon(MdiIcons.wrenchClock),
             title: const Text('Tagesarbeitszeit'),
@@ -41,20 +41,20 @@ class _ExportDataWidgetState extends State<ExportDataWidget> {
             onTap: () => _updateWorkTime(context),
           ),
           ListTile(
+            leading: const Icon(Icons.upload_sharp),
+            title: const Text('Datensicherung importieren'),
+            onTap: _importBackup,
+          ),
+          ListTile(
             leading: const Icon(Icons.download_sharp),
             title: const Text('Alle Daten exportieren'),
             subtitle: const Text('(Datensicherung)'),
-            onTap: () => _export(context),
+            onTap: _createDataBackup,
           ),
           ListTile(
             leading: const Icon(Icons.download_outlined),
             title: const Text('Übersicht nach Monat'),
-            onTap: () => _exportMonth(context),
-          ),
-          ListTile(
-            leading: const Icon(Icons.upload_sharp),
-            title: const Text('Datensicherung importieren'),
-            onTap: () => _importBackup(context),
+            onTap: _exportMonth,
           ),
         ],
       ),
@@ -77,26 +77,25 @@ class _ExportDataWidgetState extends State<ExportDataWidget> {
     }
   }
 
-  Future<void> _exportMonth(BuildContext context) async {
+  Future<void> _exportMonth() async {
     final exportFileName = 'Monats Export ${DateTimeUtil.formatWithString(DateTime.now(), "MM.y")}.csv';
     final bookings = await widget._container.get<BookingService>().all(order: SortOrder.ASC);
     final csvData = widget._container.get<ExportService>().toMonthCsvData(bookings);
     final f = await widget._container.get<ExportService>().writeToFile(csvData, fileName: exportFileName);
 
-    await Share.shareFiles(
-      [f.path],
-      subject: exportFileName, mimeTypes: ['text/csv'],);
+    await Share.shareXFiles([XFile(f.path, mimeType: 'text/csv', name: exportFileName)],);
     f.delete();
   }
-  Future<void> _export(BuildContext context) async {
-    final f = await widget._container.get<ExportService>().exportAllToFile();
-    await Share.shareFiles(
-      [f.path],
-      subject: 'Datenexport.csv', mimeTypes: ['text/csv'],);
+  Future<void> _createDataBackup() async {
+    final now = DateTime.now();
+    final f = await widget._container.get<ExportService>().exportAllToFile(
+        fileName: 'Datensicherung ${now.month}-${now.year}.csv',
+    );
+    await Share.shareXFiles([XFile(f.path, mimeType: 'text/csv')],);
     f.delete();
   }
 
-  Future<void> _importBackup(BuildContext context) async {
+  Future<void> _importBackup() async {
     final result = await FilePicker.platform.pickFiles(
       dialogTitle: 'Daten Export CSV auswählen',
       type: FileType.custom,
