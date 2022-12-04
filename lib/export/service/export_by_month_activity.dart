@@ -7,15 +7,10 @@ import 'package:time_tracker/export/entity/export_day_statistic.dart';
 
 class ExportByMonthActivity {
 
-  static const header = [
-    'Datum', 'Tag', 'Soll',
-    'Arbeitsbeginn', 'Arbeitsende', 'Arbeitszeit',
-    'Pause 1 Start', 'Pause 1 Ende',
-    'Pause 2 Start', 'Pause 2 Ende',
-    'Pause Rest', 'Pause Rest',
-    'Pausenzeit'];
-
   String toCsvData(List<TimeBooking> bookings) {
+    final dFormat = DateTimeUtil.getFormat('dd.MM.yyyy');
+    final dName = DateTimeUtil.getFormat('EEEE');
+
     // first we collect the data into a map, and get the earliest Month
     final Map<String, List<TimeBooking>> byDay = {};
 
@@ -28,17 +23,28 @@ class ExportByMonthActivity {
 
     final monthNow = DateTime.now().month;
     final yearNow = DateTime.now().year;
-
     firstMonth = DateTime(firstMonth.year, firstMonth.month);
-    final dFormat = DateTimeUtil.getFormat('dd.MM.yyyy');
-    final dName = DateTimeUtil.getFormat('EEEE');
-    final List<List<String>?> result = [header];
-    while(firstMonth.month <= monthNow && yearNow <= yearNow) {
-      final dayStats = ExportDailyStats.fromBookings(byDay[firstMonth.toIsoDateString()] ?? []);
+
+    final List<List<String>?> result = [[
+      'Datum', 'Tag', 'Soll',
+      'Arbeitsbeginn', 'Arbeitsende', 'Arbeitszeit',
+      'Pause 1 Start', 'Pause 1 Ende',
+      'Pause 2 Start', 'Pause 2 Ende',
+      'Pause Rest Start', 'Pause Rest Ende',
+      'Pausenzeit']
+    ];
+
+    while(firstMonth.year < yearNow
+        || (firstMonth.month <= monthNow && firstMonth.year == yearNow)) {
+
+      final dayKey = firstMonth.toIsoDateString();
+      final dayStats = ExportDailyStats.fromBookings(byDay[dayKey] ?? []);
+
       result.add([
         dFormat.format(firstMonth),
         dName.format(firstMonth),
         dayStats.planedWorkTime,
+
         dayStats.startTime,
         dayStats.endTime,
         dayStats.workedTime,
