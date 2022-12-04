@@ -1,14 +1,10 @@
 import 'dart:io';
 
-import 'package:csv/csv.dart';
-import 'package:flutter/material.dart';
 import 'package:path_provider/path_provider.dart';
-import 'package:sqflite_entities/converter/date_util.dart';
 import 'package:sqflite_entities/entity/query.dart';
 import 'package:time_tracker/booking/entity/time_booking.dart';
 import 'package:time_tracker/booking/service/booking_service.dart';
 import 'package:time_tracker/common/logger.dart';
-import 'package:time_tracker/export/entity/export_day_statistic.dart';
 import 'package:time_tracker/export/service/data_backup_activity.dart';
 import 'package:time_tracker/export/service/export_by_month_activity.dart';
 
@@ -37,60 +33,7 @@ class ExportService {
   }
 
   String toMonthCsvData(List<TimeBooking> bookings) {
-    final dFormat = DateTimeUtil.getFormat('dd.MM.yyyy');
-    final dName = DateTimeUtil.getFormat('EEEE');
-
-    // first we collect the data into a map, and get the earliest Month
-    final Map<String, List<TimeBooking>> byDay = {};
-
-    var firstMonth = DateUtils.dateOnly(DateTime.now());
-    for(final b in bookings) {
-      if (b.start.isBefore(firstMonth)) firstMonth = DateUtils.dateOnly(b.start);
-      if (byDay.containsKey(b.day)) byDay[b.day]!.add(b);
-      else byDay[b.day] = [b];
-    }
-
-    final monthNow = DateTime.now().month;
-    final yearNow = DateTime.now().year;
-    firstMonth = DateTime(firstMonth.year, firstMonth.month);
-    
-    _log.debug('Creating export from $firstMonth to $monthNow.$yearNow of ${byDay.length} booked days');
-    
-    final List<List<String>?> result = [['Datum', 'Tag', 'Soll', 'Arbeitsbeginn', 'Arbeitsende', 'Arbeitszeit',
-      'Pause 1 Start', 'Pause 1 Ende',
-      'Pause 2 Start', 'Pause 2 Ende',
-      'Pause Rest', 'Pause Rest',
-      'Pausenzeit']
-    ];
-
-    while(firstMonth.year < yearNow
-        || (firstMonth.month <= monthNow && firstMonth.year == yearNow)) {
-
-      final dayKey = firstMonth.toIsoDateString();
-      final dayStats = ExportDailyStats.fromBookings(byDay[dayKey] ?? []);
-
-      result.add([
-        dFormat.format(firstMonth),
-        dName.format(firstMonth),
-        dayStats.planedWorkTime,
-        dayStats.startTime,
-        dayStats.endTime,
-        dayStats.workedTime,
-
-        dayStats.startFirstBreak,
-        dayStats.endFirstBreak,
-        dayStats.startSecondBreak,
-        dayStats.endSecondBreak,
-        dayStats.startRemainingBreak,
-        dayStats.endRemainingBreak,
-
-        dayStats.breakTime,
-      ]);
-      firstMonth = firstMonth.add(const Duration(days: 1));
-    }
-    return const ListToCsvConverter(
-        fieldDelimiter: ';',
-      ).convert(result);
+    return _monthExportActivity.toCsvData(bookings);
   }
 
   String toCsvData(List<TimeBooking> bookings) {

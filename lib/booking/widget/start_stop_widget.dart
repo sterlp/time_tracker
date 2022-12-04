@@ -51,9 +51,7 @@ class StartAndStopWidget extends StatelessWidget {
     final stroke = _strokeSize(size);
     final circleSize = _circleSize(size) - stroke;
 
-    _log.debug('progress size $size');
-    _log.debug('progress width ${size.width}');
-    _log.debug('progress height ${size.height}');
+    _log.debug('progress size $size width ${size.width} height ${size.height}');
 
     final progress = _workTime.inSeconds / _targetWorkTime.inSeconds;
     return SizedBox(
