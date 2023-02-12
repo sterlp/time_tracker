@@ -2,7 +2,6 @@ import 'package:flutter/foundation.dart';
 import 'package:sqflite_entities/dao/abstract_map_dao.dart';
 
 class AttachedMap extends ValueNotifier<Map<String, String?>> {
-
   final AbstractMapDao dao;
 
   AttachedMap(Map<String, String?> map, this.dao) : super(map);
@@ -48,5 +47,5 @@ class AttachedMap extends ValueNotifier<Map<String, String?>> {
   Future<void> delete(String key) {
     this.value[key] = null;
     return dao.delete(key);
-   }
+  }
 }

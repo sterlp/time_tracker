@@ -13,42 +13,60 @@ abstract class AbstractDao<T extends AbstractEntity> {
   Database get db => _db;
 
   AttachedEntity<T> attach(T entity) {
-    return AttachedEntity<T>(entity,
-      reload, save, deleteEntity,);
+    return AttachedEntity<T>(
+      entity,
+      reload,
+      save,
+      deleteEntity,
+    );
   }
 
   Future<AttachedEntity<T>?> getAttached(int id) async {
     final e = await getById(id);
-    if (e == null) return null;
-    else return this.attach(e);
+    if (e == null)
+      return null;
+    else
+      return this.attach(e);
   }
 
   Future<T?> reload(T e) async {
-    if (e.id == null) return null;
-    else return getById(e.id!);
+    if (e.id == null)
+      return null;
+    else
+      return getById(e.id!);
   }
 
   Future<T?> getById(int id) async {
     final List<Map<String, dynamic>> results = await _db.query(
-        tableName,
-        where: "id = ?",
-        whereArgs: [id],);
-    assert(results.length <= 1, 'Get by ID should return only one element but returned ${results.length} elements.');
+      tableName,
+      where: "id = ?",
+      whereArgs: [id],
+    );
+    assert(results.length <= 1,
+        'Get by ID should return only one element but returned ${results.length} elements.');
     return results.isEmpty ? null : fromMap(results[0]);
   }
 
-  Future<List<T>> loadAll({bool? distinct,
-      String? where,
-      List<dynamic>? whereArgs,
-      String? groupBy,
-      String? having,
-      String? orderBy,
-      int? limit,
-      int? offset,}) async {
-
-    final List<Map<String, dynamic>> results = await _db.query(tableName,
-        where: where, whereArgs: whereArgs, groupBy: groupBy, having: having,
-        orderBy: orderBy, limit: limit, offset: offset,);
+  Future<List<T>> loadAll({
+    bool? distinct,
+    String? where,
+    List<dynamic>? whereArgs,
+    String? groupBy,
+    String? having,
+    String? orderBy,
+    int? limit,
+    int? offset,
+  }) async {
+    final List<Map<String, dynamic>> results = await _db.query(
+      tableName,
+      where: where,
+      whereArgs: whereArgs,
+      groupBy: groupBy,
+      having: having,
+      orderBy: orderBy,
+      limit: limit,
+      offset: offset,
+    );
 
     return results.map((e) => fromMap(e)).toList();
   }
@@ -71,7 +89,7 @@ abstract class AbstractDao<T extends AbstractEntity> {
   }
 
   Future<List<T>> saveAll(List<T> entities) async {
-    for(final e in entities) await save(e);
+    for (final e in entities) await save(e);
     return entities;
   }
 
@@ -87,15 +105,21 @@ abstract class AbstractDao<T extends AbstractEntity> {
     }
     return result;
   }
+
   Future<T> insert(T entity) async {
-    entity.id = await _db.insert(tableName, toMap(entity),
-        conflictAlgorithm: ConflictAlgorithm.replace,);
+    entity.id = await _db.insert(
+      tableName,
+      toMap(entity),
+      conflictAlgorithm: ConflictAlgorithm.replace,
+    );
     return entity;
   }
+
   Future<T> update(T entity) async {
     assert(entity.id != null);
 
-    await _db.update(tableName, toMap(entity), where: "id = ?", whereArgs: [entity.id]);
+    await _db.update(tableName, toMap(entity),
+        where: "id = ?", whereArgs: [entity.id]);
     // if (count == 0) _log.warn('Record not found anymore to update $entity');
 
     return entity;

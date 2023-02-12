@@ -6,10 +6,12 @@ extension ToDecimal on Duration {
     return this.inSeconds / 3600;
   }
 }
+
 extension AddDuration on DateTime {
   DateTime addDays(int days) {
     return this.add(Duration(days: days));
   }
+
   DateTime addHours(int hours) {
     return this.add(Duration(hours: hours));
   }
@@ -39,16 +41,20 @@ class DateTimeUtil {
   static DateTime midnight(DateTime dateTime) {
     return DateTime(dateTime.year, dateTime.month, dateTime.day, 23, 59, 59);
   }
+
   static DateTime clearTime(DateTime dateTime) {
     return DateTime(dateTime.year, dateTime.month, dateTime.day);
   }
 
   static String format(DateTime? d, DateFormat f) {
-    if (d == null) return '';
-    else return f.format(d);
+    if (d == null)
+      return '';
+    else
+      return f.format(d);
   }
 
-  static String formatWithString(DateTime? date, String format, [String? locale = 'de']) {
+  static String formatWithString(DateTime? date, String format,
+      [String? locale = 'de']) {
     if (date == null) return '';
     return getFormat(format, locale).format(date);
   }
@@ -68,17 +74,26 @@ class DateTimeUtil {
   }
 
   static DateTime precisionMilliseconds(DateTime now) {
-    return DateTime(now.year, now.month, now.day, now.hour, now.minute, now.second, now.millisecond);
+    return DateTime(now.year, now.month, now.day, now.hour, now.minute,
+        now.second, now.millisecond);
   }
+
   static DateTime precisionSeconds(DateTime now) {
-    return DateTime(now.year, now.month, now.day, now.hour, now.minute, now.second);
+    return DateTime(
+        now.year, now.month, now.day, now.hour, now.minute, now.second);
   }
+
   static DateTime precisionMinutes(DateTime now) {
     return DateTime(now.year, now.month, now.day, now.hour, now.minute);
   }
+
   static DateTime asDateTime(DateTime newDate, TimeOfDay newTime) {
-    return DateTime(newDate.year,
-      newDate.month, newDate.day, newTime.hour, newTime.minute,
+    return DateTime(
+      newDate.year,
+      newDate.month,
+      newDate.day,
+      newTime.hour,
+      newTime.minute,
     );
   }
 }

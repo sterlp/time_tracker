@@ -14,10 +14,13 @@ class DbProvider {
 
   //Future<Database> get db => _completer.future;
 
-  DbProvider(this.dbName, this.updates, {this.version = 99999}) : this._futureDb = null;
+  DbProvider(this.dbName, this.updates, {this.version = 99999})
+      : this._futureDb = null;
 
-  DbProvider.withDb(Future<Database> database, this.updates, {this.version = 99999})
-      : this.dbName = 'testDB', this._futureDb = database;
+  DbProvider.withDb(Future<Database> database, this.updates,
+      {this.version = 99999})
+      : this.dbName = 'testDB',
+        this._futureDb = database;
 
   Future<Database> init() async {
     _db ??= await _init();
@@ -30,7 +33,8 @@ class DbProvider {
     try {
       if (_futureDb == null) {
         // await deleteDatabase(join(await getDatabasesPath(), dbName));
-        db = await openDatabase(join(await getDatabasesPath(), dbName), version: version, onUpgrade: _createDB);
+        db = await openDatabase(join(await getDatabasesPath(), dbName),
+            version: version, onUpgrade: _createDB);
       } else {
         db = await _createDB(await _futureDb!, 0, version);
       }
@@ -42,14 +46,17 @@ class DbProvider {
     return _completer.future;
   }
 
-  Future<Database> _createDB(final Database db, final int oldVersion, final int newVersion) async {
+  Future<Database> _createDB(
+      final Database db, final int oldVersion, final int newVersion) async {
     var currentVersion = oldVersion; // just to make dart analysis happy ...
-    if (kDebugMode) print('DEBUG: createDB from version $currentVersion to $newVersion');
+    if (kDebugMode)
+      print('DEBUG: createDB from version $currentVersion to $newVersion');
     for (final update in this.updates) {
       try {
         currentVersion = await update.execute(currentVersion, db);
       } catch (e, stack) {
-        if (kDebugMode) print('ERROR: Failed to apply update $oldVersion -> $e\n$stack');
+        if (kDebugMode)
+          print('ERROR: Failed to apply update $oldVersion -> $e\n$stack');
         rethrow;
       }
     }

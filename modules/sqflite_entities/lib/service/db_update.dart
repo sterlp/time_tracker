@@ -17,5 +17,6 @@ abstract class DbUpdate {
     }
     return currentVersion;
   }
+
   Future<void> update(Database db);
 }

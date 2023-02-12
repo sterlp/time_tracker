@@ -2,6 +2,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:sqflite_entities/entity/abstract_entity.dart';
 
 class _Foo extends AbstractEntity {}
+
 class _Bar extends AbstractEntity {}
 
 void main() {

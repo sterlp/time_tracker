@@ -73,7 +73,7 @@ void main() {
   test('Test countAll', () async {
     expect(await subject!.countAll(), 0);
 
-    for(int i = 0; i < 10; ++i) {
+    for (int i = 0; i < 10; ++i) {
       await subject!.save(_FooBE(name: 'hallo $i'));
     }
 
@@ -113,6 +113,7 @@ class _FooBE extends AbstractEntity {
 
   _FooBE({this.name});
 }
+
 class _FooDao extends AbstractDao<_FooBE> {
   _FooDao(Database db) : super(db, "FOO_TABLE");
 
@@ -142,8 +143,7 @@ class _DbV1 extends DbUpdate {
 CREATE TABLE IF NOT EXISTS FOO_TABLE (
   id integer PRIMARY KEY AUTOINCREMENT,
   name text
-);'''
-    );
+);''');
   }
 }
 

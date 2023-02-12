@@ -2,7 +2,7 @@ abstract class AbstractEntity {
   int? id;
 
   @override
-  bool operator == (Object other) {
+  bool operator ==(Object other) {
     if (other is AbstractEntity && id != null && other.id != null) {
       return id == other.id && this.runtimeType == other.runtimeType;
     } else {

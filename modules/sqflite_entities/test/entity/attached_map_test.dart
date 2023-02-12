@@ -1,4 +1,3 @@
-
 import 'package:flutter_test/flutter_test.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:sqflite_common_ffi/sqflite_ffi.dart';
@@ -10,7 +9,6 @@ import '../map/map_db_v1.dart';
 import '../map/map_db_v2.dart';
 
 void main() {
-
   DbProvider? dbProvider;
   Database? db;
 
@@ -27,34 +25,32 @@ void main() {
   });
 
   test('Test CRUD', () async {
-      final dao = _TestMapDao(db!);
-      var attachedMap = AttachedMap({}, dao);
+    final dao = _TestMapDao(db!);
+    var attachedMap = AttachedMap({}, dao);
 
-      // CREATE
-      await attachedMap.setValue('foo', 'baar');
-      expect(await dao.countAll(), 4);
-      expect(await dao.getValue('foo'), 'baar');
+    // CREATE
+    await attachedMap.setValue('foo', 'baar');
+    expect(await dao.countAll(), 4);
+    expect(await dao.getValue('foo'), 'baar');
 
-      await attachedMap.setValue('foo2', 'baar2');
-      expect(await dao.countAll(), 5);
+    await attachedMap.setValue('foo2', 'baar2');
+    expect(await dao.countAll(), 5);
 
-      // UPDATE
-      await attachedMap.setValue('foo', 'baar2');
-      expect(await dao.countAll(), 5);
-      expect(await dao.getValue('foo'), 'baar2');
+    // UPDATE
+    await attachedMap.setValue('foo', 'baar2');
+    expect(await dao.countAll(), 5);
+    expect(await dao.getValue('foo'), 'baar2');
 
-      // READ
-      attachedMap = AttachedMap({}, dao);
-      expect(await attachedMap.getValue('foo'), 'baar2');
-      expect(await attachedMap.getValue('foo2'), 'baar2');
+    // READ
+    attachedMap = AttachedMap({}, dao);
+    expect(await attachedMap.getValue('foo'), 'baar2');
+    expect(await attachedMap.getValue('foo2'), 'baar2');
 
-      // DELETE
-      await attachedMap.delete('foo');
-      expect(await dao.countAll(), 4);
-      expect(await dao.getValue('foo'), isNull);
+    // DELETE
+    await attachedMap.delete('foo');
+    expect(await dao.countAll(), 4);
+    expect(await dao.getValue('foo'), isNull);
   });
-
-
 }
 
 class _TestMapDao extends AbstractMapDao {

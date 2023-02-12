@@ -5,17 +5,18 @@ typedef AttachedEntityAction<T> = Future<T?> Function(T value);
 
 class AttachedEntity<Entity extends AbstractEntity>
     extends ValueNotifier<Entity> {
-
   final AttachedEntityAction<Entity> doReloadCallback;
   final AttachedEntityAction<Entity> doSaveCallback;
   final AttachedEntityAction<Entity> doDeleteCallback;
 
   bool _deleted = false;
 
-  AttachedEntity(Entity entity,
-      this.doReloadCallback,
-      this.doSaveCallback,
-      this.doDeleteCallback,) : super(entity);
+  AttachedEntity(
+    Entity entity,
+    this.doReloadCallback,
+    this.doSaveCallback,
+    this.doDeleteCallback,
+  ) : super(entity);
 
   bool isDeleted() => _deleted;
 

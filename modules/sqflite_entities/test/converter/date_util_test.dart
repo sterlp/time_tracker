@@ -1,9 +1,7 @@
-
 import 'package:flutter_test/flutter_test.dart';
 import 'package:sqflite_entities/converter/date_util.dart';
 
 void main() {
-
   test('Test toIsoString', () {
     expect(DateTime.parse("2012-02-27").toIsoDateString(), "2012-02-27");
     expect(DateTime.parse("2012-11-27").toIsoDateString(), "2012-11-27");
@@ -16,5 +14,4 @@ void main() {
     expect(const Duration(hours: 8).toDecimal(), 8);
     expect(const Duration(hours: 8, minutes: 30).toDecimal(), 8.5);
   });
-
 }
