@@ -23,24 +23,24 @@ environment:
 dependencies:
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
+  csv: ^5.0.1
   cupertino_icons: ^1.0.5
   date_time_picker: ^2.1.0
   dependency_container: ^0.1.3
+  file_picker: ^5.2.2
   flutter:
     sdk: flutter
   flutter_localizations:
     sdk: flutter
   intl: ^0.17.0
   material_design_icons_flutter: ^6.0.7096
-  sqflite: ^2.2.0+2
-  share_plus: ^6.3.0
-  week_of_year: ^2.0.0
-  # https://plus.fluttercommunity.dev/docs/overview/
-  csv: ^5.0.1
   path_provider: ^2.0.11
-  file_picker: ^5.2.2
+  # https://plus.fluttercommunity.dev/docs/overview/
+  share_plus: ^6.3.0
+  sqflite: ^2.2.0+2
   sqflite_entities:
     path: ./modules/sqflite_entities
+  week_of_year: ^2.0.0
 
 dev_dependencies:
   flutter_launcher_icons: ^0.11.0
