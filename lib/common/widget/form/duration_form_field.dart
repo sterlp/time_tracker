@@ -6,16 +6,16 @@ class DurationFormField extends StatelessWidget {
   final ValueChanged<Duration>? onChanged;
   final InputDecoration decoration;
   final FormFieldValidator<Duration>? validator;
-  Duration duration;
+  final Duration duration;
   final _controller = TextEditingController();
 
   DurationFormField(
-      {Key? key,
+      {super.key,
         this.duration = Duration.zero,
         this.decoration = const InputDecoration(),
         this.onChanged,
         this.validator,
-      }) : super(key: key);
+      });
 
   @override
   Widget build(BuildContext context) {
@@ -43,9 +43,8 @@ class DurationFormField extends StatelessWidget {
         minute: duration.inMinutes - duration.inHours * 60,
       ),
     );
-    if (newTime != null && onChanged != null) {
-      duration = Duration(hours: newTime.hour, minutes: newTime.minute);
-      onChanged!(duration);
+    if (onChanged != null && newTime != null) {
+      onChanged!(Duration(hours: newTime.hour, minutes: newTime.minute));
     }
   }
 }

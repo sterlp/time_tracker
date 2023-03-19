@@ -8,20 +8,29 @@ class TimeBooking extends AbstractEntity {
   DateTime? end;
   Duration targetWorkTime;
 
-  TimeBooking(this.start, {DateTime? endTime, Duration target = const Duration(hours: 8)})
-      : end = endTime, targetWorkTime = target;
+  TimeBooking(this.start, {this.end, this.targetWorkTime = const Duration(hours: 8)});
 
   TimeBooking.now() : this(DateTimeUtil.precisionMinutes(DateTime.now()));
 
   String get day => start.toIsoDateString();
+
   Duration get workTime {
     final currentEnd = end ?? DateTimeUtil.precisionMinutes(DateTime.now());
     return currentEnd.difference(start);
   }
+
   bool get isOpen => end == null;
+
   set workTime(Duration time) {
     end = start.add(time);
   }
+
+  TimeBooking split(DateTime thisBookingEnd, DateTime newStart) {
+    final result = TimeBooking(newStart, end: end, targetWorkTime: targetWorkTime);
+    end = thisBookingEnd;
+    return result;
+  }
+
   @override
   String toString() {
     return 'TimeBooking[id=$id, start=$start, end=$end]';

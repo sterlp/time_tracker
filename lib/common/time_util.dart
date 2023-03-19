@@ -1,4 +1,6 @@
 
+import 'package:flutter/material.dart';
+
 int durationToMinutes(Duration? d) {
   if (d == null) return 0;
   else {
@@ -34,6 +36,18 @@ String toDurationHoursAndMinutes(Duration? inDuration) {
 
 String _padWith0(int value) {
   return value.toString().padLeft(2, '0');
+}
+
+extension ToTimeOfDay on DateTime {
+  TimeOfDay toTimeOfDay() {
+    return TimeOfDay(hour: hour, minute: minute);
+  }
+}
+
+extension ToDateTime on TimeOfDay {
+  DateTime toDateTime(DateTime date) {
+    return DateTime(date.year, date.month, date.day, hour, minute);
+  }
 }
 
 extension DateTimeExtension on DateTime {

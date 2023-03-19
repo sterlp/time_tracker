@@ -1,4 +1,5 @@
 import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:time_tracker/common/feedback.dart';
 import 'package:time_tracker/common/logger.dart';

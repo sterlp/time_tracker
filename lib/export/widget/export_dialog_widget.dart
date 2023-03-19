@@ -6,12 +6,11 @@ import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:share_plus/share_plus.dart';
-import 'package:sqflite_entities/converter/date_util.dart';
-import 'package:sqflite_entities/entity/query.dart';
 import 'package:time_tracker/booking/service/booking_service.dart';
 import 'package:time_tracker/common/time_util.dart';
 import 'package:time_tracker/config/entity/config_entity.dart';
 import 'package:time_tracker/export/service/export_service.dart';
+import 'package:time_tracker/export/widget/export_by_month.dart';
 
 class ExportDataWidget extends StatefulWidget {
   final AppContainer _container;
@@ -54,7 +53,9 @@ class _ExportDataWidgetState extends State<ExportDataWidget> {
           ListTile(
             leading: const Icon(Icons.download_outlined),
             title: const Text('Übersicht nach Monat'),
-            onTap: _exportMonth,
+            onTap: () => exportBookingsByMonth(context,
+              widget._container.get<ExportService>(),
+              widget._container.get<BookingService>(),),
           ),
         ],
       ),
@@ -75,16 +76,6 @@ class _ExportDataWidgetState extends State<ExportDataWidget> {
       config.setDailyWorkHours(workTime);
       setState(() {});
     }
-  }
-
-  Future<void> _exportMonth() async {
-    final exportFileName = 'Monats Export ${DateTimeUtil.formatWithString(DateTime.now(), "MM.y")}.csv';
-    final bookings = await widget._container.get<BookingService>().all(order: SortOrder.ASC);
-    final csvData = widget._container.get<ExportService>().toMonthCsvData(bookings);
-    final f = await widget._container.get<ExportService>().writeToFile(csvData, fileName: exportFileName);
-
-    await Share.shareXFiles([XFile(f.path, mimeType: 'text/csv', name: exportFileName)],);
-    f.delete();
   }
 
   Future<void> _createDataBackup() async {

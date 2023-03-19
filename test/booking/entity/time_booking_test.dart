@@ -30,4 +30,38 @@ void main() {
     expect(copy.end, root.end);
     expect(copy.targetWorkTime, root.targetWorkTime);
   });
+
+  test('Test Booking split', () {
+    // GIVEN
+    final original = TimeBooking.now();
+    original.targetWorkTime = const Duration(hours: 7, minutes: 3);
+    final end = DateTime.now().add(const Duration(hours: 4));
+    final newStart = DateTime.now().add(const Duration(hours: 5));
+
+    // WHEN
+    final newBooking = original.split(end, newStart);
+
+    // THEN
+    expect(original.targetWorkTime, newBooking.targetWorkTime);
+    expect(original.end, end);
+    expect(newBooking.start, newStart);
+    expect(newBooking.end, isNull);
+  });
+
+  test('Test Booking split with end', () {
+    // GIVEN
+    final original = TimeBooking.now();
+    final start = DateTime.now().add(const Duration(hours: -8));
+    final end = DateTime.now();
+    original.start = start;
+    original.end = end;
+
+    // WHEN
+    final newBooking = original.split(
+        DateTime.now().add(const Duration(hours: -5)),
+        DateTime.now().add(const Duration(hours: -4)));
+
+    // THEN
+    expect(newBooking.end, end);
+  });
 }

@@ -67,7 +67,7 @@ class DataBackupActivity {
           if (row.length > 6) target = hoursAndMinutesToDuration(row[6].toString());
 
           result.add(TimeBooking(
-            start, endTime: end, target: target,
+            start, end: end, targetWorkTime: target,
           ),);
         }
       } else {

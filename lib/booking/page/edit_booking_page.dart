@@ -1,14 +1,17 @@
+import 'dart:math';
+
 import 'package:dependency_container/dependency_container.dart';
 import 'package:flutter/material.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:sqflite_entities/converter/date_util.dart';
-import 'package:time_tracker/booking/service/booking_service.dart';
+import 'package:time_range_picker/time_range_picker.dart';
 import 'package:time_tracker/booking/entity/time_booking.dart';
+import 'package:time_tracker/booking/service/booking_service.dart';
 import 'package:time_tracker/booking/widget/delete_booking_dialog.dart';
 import 'package:time_tracker/common/feedback.dart';
+import 'package:time_tracker/common/time_util.dart';
 import 'package:time_tracker/common/widget/date_time_form_field.dart';
 import 'package:time_tracker/common/widget/form/duration_form_field.dart';
-import 'package:time_tracker/common/time_util.dart';
 
 Future<TimeBooking?> showEditBookingPage(
     BuildContext context,
@@ -35,7 +38,7 @@ class EditBookingPage extends StatefulWidget {
   final TimeBooking _booking;
   final dateTimeFormat = DateTimeUtil.getFormat('EEEE dd.MM.yyyy HH:mm');
 
-  EditBookingPage(this._container, this._booking, {Key? key}) : super(key: key);
+  EditBookingPage(this._container, this._booking, {super.key});
 
   @override
   _EditBookingPageState createState() => _EditBookingPageState();
@@ -78,12 +81,12 @@ class _EditBookingPageState extends State<EditBookingPage> {
               DateTimeFormField(
                 _booking.end,
                 _setEnd,
-                validator: (value) { // value is the last state of the widget
+                validator: (value) {
                   String? msg;
                   if (_booking.end == null) {
                     msg = null;
                   } else if (_booking.end!.isBefore(_booking.start)) {
-                    msg = 'Endedatum muss vor dem Startdatum  liegen.';
+                    msg = 'Enddatum muss vor dem Startdatum  liegen.';
                   }
                   return msg;
                 },
@@ -98,20 +101,75 @@ class _EditBookingPageState extends State<EditBookingPage> {
               Padding(
                 padding: const EdgeInsets.fromLTRB(0, 16, 0, 0),
                 child: ElevatedButton.icon(
-                  onPressed: _booking.id == null ? null : _doDelete,
-                  icon: const Icon(MdiIcons.delete),
-                  label: const Text('Löschen'),
+                  onPressed: _showBreakDialog,
+                  icon: const Icon(MdiIcons.coffeeToGoOutline),
+                  label: const Text('Pause einfügen'),
                   style: OutlinedButton.styleFrom(
-                    backgroundColor: Colors.redAccent,
                     minimumSize: const Size.fromHeight(40),
                   ),
+                ),
+              ),
+              ElevatedButton.icon(
+                onPressed: _booking.id == null ? null : _doDelete,
+                icon: const Icon(MdiIcons.delete),
+                label: const Text('Löschen'),
+                style: OutlinedButton.styleFrom(
+                  backgroundColor: Colors.redAccent,
+                  minimumSize: const Size.fromHeight(40),
                 ),
               ),
             ],
           ),
         ),
-      )
+      ),
     );
+  }
+
+  Future<void> _showBreakDialog() async {
+    final endTime = _booking.end != null ? _booking.end! : DateTime.now();
+
+    final durationToMidTime = endTime.difference(_booking.start).inMinutes ~/ 2;
+    final breakStart = max(1, durationToMidTime - 15);
+
+    final breakTime = await showTimeRangePicker(
+      context: context,
+      fromText: "Pausenstart",
+      toText: "Pausenende",
+      paintingStyle: PaintingStyle.fill,
+      disabledTime: TimeRange(
+        startTime: endTime.add(const Duration(minutes: -1)).toTimeOfDay(),
+        endTime: _booking.start.add(const Duration(minutes: 1)).toTimeOfDay(),
+      ),
+      start: _booking.start.add(Duration(minutes: breakStart)).toTimeOfDay(),
+      end: _booking.start.add(Duration(minutes: breakStart == 1
+          ? breakStart + 1
+          : durationToMidTime + 15)).toTimeOfDay(),
+      interval: const Duration(minutes: 1),
+      ticks: 8,
+      strokeColor: Theme.of(context).primaryColor.withOpacity(0.5),
+      ticksColor: Colors.black,
+      labels: [
+        "24:00",
+        "03:00",
+        "06:00",
+        "09:00",
+        "12:00",
+        "15:00",
+        "18:00",
+        "21:00"
+      ].asMap().entries.map((e) => ClockLabel.fromIndex(idx: e.key, length: 8, text: e.value)).toList(),
+    ) as TimeRange?;
+
+
+    if (breakTime != null) {
+      await widget._container.get<BookingService>().addBreakToBooking (_booking, breakTime);
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+          content: Text('Neue Pause eingefügt.'),
+        ),);
+        Navigator.pop(context, null);
+      }
+    }
   }
 
   Future<void> _doDelete() async {
