@@ -13,7 +13,7 @@ class StartAndStopWidget extends StatelessWidget {
 
   const StartAndStopWidget(this._showStart,
       this._workTime, this._targetWorkTime, this._startPress,
-      {Key? key,}) : super(key: key);
+      {super.key,});
 
 
   @override
@@ -54,12 +54,12 @@ class StartAndStopWidget extends StatelessWidget {
 
     _log.debug('progress size $size width ${size.width} height ${size.height}');
 
-    final progress = _workTime.inSeconds / _targetWorkTime.inSeconds;
+    final progress = _targetWorkTime.inSeconds > 0 ? _workTime.inSeconds / _targetWorkTime.inSeconds : 100.0;
     return SizedBox(
       child: CircularProgressIndicator(
         value: progress,
         strokeWidth: stroke,
-        color: color,
+        color: _targetWorkTime.inSeconds > 0 ? color : Colors.black12,
       ),
       height: circleSize,
       width: circleSize,
