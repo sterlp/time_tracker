@@ -15,6 +15,7 @@ class ExportDailyStats {
     return duration.toDecimal().toStringAsFixed(2).replaceFirst(".", ",");
   }
 
+  final DateTime day;
   final List<TimeBooking> bookings;
   final DailyBookingStatistic stats;
 
@@ -39,22 +40,22 @@ class ExportDailyStats {
       : '';
   String get breakTime => hasBreak ? toDecimal(stats.breakTime) : '0,0';
 
-  ExportDailyStats(this.bookings, this.stats);
+  ExportDailyStats(this.day, this.bookings, this.stats);
 
-  factory ExportDailyStats.fromBookings(List<TimeBooking> bookings) {
+  factory ExportDailyStats.fromBookings(DateTime day, List<TimeBooking> bookings) {
     var start = DateTime.now();
     var end = DateTime(1900);
     var workedTime = Duration.zero;
     var planedWorkTime = Duration.zero;
-    String day = '';
+    String dayString = '';
     for (final b in bookings) {
-      day = b.day;
+      dayString = b.day;
       if (b.start.isBefore(start)) start = b.start;
       if (b.end != null && b.end!.isAfter(end)) end = b.end!;
       workedTime = workedTime + b.workTime;
       if (planedWorkTime < b.targetWorkTime) planedWorkTime = b.targetWorkTime;
     }
-    return ExportDailyStats(bookings, DailyBookingStatistic(day, start, end, workedTime, planedWorkTime, bookings.length));
+    return ExportDailyStats(day, bookings, DailyBookingStatistic(dayString, start, end, workedTime, planedWorkTime, bookings.length));
   }
 
   Duration calculateBreakTime([int breakNumber = 1]) {

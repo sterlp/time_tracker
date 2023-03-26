@@ -3,6 +3,7 @@ import 'dart:ffi';
 
 import 'package:dependency_container/dependency_container.dart';
 import 'package:flutter/material.dart';
+import 'package:time_tracker/export/entity/export_field.dart';
 
 Future<Void?> showConfigureExportPage(
     BuildContext context,
@@ -23,15 +24,37 @@ class ConfigureExportPage extends StatefulWidget {
 
 class _ConfigureExportPageState extends State<ConfigureExportPage> {
 
+  final ExportFields fields = ExportFields();
 
   List<Widget> _selectedFields() {
+    return _toChips(
+      fields.selectedValues, const Icon(Icons.remove),
+      (field) => setState(() => fields.remove(field)),
+      Theme.of(context).primaryColorLight,);
+  }
+
+  List<Widget> _availableFields() {
+    return _toChips(
+      fields.availableValues, const Icon(Icons.add),
+      (field) => setState(() => fields.add(field)),
+      Theme.of(context).secondaryHeaderColor,);
+  }
+
+  List<Widget> _toChips(List<ExportField> fields,
+      Icon icon,
+      Function(ExportField field)? fn,
+      Color? backgroundColor,) {
     final result = <Widget>[];
-    for(int i = 0; i < 10; i++) {
-      result.add(Chip(
-        label: Text("fooo $i"),
-        deleteIcon: const Icon(Icons.close),
-        onDeleted: () => {},
-        backgroundColor: Theme.of(context).primaryColor.withAlpha(80),),
+    for (final field in fields) {
+      result.add(Padding(
+          padding: const EdgeInsets.fromLTRB(0, 0, 4, 0),
+          child: Chip(
+            label: Text(field.name),
+            deleteIcon: icon,
+            onDeleted: fn == null ? null : () => fn(field),
+            backgroundColor: backgroundColor,
+          ),
+        ),
       );
     }
     return result;
@@ -40,35 +63,32 @@ class _ConfigureExportPageState extends State<ConfigureExportPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text("Export konfigurieren")),
+      appBar: AppBar(
+        title: const Text("Export konfigurieren"),
+        actions: [
+          IconButton(
+            onPressed: null, //_valid ? FeedbackFixed.wrapTouch(_doSave, context) : null,
+            icon: const Icon(Icons.done),),
+        ],
+      ),
       body: Padding(
         padding: const EdgeInsets.all(8.0),
         child: Column(
           children: [
             Center(child: Text("Exportierte Felder", style: Theme.of(context).textTheme.headlineSmall,)),
-            const Divider(),
+            const Divider(thickness: 1,),
             Wrap(
               children: _selectedFields(),
             ),
-            Divider(thickness: 2,),
+            const Divider(thickness: 2,),
             Center(child: Text("Mögliche Felder", style: Theme.of(context).textTheme.headlineSmall,)),
-            const Divider(),
+            const Divider(thickness: 1,),
             Wrap(
-              children: [
-                Chip(label: Text("fooo 1")),
-                Chip(label: Text("fooo 2")),
-                Chip(label: Text("fooo 3")),
-                Chip(label: Text("fooo 4")),
-                Chip(label: Text("fooo 4")),
-                Chip(label: Text("fooo 4")),
-                Chip(label: Text("fooo 4")),
-                Chip(label: Text("fooo 4")),
-              ],
+              children: _availableFields(),
             ),
           ],
         ),
       ),
     );
   }
-
 }

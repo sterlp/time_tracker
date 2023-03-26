@@ -64,12 +64,11 @@ class _ExportDataWidgetState extends State<ExportDataWidget> {
               widget._container.get<BookingService>(),
             ),
           ),
-          /*
           ListTile(
             leading: const Icon(Icons.settings),
             title: const Text('Export konfigurieren'),
             onTap: () => showConfigureExportPage(context, widget._container),
-          )*/
+          )
         ],
       ),
     );

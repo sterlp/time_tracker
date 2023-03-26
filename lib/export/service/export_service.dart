@@ -5,6 +5,7 @@ import 'package:sqflite_entities/entity/query.dart';
 import 'package:time_tracker/booking/entity/time_booking.dart';
 import 'package:time_tracker/booking/service/booking_service.dart';
 import 'package:time_tracker/common/logger.dart';
+import 'package:time_tracker/export/entity/export_field.dart';
 import 'package:time_tracker/export/service/data_backup_activity.dart';
 import 'package:time_tracker/export/service/export_by_month_activity.dart';
 
@@ -30,6 +31,10 @@ class ExportService {
     f = await f.writeAsString(csvData, flush: true);
     _log.info("Written ${f.lengthSync()} to file ${f.path}");
     return f;
+  }
+
+  String exportUsingFields(ExportFields fields, List<TimeBooking> bookings) {
+    return _monthExportActivity.execute(fields, bookings);
   }
 
   String toMonthCsvData(List<TimeBooking> bookings) {

@@ -15,7 +15,7 @@ Future<void> main() async {
       TimeBooking(DateTime(2021, 3, 1, 8, 30))..end = DateTime(2021, 3, 1, 16, 20)
     ];
     // WHEN
-    final subject = ExportDailyStats.fromBookings(bookings);
+    final subject = ExportDailyStats.fromBookings(DateTime(2021, 3, 1, 8, 30), bookings);
     // THEN
     expect(subject.workedTime, '7,83');
     expect(subject.startTime, '08:30');
@@ -33,7 +33,7 @@ Future<void> main() async {
       TimeBooking(DateTime(2021, 3, 1, 13))..end = DateTime(2021, 3, 1, 17)
     ];
     // WHEN
-    final subject = ExportDailyStats.fromBookings(bookings);
+    final subject = ExportDailyStats.fromBookings(DateTime(2021, 3, 1, 8), bookings);
     // THEN
     expect(subject.startTime, '08:00');
     expect(subject.endTime, '17:00');
@@ -50,7 +50,7 @@ Future<void> main() async {
       TimeBooking(DateTime(2021, 3, 1, 15, 05))..end = DateTime(2021, 3, 1, 17, 30)
     ];
     // WHEN
-    final subject = ExportDailyStats.fromBookings(bookings);
+    final subject = ExportDailyStats.fromBookings(DateTime(2021, 3, 1, 8), bookings);
     // THEN
     expect(subject.startTime, '08:00');
 
@@ -72,7 +72,7 @@ Future<void> main() async {
       TimeBooking(DateTime(2021, 3, 1, 13))..end = DateTime(2021, 3, 1, 17),
     ];
     // WHEN
-    final subject = ExportDailyStats.fromBookings(bookings);
+    final subject = ExportDailyStats.fromBookings(DateTime(2021, 3, 1, 8), bookings);
     // THEN
     expect(subject.calculateBreakTime(), const Duration(hours: 1));
     expect(subject.calculateBreakTime(2), const Duration(hours: 2));
@@ -89,7 +89,7 @@ Future<void> main() async {
       TimeBooking(DateTime(2021, 3, 1, 16))..end = DateTime(2021, 3, 1, 17),
     ];
     // WHEN
-    final subject = ExportDailyStats.fromBookings(bookings);
+    final subject = ExportDailyStats.fromBookings(DateTime(2021, 3, 1, 8), bookings);
     // THEN
     expect(subject.startTime, '08:00');
     expect(subject.endTime, '17:00');
