@@ -60,6 +60,7 @@ class _ExportDataWidgetState extends State<ExportDataWidget> {
             title: const Text('Übersicht nach Monat'),
             onTap: () => exportBookingsByMonth(
               context,
+              widget._container.get<TimeTrackerConfig>(),
               widget._container.get<ExportService>(),
               widget._container.get<BookingService>(),
             ),

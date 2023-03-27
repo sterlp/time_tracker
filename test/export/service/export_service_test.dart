@@ -34,14 +34,6 @@ Future<void> main() async {
       await dao.deleteAll();
   });
 
-  test('toMonthCsvData should add all days', () async {
-    // GIVEN & WHEN
-    final data = subject.toMonthCsvData([TimeBooking(DateTime.parse("2020-04-04 13:27:00"))]);
-    // THEN
-    expect(data, contains("01.04.2020"));
-    expect(data, contains("30.04.2020"));
-  });
-
   test('Test export data csv', () async {
     // GIVEN
     testData.newBookingWithStart(DateTime.parse("2022-05-02 08:00:00"), const Duration(hours: 8));
@@ -91,25 +83,31 @@ Future<void> main() async {
 
   });
 
-  test('Test toMonthCsvData over years', () async {
-      // GIVEN
-      final file = await File('test_resources/Datenexport.csv')
-          .readAsString();
-      // WHEN
-      var bookings = await subject.importBackup(file);
-      bookings = await bService.all(order: SortOrder.ASC);
-      final csvData = subject.toMonthCsvData(bookings);
+  test('toMonthCsvData should add all days', () async {
+    // GIVEN & WHEN
+    final fields = ExportFields();
+    fields.selectValues([ExportField.date, ExportField.cw]);
+    final data = subject.exportUsingFields(fields, [TimeBooking(DateTime.parse("2020-04-04 13:27:00"))]);
+    // THEN
+    expect(data, contains("01.04.2020"));
+    expect(data, contains("30.04.2020"));
 
-      // THEN we should have at least two years in the exported data
-      expect(bookings.length, 3);
-      expect(csvData, contains('01.11.2021'));
-      expect(csvData, contains('02.11.2021'));
-      expect(csvData, contains('29.11.2021;Montag;;;;;;;;;;;0,0'));
-      expect(csvData, contains('30.11.2021;Dienstag;8,00;10:00;18:00;7,00;12:00;13:00;;;;;1,00'));
-      expect(csvData, contains('01.12.2021;Mittwoch;;;;;;;;;;;0,0'));
-      expect(csvData, contains('09.03.2022;Mittwoch;8,00;12:56;16:13;3,28;;;;;;;0,0'));
-      expect(csvData, contains('31.05.2022'));
-    });
+    expect(data, isNot(contains('01.05.2020')));
+    expect(data, isNot(contains('01.03.2020')));
+    expect(data, isNot(contains('2019')));
+    expect(data, isNot(contains('2021')));
+  });
+
+  test('exportUsingFields should add the month and use only selected fields', () async {
+    // GIVEN & WHEN
+    final fields = ExportFields();
+    fields.selectValues([ExportField.date, ExportField.cw]);
+    final data = subject.exportUsingFields(fields, [TimeBooking(DateTime.parse("2020-04-04 13:27:00"))]);
+    // THEN
+    expect(data, contains('01.04.2020;14'));
+    expect(data, contains('04.04.2020;14'));
+    expect(data, contains('30.04.2020;18'));
+  });
 
   test('Test exportUsingFields over years', () async {
     // GIVEN
@@ -130,18 +128,4 @@ Future<void> main() async {
     expect(csvData, contains('09.03.2022;Mittwoch;8,00;12:56;16:13;3,28;;;;;;;0,0'));
     expect(csvData, contains('31.05.2022'));
   });
-
-    test('Test new and old export', () async {
-      // GIVEN
-      final file = await File('test_resources/Datenexport.csv').readAsString();
-      var bookings = await subject.importBackup(file);
-      bookings = await bService.all(order: SortOrder.ASC);
-
-      // WHEN
-      final csvData = subject.toMonthCsvData(bookings);
-      final csvUsingFields = subject.exportUsingFields(ExportFields(), bookings);
-
-      // THEN
-      expect(csvUsingFields, csvData);
-    });
-  }
+}

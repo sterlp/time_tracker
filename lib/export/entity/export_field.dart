@@ -99,12 +99,20 @@ class ExportFields {
     }
   }
 
+  void selectValues(List<ExportField> fields) {
+    clear();
+    selectedValues.addAll(fields);
+  }
+
   List<String> exportWith(ExportDailyStats stats) {
     final result = <String>[];
     for (final f in selectedValues) result.add(f.extract(stats));
     return result;
   }
 
+  void clear() {
+    selectedValues.clear();
+  }
   void add(ExportField field) {
     selectedValues.add(field);
   }

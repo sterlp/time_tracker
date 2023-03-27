@@ -37,10 +37,6 @@ class ExportService {
     return _monthExportActivity.execute(fields, bookings);
   }
 
-  String toMonthCsvData(List<TimeBooking> bookings) {
-    return _monthExportActivity.toCsvData(bookings);
-  }
-
   String toCsvData(List<TimeBooking> bookings) {
     return _dataBackupActivity.toCsvData(bookings);
   }

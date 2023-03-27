@@ -46,7 +46,10 @@ class AppContextMock {
     when(() => timeBookingDao.loadDay(any())).thenAnswer((_) => Future.value(todayBookings));
     final bs = BookingService(timeBookingDao);
 
+    when(() => configDao.getValue(any())).thenAnswer((_) => Future.value());
+
     result.add<ConfigDao>(configDao);
+    result.add<TimeTrackerConfig>(config!);
     result.add<TimeBookingDao>(timeBookingDao);
     result.add<BookingService>(bs);
     result.add<TodayBean>(TodayBean(bs, config!));

@@ -12,25 +12,25 @@ import 'package:time_tracker/booking/page/bookings_list_page.dart';
 import '../../test_helper.dart';
 
 void main() {
-  AppContainer _container = AppContainer();
-  BookingServiceMock _bookingServiceMock = BookingServiceMock();
-  List<TimeBooking> _bookings = [];
+  AppContainer container = AppContainer();
+  BookingServiceMock bookingServiceMock = BookingServiceMock();
+  List<TimeBooking> bookings = [];
   setUpAll(() {
     initializeDateFormatting();
-    _container = AppContainer();
-    _bookingServiceMock = BookingServiceMock();
-    _container.add<BookingService>(_bookingServiceMock);
-    _bookings = [];
+    container = AppContainer();
+    bookingServiceMock = BookingServiceMock();
+    container.add<BookingService>(bookingServiceMock);
+    bookings = [];
     registerFallbackValue(SortOrder.DESC);
-    when(() => _bookingServiceMock.fromTo(
-        any(), any(),),).thenAnswer((_) => Future.value(_bookings));
+    when(() => bookingServiceMock.fromTo(
+        any(), any(),),).thenAnswer((_) => Future.value(bookings));
   });
 
   testWidgets('Load empty bookings', (WidgetTester tester) async {
     // GIVEN
     await tester.pumpWidget(MaterialApp(
       title: 'test',
-      home: BookingListPage(_container, DateTime.now(), DateTime.now()),),
+      home: BookingListPage(container, DateTime.now(), DateTime.now()),),
     );
     // THEN
     expect(find.text('Lade ...'), findsOneWidget);

@@ -4,7 +4,7 @@ import 'package:sqflite_entities/dao/abstract_map_dao.dart';
 class AttachedMap extends ValueNotifier<Map<String, String?>> {
   final AbstractMapDao dao;
 
-  AttachedMap(Map<String, String?> map, this.dao) : super(map);
+  AttachedMap(super.map, this.dao);
 
   Future<Map<String, String?>> reload() async {
     final e = await dao.loadAll();

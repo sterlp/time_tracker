@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 class LoadingWidget extends StatelessWidget {
   final String caption;
 
-  const LoadingWidget({Key? key, this.caption = 'Lade ...'}) : super(key: key);
+  const LoadingWidget({super.key, this.caption = 'Lade ...'});
 
   @override
   Widget build(BuildContext context) {

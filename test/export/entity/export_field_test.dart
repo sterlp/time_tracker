@@ -9,6 +9,7 @@ void main() {
     // GIVEN
     final subject = ExportFields();
     // WHEN
+    subject.clear();
     subject.add(ExportField.day);
     subject.add(ExportField.workedTime);
     // THEN
