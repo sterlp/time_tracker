@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:sqflite_entities/converter/date_util.dart';
 import 'package:time_tracker/booking/widget/work_time_widget.dart';
+import 'package:time_tracker/common/time_util.dart';
 import 'package:time_tracker/common/widget/label_text_widget.dart';
 import 'package:time_tracker/common/widget/labeled_card_widget.dart';
 import 'package:time_tracker/statistic/entity/overview_stats.dart';
@@ -32,7 +33,7 @@ class StatisticWidget extends StatelessWidget {
           TableRow(
             children: [
               LabelTextWidget('Tage gearbeitet', item.statisticList.count.toString()),
-              LabeledWidget('Überstunden', child: WorkTimeWidget(item.statisticList.sumOverHours, style: valueStyle,)),
+              LabeledWidget('Überstunden', child: Text(toDurationHoursAndMinutes(item.statisticList.sumOverHours), style: valueStyle,)),
             ],
           ),
           space,

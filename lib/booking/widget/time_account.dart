@@ -7,11 +7,10 @@ class TimeAccount extends StatelessWidget {
   final Duration done;
   final Duration pause;
 
-  const TimeAccount(this.target, this.done, this.pause, {Key? key}) : super(key: key);
+  const TimeAccount(this.target, this.done, this.pause, {super.key});
 
   @override
   Widget build(BuildContext context) {
-    final divToday = done - target;
     final textStyle = Theme.of(context).textTheme.subtitle1;
     final headStyle = Theme.of(context).textTheme.headline6;
 
@@ -25,8 +24,8 @@ class TimeAccount extends StatelessWidget {
           ],
         ),
         TableRow(children: [
-          Center(child: WorkTimeWidget(divToday, style: textStyle,)),
-          Center(child: Text(toDurationHoursAndMinutes(done), style: textStyle)),
+          Center(child: Text(toDurationHoursAndMinutes(target), style: textStyle)),
+          Center(child: WorkTimeWidget(done, target, style: textStyle,)),
           Center(child: Text(toDurationHoursAndMinutes(pause), style: textStyle)),
         ],),
       ],

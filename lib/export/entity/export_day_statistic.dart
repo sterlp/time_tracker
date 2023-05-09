@@ -2,6 +2,7 @@
 import 'package:sqflite_entities/converter/date_util.dart';
 import 'package:time_tracker/booking/entity/time_booking.dart';
 import 'package:time_tracker/booking/entity/time_booking_statistics.dart';
+import 'package:time_tracker/common/time_util.dart';
 
 class ExportDailyStats {
   static final _timeFormat = DateTimeUtil.getFormat('HH:mm');
@@ -39,6 +40,9 @@ class ExportDailyStats {
       ? formatTime(bookings[2].end!.add( stats.breakTime - calculateBreakTime() - calculateBreakTime(2) ))
       : '';
   String get breakTime => hasBreak ? toDecimal(stats.breakTime) : '0,0';
+  String get breakTimeHHmm => hasBreak
+      ? toHHmm(stats.breakTime) // '${stats.breakTime.inHours}:${stats.breakTime.inMinutes - stats.breakTime.inHours * 60}'
+      : '00:00';
 
   ExportDailyStats(this.day, this.bookings, this.stats);
 

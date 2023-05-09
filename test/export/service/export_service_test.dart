@@ -1,10 +1,11 @@
 import 'dart:io';
 
+import 'package:flutter/cupertino.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:sqflite_entities/entity/query.dart';
-import 'package:time_tracker/booking/service/booking_service.dart';
 import 'package:time_tracker/booking/dao/time_booking_dao.dart';
+import 'package:time_tracker/booking/service/booking_service.dart';
 import 'package:time_tracker/booking/entity/time_booking.dart';
 import 'package:time_tracker/export/entity/export_field.dart';
 import 'package:time_tracker/export/service/export_service.dart';
@@ -16,8 +17,8 @@ Future<void> main() async {
   final dbProvider = await initTestDB();
   final db = await dbProvider.init();
   final dao = TimeBookingDao(db);
-  final bService = BookingService(dao);
-  final subject = ExportService(bService);
+  final bookingService = BookingService(dao);
+  final subject = ExportService(bookingService);
 
   final testData = BookingTestData(dao);
 
@@ -83,22 +84,7 @@ Future<void> main() async {
 
   });
 
-  test('toMonthCsvData should add all days', () async {
-    // GIVEN & WHEN
-    final fields = ExportFields();
-    fields.selectValues([ExportField.date, ExportField.cw]);
-    final data = subject.exportUsingFields(fields, [TimeBooking(DateTime.parse("2020-04-04 13:27:00"))]);
-    // THEN
-    expect(data, contains("01.04.2020"));
-    expect(data, contains("30.04.2020"));
-
-    expect(data, isNot(contains('01.05.2020')));
-    expect(data, isNot(contains('01.03.2020')));
-    expect(data, isNot(contains('2019')));
-    expect(data, isNot(contains('2021')));
-  });
-
-  test('exportUsingFields should add the month and use only selected fields', () async {
+  test('exportUsingFields should end with the last booking', () async {
     // GIVEN & WHEN
     final fields = ExportFields();
     fields.selectValues([ExportField.date, ExportField.cw]);
@@ -106,14 +92,13 @@ Future<void> main() async {
     // THEN
     expect(data, contains('01.04.2020;14'));
     expect(data, contains('04.04.2020;14'));
-    expect(data, contains('30.04.2020;18'));
   });
 
   test('Test exportUsingFields over years', () async {
     // GIVEN
     final file = await File('test_resources/Datenexport.csv').readAsString();
     var bookings = await subject.importBackup(file);
-    bookings = await bService.all(order: SortOrder.ASC);
+    bookings = await bookingService.all(order: SortOrder.ASC);
 
     // WHEN
     final csvData = subject.exportUsingFields(ExportFields(), bookings);
@@ -126,6 +111,50 @@ Future<void> main() async {
     expect(csvData, contains('30.11.2021;Dienstag;8,00;10:00;18:00;7,00;12:00;13:00;;;;;1,00'));
     expect(csvData, contains('01.12.2021;Mittwoch;;;;;;;;;;;0,0'));
     expect(csvData, contains('09.03.2022;Mittwoch;8,00;12:56;16:13;3,28;;;;;;;0,0'));
-    expect(csvData, contains('31.05.2022'));
+    expect(csvData, isNot(contains('10.03.2022')));
+  });
+
+  test('Test export break hh:mm', () async {
+    // GIVEN
+    final now = DateTime.now();
+    testData.newBookingWithStart(now.copyWith(hour: 7), const Duration(hours: 3, minutes: 45));
+    testData.newBookingWithStart(now.copyWith(hour: 13), const Duration(hours: 3));
+
+    // WHEN
+    final fields = ExportFields();
+    fields.selectValues([
+      ExportField.date,
+      ExportField.startTime,
+      ExportField.endTime,
+      ExportField.startFirstBreak,
+      ExportField.endFirstBreak,
+      ExportField.breakTimeHHmm]);
+
+    final export = subject.exportUsingFields(fields,
+        await bookingService.fromTo(now.copyWith(hour: 0, minute: 0), now.copyWith(hour: 23, minute: 59)));
+
+    expect(export, contains(';2:15'));
+    expect(export, contains(';07:'));
+    expect(export, contains(';13:'));
+  });
+
+  test('Test export break hh:mm', () async {
+    // GIVEN
+    final now = DateTime.now().copyWith(month: 3);
+    testData.newBookingWithStart(now.copyWith(day: 1), const Duration(hours: 3));
+    testData.newBookingWithStart(now.copyWith(day: 2), const Duration(hours: 3));
+    testData.newBookingWithStart(now.copyWith(day: 3), const Duration(hours: 3));
+
+    // WHEN
+    final bookings = await bookingService.fromTo(
+        now.copyWith(hour: 0, day: 1, month: 3),
+        DateTime.now().copyWith(month: 3, day: 31),
+    );
+    final result = subject.exportUsingFields(ExportFields(), bookings);
+
+    // THEN
+    expect(result, contains('01.03.'));
+    expect(result, contains('03.03.'));
+    expect(result, isNot(contains('04.03.')));
   });
 }

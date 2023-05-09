@@ -24,17 +24,20 @@ void main() {
     expect(find.text('5 Std 0 Min'), findsOneWidget);
 
     expect(find.text('Soll'), findsOneWidget);
-    expect(find.text('-3 Std -15 Min'), findsOneWidget);
+    expect(find.text('8 Std 15 Min'), findsOneWidget);
   });
 
   testWidgets('TimeAccount negativ color test', (WidgetTester tester) async {
     // GIVEN
     await tester.pumpWidget(const MaterialApp(
         title: 'test',
-        home: TimeAccount(Duration(hours: 7, minutes: 15), Duration(hours: 5), Duration.zero),),
+        home: TimeAccount(
+            Duration(hours: 7, minutes: 15),
+            Duration(hours: 5),
+            Duration.zero),),
     );
     // THEN
-    final text = tester.widget<Text>(find.text('-2 Std -15 Min'));
+    final text = tester.widget<Text>(find.text('5 Std 0 Min'));
     expect(text.style?.color, Colors.red);
   });
 
@@ -42,10 +45,12 @@ void main() {
     // Given
     await tester.pumpWidget(const MaterialApp(
         title: 'test',
-        home: TimeAccount(Duration(hours: 4), Duration(hours: 5), Duration.zero),),
+        home: TimeAccount(
+            Duration(hours: 4),
+            Duration(hours: 5), Duration.zero),),
     );
     // THEN
-    final text = tester.widget<Text>(find.text('1 Std 0 Min'));
+    final text = tester.widget<Text>(find.text('5 Std 0 Min'));
     expect(text.style?.color, Colors.green);
   });
 
@@ -54,11 +59,14 @@ void main() {
     await tester.pumpWidget(MaterialApp(
         title: 'test',
         theme: ThemeData.dark(),
-        home: const TimeAccount(Duration(hours: 4, minutes: 30), Duration(hours: 4), Duration.zero),),
+        home: const TimeAccount(
+            Duration(hours: 4, minutes: 30),
+            Duration(hours: 4),
+            Duration.zero,),),
     );
     // THEN
-    final text = tester.widget<Text>(find.text('0 Std -30 Min'));
-    expect(text.style?.color, Colors.white);
+    final text = tester.widget<Text>(find.text('4 Std 0 Min'));
+    expect(text.style?.color, Colors.green);
   });
 
   testWidgets('TimeAccount shows Pause', (WidgetTester tester) async {

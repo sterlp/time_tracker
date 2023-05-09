@@ -17,7 +17,6 @@ class _BookingsMap {
 
   void initExport() {
     _exportStartDay = DateTime(_exportStartDay.year, _exportStartDay.month);
-    _exportEndDay = DateTime(_exportEndDay.year, _exportStartDay.month + 1, 0);
   }
   void addDay() {
     _exportStartDay = _exportStartDay.add(const Duration(days: 1));

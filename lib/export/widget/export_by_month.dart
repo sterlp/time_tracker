@@ -26,13 +26,14 @@ Future<void> exportBookingsByMonth(BuildContext context,
   if (exportDate != null) {
     final exportFileName = 'Export von ${DateTimeUtil.formatWithString(exportDate, "dd.MM.y")} bis '
         '${DateTimeUtil.formatWithString(now, "dd.MM.y")}.csv';
-    final bookings = await bookingService.fromTo(exportDate, now);
 
     final fields = ExportFields();
     final cfg = await config.getExportCsvConfig();
     if (cfg != null && cfg.isNotEmpty) {
       fields.selectedValuesString = cfg;
     }
+
+    final bookings = await bookingService.fromTo(exportDate, now);
     final csvData = exportService.exportUsingFields(fields, bookings);
     final f = await exportService.writeToFile(csvData, fileName: exportFileName);
 

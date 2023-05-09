@@ -18,6 +18,6 @@ dev_dependencies:
   flutter_test:
     sdk: flutter
   lint: ^2.0.1
-  sqflite_common_ffi: ^2.2.0+1
+  sqflite_common_ffi: ^2.2.2
 
 flutter:

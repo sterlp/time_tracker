@@ -34,6 +34,12 @@ String toDurationHoursAndMinutes(Duration? inDuration) {
   return '${duration.inHours} Std $minutes Min';
 }
 
+String toHHmm(Duration? inDuration) {
+  final duration = inDuration ?? Duration.zero;
+  final minutes = duration.inMinutes - duration.inHours * 60;
+  return '${duration.inHours}:$minutes';
+}
+
 String _padWith0(int value) {
   return value.toString().padLeft(2, '0');
 }
