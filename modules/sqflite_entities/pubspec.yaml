@@ -11,13 +11,13 @@ dependencies:
   flutter:
     sdk: flutter
   intl: ^0.18.1
-  sqflite: ^2.2.0+3
+  sqflite: ^2.2.8+2
 
 dev_dependencies:
   flutter_lints: ^2.0.0
   flutter_test:
     sdk: flutter
   lint: ^2.0.1
-  sqflite_common_ffi: ^2.2.2
+  sqflite_common_ffi: ^2.2.5
 
 flutter:
