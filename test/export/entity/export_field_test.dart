@@ -27,4 +27,16 @@ void main() {
     expect(subject.selectedValues, contains(ExportField.day));
     expect(subject.selectedValues, contains(ExportField.workedTime));
   });
+
+  test('test parse fields', () {
+    // GIVEN
+    final subject = ExportFields();
+    // WHEN
+    for(final f in subject.availableValues) {
+      subject.selectedValuesString = f.key;
+      // THEN
+      expect(subject.selectedValues.length, 1);
+      expect(subject.selectedValues, contains(f));
+    }
+  });
 }
