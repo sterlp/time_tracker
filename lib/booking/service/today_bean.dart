@@ -27,7 +27,7 @@ class TodayBean extends ValueNotifier<List<TimeBooking>> {
     return DateUtils.isSameDay(_day, newDay);
   }
 
-  Future<List<TimeBooking>> changeDay(DateTime newDay) async {
+  Future<List<TimeBooking>> changeDay(DateTime newDay) {
     if (DateUtils.isSameDay(_day, newDay)) return SynchronousFuture(value);
     else {
       _day = DateUtils.dateOnly(newDay);
@@ -66,7 +66,7 @@ class TodayBean extends ValueNotifier<List<TimeBooking>> {
     Duration breakTime = Duration.zero;
     TimeBooking? lastBooking;
     for (final b in value.reversed) {
-      if (lastBooking != null) {
+      if (lastBooking != null && lastBooking.end != null) {
         _log.debug('Diff ${lastBooking.end} -> ${b.start}');
         breakTime += b.start.difference(lastBooking.end!);
       }
