@@ -9,7 +9,7 @@ import 'package:time_tracker/statistic/page/statistic_list_page.dart';
 class HomePage extends StatefulWidget {
   final AppContainer _container;
 
-  const HomePage(this._container, {Key? key}) : super(key: key);
+  const HomePage(this._container, {super.key});
 
   @override
   _HomePageState createState() => _HomePageState();
@@ -35,7 +35,7 @@ class _HomePageState extends State<HomePage> {
     return Scaffold(
       body: _pages[_index],
       bottomNavigationBar: BottomNavigationBar(
-        items: const <BottomNavigationBarItem>[
+        items: <BottomNavigationBarItem>[
           BottomNavigationBarItem(
             icon: Icon(MdiIcons.calendarToday),
             label: 'Heute',
@@ -44,7 +44,7 @@ class _HomePageState extends State<HomePage> {
             icon: Icon(MdiIcons.calendar),
             label: 'Statistik',
           ),
-          BottomNavigationBarItem(
+          const BottomNavigationBarItem(
             icon: Icon(Icons.view_day),
             label: 'Buchungshistorie',
           ),

@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:time_tracker/booking/entity/time_booking.dart';
@@ -9,13 +8,15 @@ import 'package:time_tracker/common/list/dismissible_backgrounds.dart';
 import 'package:time_tracker/common/widget/label_text_widget.dart';
 
 class TimeBookingListItem extends StatelessWidget {
-
   final TimeBooking booking;
   final Function(TimeBooking b) deleteFn;
   final Function(TimeBooking b) editFn;
-  const TimeBookingListItem(this.booking, this.editFn, this.deleteFn,
-      {Key? key,})
-      : super(key: key);
+  const TimeBookingListItem(
+    this.booking,
+    this.editFn,
+    this.deleteFn, {
+    super.key,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -43,22 +44,29 @@ class TimeBookingListItem extends StatelessWidget {
     Widget end;
     Widget icon;
     if (booking.end == null) {
-      icon = const Icon(MdiIcons.clockFast);
+      icon = Icon(MdiIcons.clockFast);
       end = Expanded(child: Container());
     } else {
       icon = DurationIconWidget(booking.workTime);
       end = Expanded(child: LabelTextWidget.ofTime("Ende", booking.end));
     }
     return InkWell(
-        child: Padding(
-          padding: const EdgeInsets.all(16),
-          child: Row(children: [
-            Padding(padding: const  EdgeInsets.fromLTRB(0, 0, 16, 0), child: icon),
+      child: Padding(
+        padding: const EdgeInsets.all(16),
+        child: Row(
+          children: [
+            Padding(
+              padding: const EdgeInsets.fromLTRB(0, 0, 16, 0),
+              child: icon,
+            ),
             Expanded(child: LabelTextWidget.ofTime("Beginn", booking.start)),
             end,
-            Expanded(child: LabelTextWidget.ofDuration("Dauer", booking.workTime)),
-          ],),
+            Expanded(
+              child: LabelTextWidget.ofDuration("Dauer", booking.workTime),
+            ),
+          ],
         ),
+      ),
       onLongPress: () {
         FeedbackFixed.touch(context);
         editFn(booking);

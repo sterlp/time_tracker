@@ -4,16 +4,24 @@ import 'package:time_tracker/common/time_util.dart';
 
 class BookingsStatisticWidget extends StatelessWidget {
   final DailyBookingStatisticList listStats;
-  const BookingsStatisticWidget(this.listStats, {Key? key})
-      : super(key: key);
+  const BookingsStatisticWidget(this.listStats, {super.key});
 
   @override
   Widget build(BuildContext context) {
     return Column(
       children: [
-        KeyValueWidget('Überstunden gesamt:', toDurationHoursAndMinutes(listStats.sumOverHours)),
-        KeyValueWidget('Ø Arbeitszeit:', toDurationHoursAndMinutes(listStats.avgWorkTime)),
-        KeyValueWidget('Ø Pausenzeit:', toDurationHoursAndMinutes(listStats.avgBreakTime)),
+        KeyValueWidget(
+          'Überstunden gesamt:',
+          toDurationHoursAndMinutes(listStats.sumOverHours),
+        ),
+        KeyValueWidget(
+          'Ø Arbeitszeit:',
+          toDurationHoursAndMinutes(listStats.avgWorkTime),
+        ),
+        KeyValueWidget(
+          'Ø Pausenzeit:',
+          toDurationHoursAndMinutes(listStats.avgBreakTime),
+        ),
       ],
     );
   }
@@ -22,11 +30,11 @@ class BookingsStatisticWidget extends StatelessWidget {
 class KeyValueWidget extends StatelessWidget {
   final String _key;
   final String _value;
-  const KeyValueWidget(this._key, this._value, {Key? key}) : super(key: key);
+  const KeyValueWidget(this._key, this._value, {super.key});
 
   @override
   Widget build(BuildContext context) {
-    final headStyle = Theme.of(context).textTheme.headline6;
+    final headStyle = Theme.of(context).textTheme.titleLarge;
     const padding = EdgeInsets.fromLTRB(16, 8, 16, 0);
     return Padding(
       padding: padding,
@@ -37,15 +45,18 @@ class KeyValueWidget extends StatelessWidget {
             flex: 3,
             child: FittedBox(
               alignment: Alignment.centerLeft,
-              child: Text(_key, style: headStyle,),
+              child: Text(_key, style: headStyle),
               fit: BoxFit.scaleDown,
             ),
           ),
           Container(width: 64),
-          Expanded(flex: 2, child: FittedBox(
-            alignment: Alignment.centerRight,
-            child: Text(_value, textScaleFactor: 1.3),
-            fit: BoxFit.scaleDown,),
+          Expanded(
+            flex: 2,
+            child: FittedBox(
+              alignment: Alignment.centerRight,
+              child: Text(_value, textScaler: const TextScaler.linear(1.3)),
+              fit: BoxFit.scaleDown,
+            ),
           ),
         ],
       ),

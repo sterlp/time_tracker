@@ -18,9 +18,9 @@ class LoadingWidget extends StatelessWidget {
               width: 60,
             ),
             const SizedBox(height: 24),
-            Text(caption, style: Theme.of(context).textTheme.headline5)
-          ]
-        )
+            Text(caption, style: Theme.of(context).textTheme.headlineSmall),
+          ],
+        ),
       ),
     );
   }

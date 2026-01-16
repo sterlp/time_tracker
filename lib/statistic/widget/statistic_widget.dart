@@ -10,14 +10,14 @@ class StatisticWidget extends StatelessWidget {
   final StatsEntity item;
   final GestureLongPressCallback? onLongPress;
 
-  const StatisticWidget({required this.item, this.onLongPress, Key? key}) : super(key: key);
+  const StatisticWidget({required this.item, this.onLongPress, super.key});
 
   @override
   Widget build(BuildContext context) {
     const space = TableRow(
-      children: [SizedBox(height: 6,), SizedBox(height: 6,)],
+      children: [SizedBox(height: 6), SizedBox(height: 6)],
     );
-    final valueStyle = Theme.of(context).textTheme.subtitle1;
+    final valueStyle = Theme.of(context).textTheme.titleMedium;
 
     return LabeledCardWidget(
       item.title,
@@ -25,36 +25,69 @@ class StatisticWidget extends StatelessWidget {
         children: [
           TableRow(
             children: [
-              LabelTextWidget('erster Arbeitstag', DateTimeUtil.formatWithString(item.start, 'E dd.MM.yyyy')),
-              LabelTextWidget('letzter Arbeitstag', DateTimeUtil.formatWithString(item.end, 'E dd.MM.yyyy')),
+              LabelTextWidget(
+                'erster Arbeitstag',
+                DateTimeUtil.formatWithString(item.start, 'E dd.MM.yyyy'),
+              ),
+              LabelTextWidget(
+                'letzter Arbeitstag',
+                DateTimeUtil.formatWithString(item.end, 'E dd.MM.yyyy'),
+              ),
             ],
           ),
           space,
           TableRow(
             children: [
-              LabelTextWidget('Tage gearbeitet', item.statisticList.count.toString()),
-              LabeledWidget('Überstunden', child: Text(toDurationHoursAndMinutes(item.statisticList.sumOverHours), style: valueStyle,)),
+              LabelTextWidget(
+                'Tage gearbeitet',
+                item.statisticList.count.toString(),
+              ),
+              LabeledWidget(
+                'Überstunden',
+                child: Text(
+                  toDurationHoursAndMinutes(item.statisticList.sumOverHours),
+                  style: valueStyle,
+                ),
+              ),
             ],
           ),
           space,
           TableRow(
             children: [
-              LabelTextWidget.ofDuration('Std gearbeitet', item.statisticList.sumWorkedTime),
-              LabelTextWidget.ofDuration('Ø Std gearbeitet', item.statisticList.avgWorkTime),
+              LabelTextWidget.ofDuration(
+                'Std gearbeitet',
+                item.statisticList.sumWorkedTime,
+              ),
+              LabelTextWidget.ofDuration(
+                'Ø Std gearbeitet',
+                item.statisticList.avgWorkTime,
+              ),
             ],
           ),
           space,
           TableRow(
             children: [
-              LabelTextWidget.ofDuration('Sollarbeitszeit', item.statisticList.sumPlannedWorkTime),
-              LabelTextWidget.ofDuration('Ø Sollarbeitszeit', item.statisticList.avgPlannedWorkTime),
+              LabelTextWidget.ofDuration(
+                'Sollarbeitszeit',
+                item.statisticList.sumPlannedWorkTime,
+              ),
+              LabelTextWidget.ofDuration(
+                'Ø Sollarbeitszeit',
+                item.statisticList.avgPlannedWorkTime,
+              ),
             ],
           ),
           space,
           TableRow(
             children: [
-              LabelTextWidget.ofDuration('Pause', item.statisticList.sumBreakTime),
-              LabelTextWidget.ofDuration('Ø Pause', item.statisticList.avgBreakTime),
+              LabelTextWidget.ofDuration(
+                'Pause',
+                item.statisticList.sumBreakTime,
+              ),
+              LabelTextWidget.ofDuration(
+                'Ø Pause',
+                item.statisticList.avgBreakTime,
+              ),
             ],
           ),
         ],

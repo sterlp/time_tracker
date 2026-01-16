@@ -14,9 +14,10 @@ import 'package:time_tracker/common/widget/date_time_form_field.dart';
 import 'package:time_tracker/common/widget/form/duration_form_field.dart';
 
 Future<TimeBooking?> showEditBookingPage(
-    BuildContext context,
-    AppContainer container,
-    {TimeBooking? booking,}) {
+  BuildContext context,
+  AppContainer container, {
+  TimeBooking? booking,
+}) {
   final b = booking ?? TimeBooking.now();
   return Navigator.push<TimeBooking>(
     context,
@@ -25,10 +26,10 @@ Future<TimeBooking?> showEditBookingPage(
 }
 
 Future<TimeBooking?> showBookingPageWithCallback(
-    BuildContext context,
-    AppContainer container,
-    {TimeBooking? booking,}) {
-
+  BuildContext context,
+  AppContainer container, {
+  TimeBooking? booking,
+}) {
   FeedbackFixed.touch(context);
   return showEditBookingPage(context, container, booking: booking);
 }
@@ -59,11 +60,14 @@ class _EditBookingPageState extends State<EditBookingPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(_booking.id == null ? 'Neue Buchung' : 'Buchung bearbeiten'),
+        title: Text(
+          _booking.id == null ? 'Neue Buchung' : 'Buchung bearbeiten',
+        ),
         actions: [
-          IconButton(onPressed:
-            _valid ? FeedbackFixed.wrapTouch(_save, context) : null,
-            icon: const Icon(Icons.done),),
+          IconButton(
+            onPressed: _valid ? FeedbackFixed.wrapTouch(_save, context) : null,
+            icon: const Icon(Icons.done),
+          ),
         ],
       ),
       body: Form(
@@ -102,7 +106,7 @@ class _EditBookingPageState extends State<EditBookingPage> {
                 padding: const EdgeInsets.fromLTRB(0, 16, 0, 0),
                 child: ElevatedButton.icon(
                   onPressed: _showBreakDialog,
-                  icon: const Icon(MdiIcons.coffeeToGoOutline),
+                  icon: Icon(MdiIcons.coffeeToGoOutline),
                   label: const Text('Pause einfügen'),
                   style: OutlinedButton.styleFrom(
                     minimumSize: const Size.fromHeight(40),
@@ -111,7 +115,7 @@ class _EditBookingPageState extends State<EditBookingPage> {
               ),
               ElevatedButton.icon(
                 onPressed: _booking.id == null ? null : _doDelete,
-                icon: const Icon(MdiIcons.delete),
+                icon: Icon(MdiIcons.delete),
                 label: const Text('Löschen'),
                 style: OutlinedButton.styleFrom(
                   backgroundColor: Colors.redAccent,
@@ -131,43 +135,70 @@ class _EditBookingPageState extends State<EditBookingPage> {
     final durationToMidTime = endTime.difference(_booking.start).inMinutes ~/ 2;
     final breakStart = max(1, durationToMidTime - 15);
 
-    final breakTime = await showTimeRangePicker(
-      context: context,
-      fromText: "Pausenstart",
-      toText: "Pausenende",
-      paintingStyle: PaintingStyle.fill,
-      disabledTime: TimeRange(
-        startTime: endTime.add(const Duration(minutes: -1)).toTimeOfDay(),
-        endTime: _booking.start.add(const Duration(minutes: 1)).toTimeOfDay(),
-      ),
-      start: _booking.start.add(Duration(minutes: breakStart)).toTimeOfDay(),
-      end: _booking.start.add(Duration(minutes: breakStart == 1
-          ? breakStart + 1
-          : durationToMidTime + 15)).toTimeOfDay(),
-      interval: const Duration(minutes: 1),
-      ticks: 8,
-      strokeColor: Theme.of(context).primaryColor.withOpacity(0.5),
-      ticksColor: Colors.black,
-      labels: [
-        "24:00",
-        "03:00",
-        "06:00",
-        "09:00",
-        "12:00",
-        "15:00",
-        "18:00",
-        "21:00"
-      ].asMap().entries.map((e) => ClockLabel.fromIndex(idx: e.key, length: 8, text: e.value)).toList(),
-    ) as TimeRange?;
-
+    final breakTime =
+        await showTimeRangePicker(
+              context: context,
+              fromText: "Pausenstart",
+              toText: "Pausenende",
+              paintingStyle: PaintingStyle.fill,
+              disabledTime: TimeRange(
+                startTime: endTime
+                    .add(const Duration(minutes: -1))
+                    .toTimeOfDay(),
+                endTime: _booking.start
+                    .add(const Duration(minutes: 1))
+                    .toTimeOfDay(),
+              ),
+              start: _booking.start
+                  .add(Duration(minutes: breakStart))
+                  .toTimeOfDay(),
+              end: _booking.start
+                  .add(
+                    Duration(
+                      minutes: breakStart == 1
+                          ? breakStart + 1
+                          : durationToMidTime + 15,
+                    ),
+                  )
+                  .toTimeOfDay(),
+              interval: const Duration(minutes: 1),
+              ticks: 8,
+              strokeColor: Theme.of(context).primaryColor.withOpacity(0.5),
+              ticksColor: Colors.black,
+              labels:
+                  [
+                        "24:00",
+                        "03:00",
+                        "06:00",
+                        "09:00",
+                        "12:00",
+                        "15:00",
+                        "18:00",
+                        "21:00",
+                      ]
+                      .asMap()
+                      .entries
+                      .map(
+                        (e) => ClockLabel.fromIndex(
+                          idx: e.key,
+                          length: 8,
+                          text: e.value,
+                        ),
+                      )
+                      .toList(),
+            )
+            as TimeRange?;
 
     if (breakTime != null) {
-      await widget._container.get<BookingService>().addBreakToBooking (_booking, breakTime);
+      await widget._container.get<BookingService>().addBreakToBooking(
+        _booking,
+        breakTime,
+      );
       if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-          content: Text('Neue Pause eingefügt.'),
-        ),);
-        Navigator.pop(context, null);
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(const SnackBar(content: Text('Neue Pause eingefügt.')));
+        Navigator.pop(context);
       }
     }
   }
@@ -177,10 +208,14 @@ class _EditBookingPageState extends State<EditBookingPage> {
     if (r != null && r) {
       _booking = await widget._container.get<BookingService>().delete(_booking);
       if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-          content: Text('Buchung von ${toHoursWithMinutes(_booking.start)} Uhr gelöscht.'),
-        ),);
-        Navigator.pop(context, null);
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(
+              'Buchung von ${toHoursWithMinutes(_booking.start)} Uhr gelöscht.',
+            ),
+          ),
+        );
+        Navigator.pop(context);
       }
     }
   }
@@ -189,10 +224,12 @@ class _EditBookingPageState extends State<EditBookingPage> {
     _booking.targetWorkTime = workTime;
     _validate();
   }
+
   void _setStart(DateTime newDate) {
     _booking.start = newDate;
     _validate();
   }
+
   void _setEnd(DateTime newDate) {
     _booking.end = newDate;
     _validate();
@@ -208,8 +245,9 @@ class _EditBookingPageState extends State<EditBookingPage> {
     if (_formKey.currentState!.validate()) {
       _booking = await widget._container.get<BookingService>().save(_booking);
       if (mounted) {
-        ScaffoldMessenger.of(context)
-            .showSnackBar(const SnackBar(content: Text('Buchung gespeichert.')));
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(const SnackBar(content: Text('Buchung gespeichert.')));
         Navigator.pop(context, _booking);
       }
     }

@@ -6,26 +6,32 @@ class DailyConfigOverview extends StatelessWidget {
   final DateTime? workStarted;
   final Duration workedToday;
 
-  const DailyConfigOverview(this.targetWorkHours, this.workStarted, this.workedToday,
-      {Key? key,}) : super(key: key);
+  const DailyConfigOverview(
+    this.targetWorkHours,
+    this.workStarted,
+    this.workedToday, {
+    super.key,
+  });
 
   @override
   Widget build(BuildContext context) {
-    final textStyle = Theme.of(context).textTheme.subtitle1;
-    final valueStyle = Theme.of(context).textTheme.subtitle1;
-    final workEndTime = DateTime.now().add(targetWorkHours).subtract(workedToday);
+    final textStyle = Theme.of(context).textTheme.titleMedium;
+    final valueStyle = Theme.of(context).textTheme.titleMedium;
+    final workEndTime = DateTime.now()
+        .add(targetWorkHours)
+        .subtract(workedToday);
     final rows = <TableRow>[];
     if (workStarted != null) {
       rows.add(
         _keyValueRow(
-          Text('Arbeitsbeginn:', style: textStyle,),
+          Text('Arbeitsbeginn:', style: textStyle),
           Text('${toHoursWithMinutes(workStarted)} Uhr', style: valueStyle),
         ),
       );
     }
     rows.add(
       _keyValueRow(
-        Text('Arbeitsende:', style: textStyle,),
+        Text('Arbeitsende:', style: textStyle),
         Text('${toHoursWithMinutes(workEndTime)} Uhr', style: valueStyle),
       ),
     );
@@ -36,25 +42,17 @@ class DailyConfigOverview extends StatelessWidget {
   }
 
   TableRow _keyValueRow(Widget key, Widget value) {
-    return TableRow(
-      children: [
-        _rowLabel(key),
-        _rowValue(value),
-      ],
-    );
+    return TableRow(children: [_rowLabel(key), _rowValue(value)]);
   }
 
   Padding _rowValue(Widget value) {
     return Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 2),
-        child: value,
-      );
+      padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 2),
+      child: value,
+    );
   }
 
   Container _rowLabel(Widget key) {
-    return Container(
-        alignment: Alignment.centerRight,
-        child: _rowValue(key),
-      );
+    return Container(alignment: Alignment.centerRight, child: _rowValue(key));
   }
 }
