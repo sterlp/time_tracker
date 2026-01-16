@@ -2,81 +2,72 @@ import 'package:flutter/material.dart';
 import 'package:sqflite_entities/converter/date_util.dart';
 import 'package:time_tracker/common/feedback.dart';
 
-class DateTimeFormField extends StatefulWidget {
-  final DateTime? initialDateTime;
+class DateTimeFormField extends StatelessWidget {
+  final DateTime? dateTime;
   final DateTime? firstDateTime;
   final DateTime? lastDateTime;
-  final ValueChanged<DateTime> onChanged;
+  final ValueChanged<DateTime?> onChanged;
   final InputDecoration decoration;
   final FormFieldValidator<DateTime?>? validator;
+  final bool clearable;
 
-  const DateTimeFormField(this.initialDateTime, this.onChanged,
+  const DateTimeFormField(this.dateTime, this.onChanged,
       {super.key,
         this.decoration = const InputDecoration(),
         this.firstDateTime,
         this.lastDateTime,
         this.validator,
+        this.clearable = false,
       });
 
-  @override
-  State<DateTimeFormField> createState() => _DateTimeFormFieldState();
-}
+  String get _displayText => dateTime != null
+      ? "${DateTimeUtil.formatWithString(dateTime, 'EEEE, dd.MM.yyyy, HH:mm')} Uhr"
+      : '';
 
-class _DateTimeFormFieldState extends State<DateTimeFormField> {
-  DateTime? _dateTime;
-  final _controller = TextEditingController();
-
-  @override
-  void initState() {
-    super.initState();
-    _dateTime = widget.initialDateTime;
-  }
-
-  @override
-  void dispose() {
-    _controller.dispose();
-    super.dispose();
-  }
+  bool get _showClearButton => clearable && dateTime != null;
 
   @override
   Widget build(BuildContext context) {
-    if (_dateTime != null) {
-      _controller.text =
-        "${DateTimeUtil.formatWithString(_dateTime, 'EEEE, dd.MM.yyyy, HH:mm')} Uhr";
-    }
     return TextFormField(
-      controller: _controller,
+      key: ValueKey(dateTime),
+      initialValue: _displayText,
       readOnly: true,
-      onTap: FeedbackFixed.wrapTouch(() =>  _pickNewDate(context), context),
-      decoration: widget.decoration,
-      validator: widget.validator == null ? null : _validate,
+      onTap: FeedbackFixed.wrapTouch(() => _pickNewDate(context), context),
+      decoration: decoration.copyWith(
+        suffixIcon: _showClearButton
+            ? IconButton(
+                onPressed: () => onChanged(null),
+                icon: const Icon(Icons.clear),
+                tooltip: 'Löschen',
+              )
+            : null,
+      ),
+      validator: validator == null ? null : (_) => validator!(dateTime),
     );
-  }
-
-  String? _validate(String? v) {
-    if (widget.validator != null) return widget.validator!(_dateTime);
-    else return null;
   }
 
   Future<void> _pickNewDate(BuildContext context) async {
-    final currentDate = _dateTime ?? widget.firstDateTime ?? DateTime.now();
+    final now = DateTime.now();
+    final currentDate = dateTime ?? firstDateTime ?? now;
     var newDate = await showDatePicker(context: context,
       initialDate: currentDate,
-      firstDate: widget.firstDateTime ?? currentDate.add(const Duration(days: -30)),
-      lastDate: widget.lastDateTime ?? currentDate.add(const Duration(days: 30)),
+      firstDate: firstDateTime ?? currentDate.add(const Duration(days: -30)),
+      lastDate: lastDateTime ?? currentDate.add(const Duration(days: 30)),
       confirmText: 'UHRZEIT WÄHLEN',
     );
-    if (newDate != null && mounted) {
+    if (newDate != null && context.mounted) {
+      // Use current time if no dateTime set and now is after firstDateTime
+      final initialTime = dateTime != null
+          ? TimeOfDay(hour: dateTime!.hour, minute: dateTime!.minute)
+          : (firstDateTime != null && now.isAfter(firstDateTime!))
+              ? TimeOfDay(hour: now.hour, minute: now.minute)
+              : TimeOfDay(hour: currentDate.hour, minute: currentDate.minute);
       final newTime = await showTimePicker(context: context,
-        initialTime: TimeOfDay(hour: currentDate.hour, minute: currentDate.minute),
+        initialTime: initialTime,
       );
       if (newTime != null) {
-        setState(() {
-          _dateTime = newDate = DateTimeUtil.asDateTime(newDate!, newTime);
-        });
-        _controller.text = '${DateTimeUtil.formatWithString(newDate,
-            'EEEE, dd.MM.yyyy, HH:mm', null)} Uhr';
-        widget.onChanged(newDate!);
+        newDate = DateTimeUtil.asDateTime(newDate, newTime);
+        onChanged(newDate);
       }
     }
   }

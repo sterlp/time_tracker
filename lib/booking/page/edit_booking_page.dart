@@ -1,16 +1,15 @@
-import 'dart:math';
-
 import 'package:dependency_container/dependency_container.dart';
 import 'package:flutter/material.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:sqflite_entities/converter/date_util.dart';
-import 'package:time_range_picker/time_range_picker.dart';
 import 'package:time_tracker/booking/entity/time_booking.dart';
 import 'package:time_tracker/booking/service/booking_service.dart';
+import 'package:time_tracker/booking/widget/break_picker_dialog.dart';
 import 'package:time_tracker/booking/widget/delete_booking_dialog.dart';
 import 'package:time_tracker/common/feedback.dart';
 import 'package:time_tracker/common/time_util.dart';
 import 'package:time_tracker/common/widget/date_time_form_field.dart';
+import 'package:time_tracker/common/widget/duration_summary_card.dart';
 import 'package:time_tracker/common/widget/form/duration_form_field.dart';
 
 Future<TimeBooking?> showEditBookingPage(
@@ -85,6 +84,7 @@ class _EditBookingPageState extends State<EditBookingPage> {
               DateTimeFormField(
                 _booking.end,
                 _setEnd,
+                clearable: true,
                 validator: (value) {
                   String? msg;
                   if (_booking.end == null) {
@@ -102,10 +102,15 @@ class _EditBookingPageState extends State<EditBookingPage> {
                 decoration: const InputDecoration(label: Text('Tagessoll')),
                 onChanged: _setWorkTime,
               ),
+              if (_booking.end != null && _booking.end!.isAfter(_booking.start))
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(0, 16, 0, 0),
+                  child: DurationSummaryCard(duration: _booking.workTime),
+                ),
               Padding(
                 padding: const EdgeInsets.fromLTRB(0, 16, 0, 0),
                 child: ElevatedButton.icon(
-                  onPressed: _showBreakDialog,
+                  onPressed: _doAddBreak,
                   icon: Icon(MdiIcons.coffeeToGoOutline),
                   label: const Text('Pause einfügen'),
                   style: OutlinedButton.styleFrom(
@@ -129,75 +134,16 @@ class _EditBookingPageState extends State<EditBookingPage> {
     );
   }
 
-  Future<void> _showBreakDialog() async {
-    final endTime = _booking.end != null ? _booking.end! : DateTime.now();
-
-    final durationToMidTime = endTime.difference(_booking.start).inMinutes ~/ 2;
-    final breakStart = max(1, durationToMidTime - 15);
-
-    final breakTime =
-        await showTimeRangePicker(
-              context: context,
-              fromText: "Pausenstart",
-              toText: "Pausenende",
-              paintingStyle: PaintingStyle.fill,
-              disabledTime: TimeRange(
-                startTime: endTime
-                    .add(const Duration(minutes: -1))
-                    .toTimeOfDay(),
-                endTime: _booking.start
-                    .add(const Duration(minutes: 1))
-                    .toTimeOfDay(),
-              ),
-              start: _booking.start
-                  .add(Duration(minutes: breakStart))
-                  .toTimeOfDay(),
-              end: _booking.start
-                  .add(
-                    Duration(
-                      minutes: breakStart == 1
-                          ? breakStart + 1
-                          : durationToMidTime + 15,
-                    ),
-                  )
-                  .toTimeOfDay(),
-              interval: const Duration(minutes: 1),
-              ticks: 8,
-              strokeColor: Theme.of(context).primaryColor.withValues(alpha: 0.5),
-              ticksColor: Colors.black,
-              labels:
-                  [
-                        "24:00",
-                        "03:00",
-                        "06:00",
-                        "09:00",
-                        "12:00",
-                        "15:00",
-                        "18:00",
-                        "21:00",
-                      ]
-                      .asMap()
-                      .entries
-                      .map(
-                        (e) => ClockLabel.fromIndex(
-                          idx: e.key,
-                          length: 8,
-                          text: e.value,
-                        ),
-                      )
-                      .toList(),
-            )
-            as TimeRange?;
-
+  Future<void> _doAddBreak() async {
+    final breakTime = await showBreakPickerDialog(context, _booking);
     if (breakTime != null) {
       await widget._container.get<BookingService>().addBreakToBooking(
         _booking,
         breakTime,
       );
       if (mounted) {
-        ScaffoldMessenger.of(
-          context,
-        ).showSnackBar(const SnackBar(content: Text('Neue Pause eingefügt.')));
+        ScaffoldMessenger.of(context)
+            .showSnackBar(const SnackBar(content: Text('Neue Pause eingefügt.')));
         Navigator.pop(context);
       }
     }
@@ -225,13 +171,15 @@ class _EditBookingPageState extends State<EditBookingPage> {
     _validate();
   }
 
-  void _setStart(DateTime newDate) {
-    _booking.start = newDate;
-    _validate();
+  void _setStart(DateTime? newDate) {
+    if (newDate != null) {
+      setState(() => _booking.start = newDate);
+      _validate();
+    }
   }
 
-  void _setEnd(DateTime newDate) {
-    _booking.end = newDate;
+  void _setEnd(DateTime? newDate) {
+    setState(() => _booking.end = newDate);
     _validate();
   }
 

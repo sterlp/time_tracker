@@ -12,7 +12,7 @@ class LabeledCardWidget extends StatelessWidget {
 
     return Card(
       margin: const EdgeInsets.fromLTRB(16, 16, 16, 0),
-      elevation: 8,
+      elevation: 2,
       child: InkWell(
         onLongPress: onLongPress,
         child: Padding(

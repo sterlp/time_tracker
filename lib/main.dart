@@ -47,8 +47,8 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Zeiterfassung',
-      darkTheme: ThemeData.dark(),
-      theme: ThemeData.light(),
+      darkTheme: ThemeData.dark(useMaterial3: true),
+      theme: ThemeData.light(useMaterial3: true),
       supportedLocales: const [
         Locale('de', '')
       ],

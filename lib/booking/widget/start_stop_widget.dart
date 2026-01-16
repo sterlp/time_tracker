@@ -93,7 +93,7 @@ class StartAndStopWidget extends StatelessWidget {
       style: ElevatedButton.styleFrom(
         enableFeedback: true,
         shape: const CircleBorder(),
-        elevation: 8.0,
+        elevation: 3.0,
         fixedSize: Size(widgetSize, widgetSize),
         backgroundColor: color,
       ),
