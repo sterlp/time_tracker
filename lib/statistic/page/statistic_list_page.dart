@@ -9,14 +9,11 @@ import 'package:time_tracker/common/logger.dart';
 import 'package:time_tracker/statistic/entity/overview_stats.dart';
 import 'package:time_tracker/statistic/widget/statistic_widget.dart';
 
-enum _Statistic {
-  week,
-  month,
-}
+enum _Statistic { week, month }
 
 class StatisticListPage extends StatefulWidget {
   final AppContainer _container;
-  const StatisticListPage(this._container, {Key? key}) : super(key: key);
+  const StatisticListPage(this._container, {super.key});
 
   @override
   State<StatisticListPage> createState() => _StatisticListPageState();
@@ -44,13 +41,23 @@ class _StatisticListPageState extends State<StatisticListPage> {
                 _reload();
               }
             },
-            itemBuilder: (context) => const [
-              PopupMenuItem<_Statistic>(value: _Statistic.week,
-                  child: ListTile(leading: Icon(MdiIcons.calendarWeek), title: Text("Wochenübersicht")),),
-              PopupMenuItem<_Statistic>(value: _Statistic.month,
-                child: ListTile(leading: Icon(MdiIcons.calendarMonth), title: Text("Monatsübersicht")),),
+            itemBuilder: (context) => [
+              PopupMenuItem<_Statistic>(
+                value: _Statistic.week,
+                child: ListTile(
+                  leading: Icon(MdiIcons.calendarWeek),
+                  title: const Text("Wochenübersicht"),
+                ),
+              ),
+              PopupMenuItem<_Statistic>(
+                value: _Statistic.month,
+                child: ListTile(
+                  leading: Icon(MdiIcons.calendarMonth),
+                  title: const Text("Monatsübersicht"),
+                ),
+              ),
             ],
-          )
+          ),
         ],
       ),
       body: _buildWeekListView(context),
@@ -73,7 +80,12 @@ class _StatisticListPageState extends State<StatisticListPage> {
         return StatisticWidget(
           item: item,
           onLongPress: () async {
-            await showBookingListPage(context, widget._container, item.start, item.end);
+            await showBookingListPage(
+              context,
+              widget._container,
+              item.start,
+              item.end,
+            );
             if (mounted) _reload();
           },
         );

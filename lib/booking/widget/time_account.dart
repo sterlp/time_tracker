@@ -11,23 +11,29 @@ class TimeAccount extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final textStyle = Theme.of(context).textTheme.subtitle1;
-    final headStyle = Theme.of(context).textTheme.headline6;
+    final textStyle = Theme.of(context).textTheme.titleMedium;
+    final headStyle = Theme.of(context).textTheme.titleLarge;
 
     return Table(
       children: [
         TableRow(
           children: [
-            Center(child: Text('Soll', style: headStyle,)),
-            Center(child: Text('Ist', style: headStyle,)),
-            Center(child: Text('Pause', style: headStyle,)),
+            Center(child: Text('Soll', style: headStyle)),
+            Center(child: Text('Ist', style: headStyle)),
+            Center(child: Text('Pause', style: headStyle)),
           ],
         ),
-        TableRow(children: [
-          Center(child: Text(toDurationHoursAndMinutes(target), style: textStyle)),
-          Center(child: WorkTimeWidget(done, target, style: textStyle,)),
-          Center(child: Text(toDurationHoursAndMinutes(pause), style: textStyle)),
-        ],),
+        TableRow(
+          children: [
+            Center(
+              child: Text(toDurationHoursAndMinutes(target), style: textStyle),
+            ),
+            Center(child: WorkTimeWidget(done, target, style: textStyle)),
+            Center(
+              child: Text(toDurationHoursAndMinutes(pause), style: textStyle),
+            ),
+          ],
+        ),
       ],
     );
   }

@@ -4,11 +4,11 @@ class LabeledCardWidget extends StatelessWidget {
   final String head;
   final Widget child;
   final GestureLongPressCallback? onLongPress;
-  const LabeledCardWidget(this.head, this.child, {Key? key, this.onLongPress}) : super(key: key);
+  const LabeledCardWidget(this.head, this.child, {super.key, this.onLongPress});
 
   @override
   Widget build(BuildContext context) {
-    final headStyle = Theme.of(context).textTheme.headline6;
+    final headStyle = Theme.of(context).textTheme.titleLarge;
 
     return Card(
       margin: const EdgeInsets.fromLTRB(16, 16, 16, 0),
@@ -21,7 +21,7 @@ class LabeledCardWidget extends StatelessWidget {
             children: [
               Padding(
                 padding: const EdgeInsets.fromLTRB(0, 0, 0, 8),
-                child: Text(head, style: headStyle,),
+                child: Text(head, style: headStyle),
               ),
               child,
             ],

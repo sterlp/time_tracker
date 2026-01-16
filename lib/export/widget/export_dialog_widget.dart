@@ -14,7 +14,7 @@ import 'package:time_tracker/export/widget/export_by_month.dart';
 
 class ExportDataWidget extends StatefulWidget {
   final AppContainer _container;
-  const ExportDataWidget(this._container, {Key? key}) : super(key: key);
+  const ExportDataWidget(this._container, {super.key});
 
   @override
   State<ExportDataWidget> createState() => _ExportDataWidgetState();
@@ -34,14 +34,15 @@ class _ExportDataWidgetState extends State<ExportDataWidget> {
           DrawerHeader(
             child: Text(
               'Menü',
-              style: Theme.of(context).textTheme.headline4,
+              style: Theme.of(context).textTheme.headlineMedium,
             ),
           ),
           ListTile(
-            leading: const Icon(MdiIcons.wrenchClock),
+            leading: Icon(MdiIcons.wrenchClock),
             title: const Text('Tagesarbeitszeit'),
-            subtitle:
-                Text(toDurationHoursAndMinutes(config.getDailyWorkHours())),
+            subtitle: Text(
+              toDurationHoursAndMinutes(config.getDailyWorkHours()),
+            ),
             onTap: () => _updateWorkTime(context),
           ),
           ListTile(
@@ -69,7 +70,7 @@ class _ExportDataWidgetState extends State<ExportDataWidget> {
             leading: const Icon(Icons.settings),
             title: const Text('Export konfigurieren'),
             onTap: () => showConfigureExportPage(context, widget._container),
-          )
+          ),
         ],
       ),
     );
@@ -95,11 +96,9 @@ class _ExportDataWidgetState extends State<ExportDataWidget> {
   Future<void> _createDataBackup() async {
     final now = DateTime.now();
     final f = await widget._container.get<ExportService>().exportAllToFile(
-          fileName: 'Datensicherung ${now.month}-${now.year}.csv',
-        );
-    await Share.shareXFiles(
-      [XFile(f.path, mimeType: 'text/csv')],
+      fileName: 'Datensicherung ${now.month}-${now.year}.csv',
     );
+    await Share.shareXFiles([XFile(f.path, mimeType: 'text/csv')]);
     f.delete();
   }
 
@@ -114,15 +113,14 @@ class _ExportDataWidgetState extends State<ExportDataWidget> {
       SnackBar message;
       try {
         final csvData = await File(result.files.single.path!).readAsString();
-        final imported =
-            await widget._container.get<ExportService>().importBackup(csvData);
+        final imported = await widget._container
+            .get<ExportService>()
+            .importBackup(csvData);
         message = SnackBar(
           content: Text('${imported.length} Buchungen importiert.'),
         );
       } on Exception catch (e) {
-        message = SnackBar(
-          content: Text('Fehler: $e'),
-        );
+        message = SnackBar(content: Text('Fehler: $e'));
       }
       if (mounted) ScaffoldMessenger.of(context).showSnackBar(message);
     }
