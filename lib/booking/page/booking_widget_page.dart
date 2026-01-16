@@ -13,7 +13,7 @@ import 'package:time_tracker/export/widget/export_dialog_widget.dart';
 
 class BookingWidgetPage extends StatefulWidget {
   final AppContainer _container;
-  const BookingWidgetPage(this._container, {Key? key}) : super(key: key);
+  const BookingWidgetPage(this._container, {super.key});
 
   @override
   State<BookingWidgetPage> createState() => _BookingWidgetPageState();

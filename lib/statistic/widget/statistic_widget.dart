@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:sqflite_entities/converter/date_util.dart';
-import 'package:time_tracker/booking/widget/work_time_widget.dart';
 import 'package:time_tracker/common/time_util.dart';
 import 'package:time_tracker/common/widget/label_text_widget.dart';
 import 'package:time_tracker/common/widget/labeled_card_widget.dart';

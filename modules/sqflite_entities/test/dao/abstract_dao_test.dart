@@ -1,5 +1,4 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:sqflite/sqlite_api.dart';
 import 'package:sqflite_common_ffi/sqflite_ffi.dart';
 import 'package:sqflite_entities/dao/abstract_dao.dart';
 import 'package:sqflite_entities/entity/abstract_entity.dart';

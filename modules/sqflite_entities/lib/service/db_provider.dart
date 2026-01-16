@@ -28,7 +28,7 @@ class DbProvider {
   }
 
   Future<Database> _init() async {
-    final _completer = Completer<Database>();
+    final completer = Completer<Database>();
     Database db;
     try {
       if (_futureDb == null) {
@@ -38,12 +38,12 @@ class DbProvider {
       } else {
         db = await _createDB(await _futureDb!, 0, version);
       }
-      _completer.complete(db);
+      completer.complete(db);
     } on Exception catch (e, stack) {
       print('Failed to load DB $e\n$stack');
-      _completer.completeError(e);
+      completer.completeError(e);
     }
-    return _completer.future;
+    return completer.future;
   }
 
   Future<Database> _createDB(

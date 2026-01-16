@@ -28,7 +28,7 @@ class BookingListPage extends StatefulWidget {
   final AppContainer _container;
   final DateTime _from;
   final DateTime _to;
-  const BookingListPage(this._container, this._from, this._to, {Key? key}) : super(key: key);
+  const BookingListPage(this._container, this._from, this._to, {super.key});
 
   @override
   _BookingListPageState createState() => _BookingListPageState();
@@ -95,8 +95,8 @@ class _BookingListPageState extends State<BookingListPage> {
     final fileName = 'Datenexport ${fD.format(widget._from)} bis ${tD.format(widget._to)}.csv';
     final csvData = widget._container.get<ExportService>().toCsvData(_bookings!.value);
     final f = await widget._container.get<ExportService>().writeToFile(csvData, fileName: fileName);
-    await Share.shareXFiles(
-      [XFile(f.path, mimeType: 'text/csv', name: fileName)],
+    await SharePlus.instance.share(
+      ShareParams(files: [XFile(f.path, mimeType: 'text/csv', name: fileName)]),
     );
     f.delete();
   }

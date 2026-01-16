@@ -1,9 +1,9 @@
 
 import 'package:flutter_test/flutter_test.dart';
 import 'package:intl/date_symbol_data_local.dart';
-import 'package:time_tracker/booking/service/booking_service.dart';
 import 'package:time_tracker/booking/dao/time_booking_dao.dart';
 import 'package:time_tracker/booking/entity/time_booking.dart';
+import 'package:time_tracker/booking/service/booking_service.dart';
 import 'package:time_tracker/statistic/entity/overview_stats.dart';
 
 import '../../test_helper.dart';
@@ -72,7 +72,7 @@ Future<void> main() async {
     final weekBookings = await subject.fromTo(weeks[1].start, weeks[1].end);
 
     // THEN
-    for(var s in stats) {
+    for(final s in stats) {
       print('$s');
     }
     expect(weeks[1].start, DateTime.parse("2022-04-11 08:00:00"));

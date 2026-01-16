@@ -33,7 +33,7 @@ void main() {
     container.add<TodayBean>(todayBean);
   });
 
-  Future<void> _loadBookingWidgetPage(WidgetTester tester) {
+  Future<void> loadBookingWidgetPage(WidgetTester tester) {
     return tester.pumpWidget(MaterialApp(
         title: 'test',
         home: BookingWidgetPage(container),
@@ -42,7 +42,7 @@ void main() {
   }
   testWidgets('Load empty BookingWidgetPage', (WidgetTester tester) async {
     // GIVEN
-    await _loadBookingWidgetPage(tester);
+    await loadBookingWidgetPage(tester);
     // WHEN
     await tester.pumpAndSettle();
     // WHEN
@@ -55,7 +55,7 @@ void main() {
 
   testWidgets('Load yesterday BookingWidgetPage', (WidgetTester tester) async {
     // GIVEN
-    await _loadBookingWidgetPage(tester);
+    await loadBookingWidgetPage(tester);
     await tester.pumpAndSettle();
     // WHEN
     loadDay = [

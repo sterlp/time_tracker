@@ -6,7 +6,8 @@ import 'package:time_tracker/booking/widget/bookings_statistic_widget.dart';
 void main() {
   testWidgets('Load BookingsStatisticWidget', (WidgetTester tester) async {
     // GIVEN
-    await tester.pumpWidget(MaterialApp(
+    await tester.pumpWidget(
+      MaterialApp(
         title: 'test',
         home: BookingsStatisticWidget(DailyBookingStatisticList.of([])),
       ),
@@ -21,20 +22,36 @@ void main() {
     expect(find.text('Ø Pausenzeit:'), findsOneWidget);
   });
 
-  testWidgets('BookingsStatisticWidget shows work time', (WidgetTester tester) async {
+  testWidgets('BookingsStatisticWidget shows work time', (
+    WidgetTester tester,
+  ) async {
     // GIVEN
     final april4 = DateTime.parse("2012-04-04 08:00:00");
     final april5 = DateTime.parse("2012-04-05 08:00:00");
     const hours6 = Duration(hours: 6);
-    await tester.pumpWidget(MaterialApp(
+    await tester.pumpWidget(
+      MaterialApp(
         title: 'test',
         home: BookingsStatisticWidget(
-            DailyBookingStatisticList.of([
-              DailyBookingStatistic('2022-04-04', april4, april4.add(hours6), hours6, hours6, 1),
-              DailyBookingStatistic('2022-04-05', april5, april5.add(hours6),
-                const Duration(hours: 4 ,minutes: 30), const Duration(hours: 8), 1,),
+          DailyBookingStatisticList.of([
+            DailyBookingStatistic(
+              '2022-04-04',
+              april4,
+              april4.add(hours6),
+              hours6,
+              hours6,
+              1,
+            ),
+            DailyBookingStatistic(
+              '2022-04-05',
+              april5,
+              april5.add(hours6),
+              const Duration(hours: 4, minutes: 30),
+              const Duration(hours: 8),
+              1,
+            ),
           ]),
-        )
+        ),
       ),
     );
 

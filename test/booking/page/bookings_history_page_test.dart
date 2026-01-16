@@ -10,17 +10,17 @@ import 'package:time_tracker/booking/page/bookings_history_page.dart';
 import '../../test_helper.dart';
 
 void main() {
-  TimeBookingDao _timeBookingDao = TimeBookingDaoMock();
+  TimeBookingDao timeBookingDao = TimeBookingDaoMock();
   List<DailyBookingStatistic> stats = [];
   AppContainer container = AppContainer();
   setUpAll(() => initializeDateFormatting());
 
   setUp(() {
-    _timeBookingDao = TimeBookingDaoMock();
+    timeBookingDao = TimeBookingDaoMock();
     container = AppContainer();
-    container.add<TimeBookingDao>(_timeBookingDao);
+    container.add<TimeBookingDao>(timeBookingDao);
     stats = [];
-    when(() => _timeBookingDao.stats()).thenAnswer((_) => Future.value(stats));
+    when(() => timeBookingDao.stats()).thenAnswer((_) => Future.value(stats));
   });
 
   testWidgets('Load empty BookingsWeekPage', (WidgetTester tester) async {

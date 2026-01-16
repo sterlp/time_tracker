@@ -2,13 +2,12 @@
 
 import 'package:dependency_container/dependency_container.dart';
 import 'package:mocktail/mocktail.dart';
-import 'package:sqflite/sqflite.dart';
 import 'package:sqflite_common_ffi/sqflite_ffi.dart';
 import 'package:sqflite_entities/service/db_provider.dart';
-import 'package:time_tracker/booking/service/booking_service.dart';
-import 'package:time_tracker/booking/service/today_bean.dart';
 import 'package:time_tracker/booking/dao/time_booking_dao.dart';
 import 'package:time_tracker/booking/entity/time_booking.dart';
+import 'package:time_tracker/booking/service/booking_service.dart';
+import 'package:time_tracker/booking/service/today_bean.dart';
 import 'package:time_tracker/config/dao/config_dao.dart';
 import 'package:time_tracker/config/entity/config_entity.dart';
 import 'package:time_tracker/db/time_tracker_db.dart';

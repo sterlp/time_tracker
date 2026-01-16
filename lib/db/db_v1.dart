@@ -15,5 +15,4 @@ CREATE TABLE IF NOT EXISTS $table (
   value text
 );''');
   }
-
 }
