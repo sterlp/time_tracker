@@ -163,7 +163,7 @@ class _EditBookingPageState extends State<EditBookingPage> {
                   .toTimeOfDay(),
               interval: const Duration(minutes: 1),
               ticks: 8,
-              strokeColor: Theme.of(context).primaryColor.withOpacity(0.5),
+              strokeColor: Theme.of(context).primaryColor.withValues(alpha: 0.5),
               ticksColor: Colors.black,
               labels:
                   [

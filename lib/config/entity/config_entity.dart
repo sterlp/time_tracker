@@ -1,4 +1,3 @@
-import 'package:sqflite_entities/dao/abstract_map_dao.dart';
 import 'package:sqflite_entities/entity/attached_map.dart';
 
 class TimeTrackerConfig extends AttachedMap {

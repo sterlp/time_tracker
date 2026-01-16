@@ -11,7 +11,7 @@ import 'package:time_tracker/home/widget/loading_widget.dart';
 
 class BookingsHistoryPage extends StatefulWidget {
   final AppContainer _container;
-  const BookingsHistoryPage(this._container, {Key? key}) : super(key: key);
+  const BookingsHistoryPage(this._container, {super.key});
 
   @override
   _BookingsHistoryPageState createState() => _BookingsHistoryPageState();

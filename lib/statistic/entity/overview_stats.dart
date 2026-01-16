@@ -54,7 +54,7 @@ abstract class StatsEntity {
   }
   @override
   String toString() {
-    return '${runtimeType.toString()}[time=$time, statisticList=${statisticList.elements.length}]';
+    return '$runtimeType[time=$time, statisticList=${statisticList.elements.length}]';
   }
 }
 

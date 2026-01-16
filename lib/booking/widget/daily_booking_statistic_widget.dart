@@ -8,15 +8,15 @@ import 'package:time_tracker/common/widget/labeled_card_widget.dart';
 class DailyBookingStatisticWidget extends StatelessWidget {
   final DailyBookingStatistic item;
   final GestureLongPressCallback? onLongPress;
-  const DailyBookingStatisticWidget(this.item, {Key? key, this.onLongPress}) : super(key: key);
+  const DailyBookingStatisticWidget(this.item, {super.key, this.onLongPress});
 
   @override
   Widget build(BuildContext context) {
-    final _df = DateTimeUtil.getFormat('EEEE, dd.MM.yyyy');
+    final df = DateTimeUtil.getFormat('EEEE, dd.MM.yyyy');
     final breakTime = item.end.difference(item.start) - item.workedTime;
 
     return LabeledCardWidget(
-      _df.format(item.start),
+      df.format(item.start),
       Column(
         children: [
           ExpandedRowWidget(

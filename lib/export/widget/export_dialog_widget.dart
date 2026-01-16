@@ -98,7 +98,7 @@ class _ExportDataWidgetState extends State<ExportDataWidget> {
     final f = await widget._container.get<ExportService>().exportAllToFile(
       fileName: 'Datensicherung ${now.month}-${now.year}.csv',
     );
-    await Share.shareXFiles([XFile(f.path, mimeType: 'text/csv')]);
+    await SharePlus.instance.share(ShareParams(files: [XFile(f.path, mimeType: 'text/csv')]));
     f.delete();
   }
 

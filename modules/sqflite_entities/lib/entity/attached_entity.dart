@@ -12,11 +12,11 @@ class AttachedEntity<Entity extends AbstractEntity>
   bool _deleted = false;
 
   AttachedEntity(
-    Entity entity,
+    super.entity,
     this.doReloadCallback,
     this.doSaveCallback,
     this.doDeleteCallback,
-  ) : super(entity);
+  );
 
   bool isDeleted() => _deleted;
 

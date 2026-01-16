@@ -95,7 +95,7 @@ extension DateTimeExtension on DateTime {
 
     // If the week number equals 53, one must check that the date is not actually in week 1 of the following year
     if (woy == 53 &&
-        DateTime(year, 1, 1).weekday != DateTime.thursday &&
+        DateTime(year).weekday != DateTime.thursday &&
         DateTime(year, 12, 31).weekday != DateTime.thursday) {
       return 1;
     }

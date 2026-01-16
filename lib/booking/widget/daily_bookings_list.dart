@@ -13,7 +13,7 @@ class DailyBookingsList extends StatelessWidget {
   final String ignoreDay;
 
   const DailyBookingsList(this.items, this.editFn, this.deleteFn,
-      {Key? key, this.ignoreDay = "none", }) : super(key: key);
+      {super.key, this.ignoreDay = "none", });
 
   @override
   Widget build(BuildContext context) {

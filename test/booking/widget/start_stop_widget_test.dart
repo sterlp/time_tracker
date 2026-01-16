@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:time_tracker/booking/entity/time_booking_statistics.dart';
-import 'package:time_tracker/booking/widget/bookings_statistic_widget.dart';
 import 'package:time_tracker/booking/widget/start_stop_widget.dart';
 
 void main() {
