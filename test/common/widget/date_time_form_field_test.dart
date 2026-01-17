@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:intl/date_symbol_data_local.dart';
+import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:time_tracker/common/widget/date_time_form_field.dart';
 
 void main() {
+  final deleteIcon = MdiIcons.delete;
+
   setUpAll(() async {
     await initializeDateFormatting('de', null);
   });
@@ -44,15 +47,15 @@ void main() {
 
     // Initial state - date text is visible and clear button exists
     expect(find.textContaining('Uhr'), findsOneWidget);
-    expect(find.byIcon(Icons.clear), findsOneWidget);
+    expect(find.byIcon(deleteIcon), findsOneWidget);
 
     // WHEN - tap clear button
-    await tester.tap(find.byIcon(Icons.clear));
+    await tester.tap(find.byIcon(deleteIcon));
     await tester.pumpAndSettle();
 
     // THEN - date text should be gone and clear button should disappear
     expect(find.textContaining('Uhr'), findsNothing);
-    expect(find.byIcon(Icons.clear), findsNothing);
+    expect(find.byIcon(deleteIcon), findsNothing);
   });
 
   testWidgets('DateTimeFormField without clearable shows no clear button', (WidgetTester tester) async {
@@ -70,6 +73,6 @@ void main() {
 
     // THEN - date text visible but no clear button
     expect(find.textContaining('Uhr'), findsOneWidget);
-    expect(find.byIcon(Icons.clear), findsNothing);
+    expect(find.byIcon(deleteIcon), findsNothing);
   });
 }
