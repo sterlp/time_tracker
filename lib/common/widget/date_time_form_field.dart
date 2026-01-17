@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:sqflite_entities/converter/date_util.dart';
 import 'package:time_tracker/common/feedback.dart';
 
@@ -37,7 +38,7 @@ class DateTimeFormField extends StatelessWidget {
         suffixIcon: _showClearButton
             ? IconButton(
                 onPressed: () => onChanged(null),
-                icon: const Icon(Icons.clear),
+                icon: Icon(MdiIcons.delete),
                 tooltip: 'Löschen',
               )
             : null,

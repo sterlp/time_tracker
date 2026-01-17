@@ -109,7 +109,7 @@ class _EditBookingPageState extends State<EditBookingPage> {
                 ),
               Padding(
                 padding: const EdgeInsets.fromLTRB(0, 16, 0, 0),
-                child: ElevatedButton.icon(
+                child: OutlinedButton.icon(
                   onPressed: _doAddBreak,
                   icon: Icon(MdiIcons.coffeeToGoOutline),
                   label: const Text('Pause einfügen'),
@@ -118,12 +118,13 @@ class _EditBookingPageState extends State<EditBookingPage> {
                   ),
                 ),
               ),
-              ElevatedButton.icon(
+              OutlinedButton.icon(
                 onPressed: _booking.id == null ? null : _doDelete,
                 icon: Icon(MdiIcons.delete),
                 label: const Text('Löschen'),
                 style: OutlinedButton.styleFrom(
-                  backgroundColor: Colors.redAccent,
+                  foregroundColor: Colors.red,
+                  side: const BorderSide(color: Colors.red),
                   minimumSize: const Size.fromHeight(40),
                 ),
               ),
