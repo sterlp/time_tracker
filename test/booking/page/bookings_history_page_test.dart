@@ -6,21 +6,30 @@ import 'package:mocktail/mocktail.dart';
 import 'package:time_tracker/booking/dao/time_booking_dao.dart';
 import 'package:time_tracker/booking/entity/time_booking_statistics.dart';
 import 'package:time_tracker/booking/page/bookings_history_page.dart';
+import 'package:time_tracker/tag/entity/tag.dart';
+import 'package:time_tracker/tag/service/tag_service.dart';
 
 import '../../test_helper.dart';
 
+class TagServiceMock extends Mock implements TagService {}
+
 void main() {
   TimeBookingDao timeBookingDao = TimeBookingDaoMock();
+  TagService tagService = TagServiceMock();
   List<DailyBookingStatistic> stats = [];
   AppContainer container = AppContainer();
   setUpAll(() => initializeDateFormatting());
 
   setUp(() {
     timeBookingDao = TimeBookingDaoMock();
+    tagService = TagServiceMock();
     container = AppContainer();
     container.add<TimeBookingDao>(timeBookingDao);
+    container.add<TagService>(tagService);
     stats = [];
     when(() => timeBookingDao.stats()).thenAnswer((_) => Future.value(stats));
+    when(() => tagService.getDaysWithTagsInRange(any(), any()))
+        .thenAnswer((_) => Future.value(<String, List<Tag>>{}));
   });
 
   testWidgets('Load empty BookingsWeekPage', (WidgetTester tester) async {

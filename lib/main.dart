@@ -12,6 +12,9 @@ import 'package:time_tracker/db/time_tracker_db.dart';
 import 'package:time_tracker/export/service/export_service.dart';
 import 'package:time_tracker/home/page/home_page.dart';
 import 'package:time_tracker/home/widget/loading_widget.dart';
+import 'package:time_tracker/tag/dao/day_tag_dao.dart';
+import 'package:time_tracker/tag/dao/tag_dao.dart';
+import 'package:time_tracker/tag/service/tag_service.dart';
 
 Future<AppContainer> initContext({Future<DbProvider>? dbProvider}) async {
   final result = AppContainer();
@@ -28,6 +31,11 @@ Future<AppContainer> initContext({Future<DbProvider>? dbProvider}) async {
         .addFactory<TodayBean>((c) => TodayBean(c.get<BookingService>(), c.get<TimeTrackerConfig>()).init())
         .addFactory<ExportService>((c) => ExportService(c.get<BookingService>()))
   ;
+
+  // Tags
+  final tagDao = TagDao(db);
+  final dayTagDao = DayTagDao(db);
+  result.add<TagService>(TagService(tagDao, dayTagDao));
 
   return result;
 }

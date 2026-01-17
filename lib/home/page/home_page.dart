@@ -5,6 +5,7 @@ import 'package:time_tracker/booking/page/booking_widget_page.dart';
 import 'package:time_tracker/booking/page/bookings_history_page.dart';
 import 'package:time_tracker/common/feedback.dart';
 import 'package:time_tracker/statistic/page/statistic_list_page.dart';
+import 'package:time_tracker/tag/page/tag_report_page.dart';
 
 class HomePage extends StatefulWidget {
   final AppContainer _container;
@@ -25,6 +26,7 @@ class _HomePageState extends State<HomePage> {
     _pages = [
       BookingWidgetPage(widget._container),
       StatisticListPage(widget._container),
+      TagReportPage(widget._container),
       BookingsHistoryPage(widget._container),
     ];
     //initializeDateFormatting('de');
@@ -44,9 +46,13 @@ class _HomePageState extends State<HomePage> {
             icon: Icon(MdiIcons.calendar),
             label: 'Statistik',
           ),
+          BottomNavigationBarItem(
+            icon: Icon(MdiIcons.tagMultiple),
+            label: 'Tags',
+          ),
           const BottomNavigationBarItem(
             icon: Icon(Icons.view_day),
-            label: 'Buchungshistorie',
+            label: 'Historie',
           ),
         ],
         currentIndex: _index,

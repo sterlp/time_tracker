@@ -3,6 +3,7 @@ import 'package:sqflite_entities/converter/date_util.dart';
 import 'package:time_tracker/booking/entity/time_booking.dart';
 import 'package:time_tracker/booking/entity/time_booking_statistics.dart';
 import 'package:time_tracker/common/time_util.dart';
+import 'package:time_tracker/tag/entity/tag.dart';
 
 class ExportDailyStats {
   static final _timeFormat = DateTimeUtil.getFormat('HH:mm');
@@ -19,6 +20,7 @@ class ExportDailyStats {
   final DateTime day;
   final List<TimeBooking> bookings;
   final DailyBookingStatistic stats;
+  final List<Tag> tags;
 
   bool get hasBookings => bookings.isNotEmpty;
   bool get hasBreak => bookings.length > 1;
@@ -43,10 +45,11 @@ class ExportDailyStats {
   String get breakTimeHHmm => hasBreak
       ? toHHmm(stats.breakTime) // '${stats.breakTime.inHours}:${stats.breakTime.inMinutes - stats.breakTime.inHours * 60}'
       : '00:00';
+  String get tagsString => tags.map((t) => t.name).join(', ');
 
-  ExportDailyStats(this.day, this.bookings, this.stats);
+  ExportDailyStats(this.day, this.bookings, this.stats, {this.tags = const []});
 
-  factory ExportDailyStats.fromBookings(DateTime day, List<TimeBooking> bookings) {
+  factory ExportDailyStats.fromBookings(DateTime day, List<TimeBooking> bookings, {List<Tag>? dayTags}) {
     var start = DateTime.now();
     var end = DateTime(1900);
     var workedTime = Duration.zero;
@@ -59,7 +62,12 @@ class ExportDailyStats {
       workedTime = workedTime + b.workTime;
       if (planedWorkTime < b.targetWorkTime) planedWorkTime = b.targetWorkTime;
     }
-    return ExportDailyStats(day, bookings, DailyBookingStatistic(dayString, start, end, workedTime, planedWorkTime, bookings.length));
+    return ExportDailyStats(
+      day,
+      bookings,
+      DailyBookingStatistic(dayString, start, end, workedTime, planedWorkTime, bookings.length),
+      tags: dayTags ?? [],
+    );
   }
 
   Duration calculateBreakTime([int breakNumber = 1]) {

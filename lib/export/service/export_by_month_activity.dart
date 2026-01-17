@@ -5,9 +5,11 @@ import 'package:sqflite_entities/converter/date_util.dart';
 import 'package:time_tracker/booking/entity/time_booking.dart';
 import 'package:time_tracker/export/entity/export_day_statistic.dart';
 import 'package:time_tracker/export/entity/export_field.dart';
+import 'package:time_tracker/tag/entity/tag.dart';
 
 class _BookingsMap {
   final Map<String, List<TimeBooking>> byDay = {};
+  final Map<String, List<Tag>> dayTags;
   var _exportStartDay = DateUtils.dateOnly(DateTime.now());
   var _exportEndDay = DateTime(1900);
 
@@ -24,10 +26,14 @@ class _BookingsMap {
 
   ExportDailyStats get currentExportDailyStats {
     final dayKey = _exportStartDay.toIsoDateString();
-    return ExportDailyStats.fromBookings(_exportStartDay, byDay[dayKey] ?? []);
+    return ExportDailyStats.fromBookings(
+      _exportStartDay,
+      byDay[dayKey] ?? [],
+      dayTags: dayTags[dayKey],
+    );
   }
 
-  _BookingsMap.fromBookings(List<TimeBooking> bookings) {
+  _BookingsMap.fromBookings(List<TimeBooking> bookings, {this.dayTags = const {}}) {
     for(final b in bookings) {
       if (b.start.isBefore(_exportStartDay)) _exportStartDay = DateUtils.dateOnly(b.start);
       if (b.start.isAfter(_exportEndDay)) _exportEndDay = DateUtils.dateOnly(b.start);
@@ -41,8 +47,12 @@ class _BookingsMap {
 
 class ExportByMonthActivity {
 
-  String execute(ExportFields fields, List<TimeBooking> bookings) {
-    final bookingsMap = _BookingsMap.fromBookings(bookings);
+  String execute(
+    ExportFields fields,
+    List<TimeBooking> bookings, {
+    Map<String, List<Tag>>? dayTags,
+  }) {
+    final bookingsMap = _BookingsMap.fromBookings(bookings, dayTags: dayTags ?? {});
 
     final List<List<String>?> result = [fields.selectedHeaders];
 
