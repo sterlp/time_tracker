@@ -20,9 +20,11 @@ class TimeBookingDao extends AbstractDao<TimeBooking> {
       [newTarget.inMinutes, day],);
   }
 
+  @override
   Future<List<TimeBooking>> all() {
     return loadAll(orderBy: _orderByStartDate);
   }
+
   Future<List<TimeBooking>> allOrderByStart() {
     return loadAll(orderBy: _orderByStartDate);
   }

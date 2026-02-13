@@ -4,12 +4,10 @@ import 'package:sqflite/sqflite.dart';
 import 'package:sqflite_entities/service/db_provider.dart';
 import 'package:time_tracker/db/db_v1.dart';
 import 'package:time_tracker/db/db_v2.dart';
-import 'package:time_tracker/db/db_v3.dart';
 
 final _dbUpdates = [
   DbConfigV1(),
   DbBookingTableV2(),
-  DbTagTablesV3(),
 ];
 
 Future<DbProvider> initDb({Future<Database>? testDb}) async {

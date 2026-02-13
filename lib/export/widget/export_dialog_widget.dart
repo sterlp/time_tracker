@@ -11,7 +11,6 @@ import 'package:time_tracker/config/entity/config_entity.dart';
 import 'package:time_tracker/export/page/configure_export_page.dart';
 import 'package:time_tracker/export/service/export_service.dart';
 import 'package:time_tracker/export/widget/export_by_month.dart';
-import 'package:time_tracker/tag/service/tag_service.dart';
 
 class ExportDataWidget extends StatefulWidget {
   final AppContainer _container;
@@ -65,7 +64,6 @@ class _ExportDataWidgetState extends State<ExportDataWidget> {
               widget._container.get<TimeTrackerConfig>(),
               widget._container.get<ExportService>(),
               widget._container.get<BookingService>(),
-              tagService: widget._container.get<TagService>(),
             ),
           ),
           ListTile(

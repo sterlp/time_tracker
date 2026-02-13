@@ -12,9 +12,6 @@ import 'package:time_tracker/db/time_tracker_db.dart';
 import 'package:time_tracker/export/service/export_service.dart';
 import 'package:time_tracker/home/page/home_page.dart';
 import 'package:time_tracker/home/widget/loading_widget.dart';
-import 'package:time_tracker/tag/dao/day_tag_dao.dart';
-import 'package:time_tracker/tag/dao/tag_dao.dart';
-import 'package:time_tracker/tag/service/tag_service.dart';
 
 Future<AppContainer> initContext({Future<DbProvider>? dbProvider}) async {
   final result = AppContainer();
@@ -22,21 +19,19 @@ Future<AppContainer> initContext({Future<DbProvider>? dbProvider}) async {
 
   // CONFIG
   final configDao = ConfigDao(db);
+  result.add(configDao);
   final TimeTrackerConfig config = await configDao.loadConfig();
   result.add(config);
 
-  // TodayBean
-  result.add<TimeBookingDao>(TimeBookingDao(db))
-        .addFactory<BookingService>((c) => BookingService(c.get<TimeBookingDao>()))
-        .addFactory<TodayBean>((c) => TodayBean(c.get<BookingService>(), c.get<TimeTrackerConfig>()).init())
-        .addFactory<ExportService>((c) => ExportService(c.get<BookingService>()))
-  ;
-
-  // Tags
-  final tagDao = TagDao(db);
-  final dayTagDao = DayTagDao(db);
-  result.add<TagService>(TagService(tagDao, dayTagDao));
-
+  result
+      .add<TimeBookingDao>(TimeBookingDao(db))
+      .addFactory<BookingService>(
+        (c) => BookingService(c.get<TimeBookingDao>()),
+      )
+      .addFactory<TodayBean>(
+        (c) => TodayBean(c.get<BookingService>(), config).init(),
+      )
+      .addFactory<ExportService>((c) => ExportService(c.get<BookingService>()));
   return result;
 }
 
@@ -57,24 +52,22 @@ class MyApp extends StatelessWidget {
       title: 'Zeiterfassung',
       darkTheme: ThemeData.dark(useMaterial3: true),
       theme: ThemeData.light(useMaterial3: true),
-      supportedLocales: const [
-        Locale('de', '')
-      ],
+      supportedLocales: const [Locale('de', '')],
       localizationsDelegates: const [
         GlobalMaterialLocalizations.delegate,
         GlobalWidgetsLocalizations.delegate,
-        GlobalCupertinoLocalizations.delegate
+        GlobalCupertinoLocalizations.delegate,
       ],
       home: FutureBuilder<AppContainer>(
         future: _container,
         builder: (context, snapshot) {
           if (snapshot.hasError) {
             _log.error('Failed to load App', snapshot.error);
-            return LoadingWidget(caption: snapshot.error.toString());
+            return LoadingScaffoldWidget(caption: snapshot.error.toString());
           } else if (snapshot.hasData) {
             return HomePage(snapshot.data!);
           } else {
-            return const LoadingWidget();
+            return const LoadingScaffoldWidget();
           }
         },
       ),

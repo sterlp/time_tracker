@@ -28,7 +28,6 @@ class ExportField {
   static final endRemainingBreak = ExportField._("Pause Rest Ende", "endRemainingBreak", (s) => s.endRemainingBreak);
   static final breakTime = ExportField._("Pause dezimal", "breakTime", (s) => s.breakTime);
   static final breakTimeHHmm = ExportField._("Pause HH:mm", "breakTimeHHmm", (s) => s.breakTimeHHmm);
-  static final tags = ExportField._("Tags", "tags", (s) => s.tagsString);
 }
 
 final dateFormat = DateTimeUtil.getFormat('dd.MM.yyyy');
@@ -54,7 +53,6 @@ class ExportFields {
     ExportField.endSecondBreak,
     ExportField.startRemainingBreak,
     ExportField.endRemainingBreak,
-    ExportField.tags,
   ];
 
   /*

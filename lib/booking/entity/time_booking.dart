@@ -44,15 +44,14 @@ class TimeBooking extends AbstractEntity {
   }
 
   Map<String, dynamic> asMap() {
-    final value = this;
     return {
-      'id': value.id,
+      'id': id,
       'day': day,
-      'start_date': dateTimeToInt(value.start),
-      'end_date': dateTimeToInt(value.end),
-      DbBookingTableV2.workedHoursInMin: value.workTime.inMinutes,
-      DbBookingTableV2.targetHoursInMin: value.targetWorkTime.inMinutes,
-      'weekday': value.start.weekday
+      'start_date': dateTimeToInt(start),
+      'end_date': dateTimeToInt(end),
+      DbBookingTableV2.workedHoursInMin: workTime.inMinutes,
+      DbBookingTableV2.targetHoursInMin: targetWorkTime.inMinutes,
+      'weekday': start.weekday
     };
   }
 }

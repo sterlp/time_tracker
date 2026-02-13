@@ -8,7 +8,6 @@ import 'package:time_tracker/common/logger.dart';
 import 'package:time_tracker/export/entity/export_field.dart';
 import 'package:time_tracker/export/service/data_backup_activity.dart';
 import 'package:time_tracker/export/service/export_by_month_activity.dart';
-import 'package:time_tracker/tag/entity/tag.dart';
 
 class ExportService {
   static final _log = LoggerFactory.get<ExportService>();
@@ -36,10 +35,8 @@ class ExportService {
 
   String exportUsingFields(
     ExportFields fields,
-    List<TimeBooking> bookings, {
-    Map<String, List<Tag>>? dayTags,
-  }) {
-    return _monthExportActivity.execute(fields, bookings, dayTags: dayTags);
+    List<TimeBooking> bookings) {
+    return _monthExportActivity.execute(fields, bookings);
   }
 
   String toCsvData(List<TimeBooking> bookings) {

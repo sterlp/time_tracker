@@ -54,7 +54,7 @@ class _BookingListPageState extends State<BookingListPage> {
   @override
   Widget build(BuildContext context) {
     if (_bookings == null) {
-      return const LoadingWidget();
+      return const LoadingScaffoldWidget();
     } else {
       return Scaffold(
         appBar: AppBar(

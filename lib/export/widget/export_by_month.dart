@@ -7,15 +7,13 @@ import 'package:time_tracker/booking/service/booking_service.dart';
 import 'package:time_tracker/config/entity/config_entity.dart';
 import 'package:time_tracker/export/entity/export_field.dart';
 import 'package:time_tracker/export/service/export_service.dart';
-import 'package:time_tracker/tag/service/tag_service.dart';
 
 Future<void> exportBookingsByMonth(
   BuildContext context,
   TimeTrackerConfig config,
   ExportService exportService,
-  BookingService bookingService, {
-  TagService? tagService,
-}) async {
+  BookingService bookingService,
+) async {
   final now = DateTime.now();
   final monthSelector = now.day > 27 ? now.month : max(now.month - 1, 1);
   DateTime? exportDate = DateTime.now().copyWith(month: monthSelector, day: 1);
@@ -40,17 +38,16 @@ Future<void> exportBookingsByMonth(
     }
 
     final bookings = await bookingService.fromTo(exportDate, now);
-    final dayTags = tagService != null
-        ? await tagService.getDaysWithTagsInRange(exportDate, now)
-        : null;
-    final csvData = exportService.exportUsingFields(fields, bookings, dayTags: dayTags);
+    final csvData = exportService.exportUsingFields(fields, bookings);
     final f = await exportService.writeToFile(
       csvData,
       fileName: exportFileName,
     );
 
     await SharePlus.instance.share(
-      ShareParams(files: [XFile(f.path, mimeType: 'text/csv', name: exportFileName)]),
+      ShareParams(
+        files: [XFile(f.path, mimeType: 'text/csv', name: exportFileName)],
+      ),
     );
     f.delete();
   }
