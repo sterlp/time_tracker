@@ -37,7 +37,10 @@ id "org.jetbrains.kotlin.android" version "2.4.0" apply false
 
 ### android/app/build.gradle
 
-- Plugins: `kotlin-android` durch `org.jetbrains.kotlin.android` ersetzen (Legacy-Alias).
+- **Wichtig:** `org.jetbrains.kotlin.android` (bzw. `kotlin-android`) **nicht** mehr im
+  `plugins`-Block der App stehen haben! Flutter applied KGP im Legacy-Modus
+  (`android.builtInKotlin=false`) automatisch selbst — mit explizitem Apply gibt es
+  bei jedem Build die Migrations-Warnung. Die Version kommt aus `settings.gradle` (`apply false`).
 - AGP-9-Syntax: `minSdk = flutter.minSdkVersion`, `targetSdk = flutter.targetSdkVersion`,
   `compileSdk flutter.compileSdkVersion`, `ndkVersion = flutter.ndkVersion`.
 - Java 21:
@@ -69,9 +72,9 @@ android.newDsl=false
 - **Built-in Kotlin geht NICHT:** AGP 9.0–9.2 bündeln Built-in-Kotlin nur in Version
   **2.2.10**, Flutter braucht aber **≥ 2.2.20** → Build schlägt fehl
   ("Your project's Kotlin version (2.2.10) is lower than Flutter's minimum supported version of 2.2.20").
-  Deshalb: `org.jetbrains.kotlin.android` 2.4.0 explizit behalten + Opt-out-Flags setzen.
-- Die Build-Warnung ("applies the Kotlin Gradle Plugin … migrate to Built-in Kotlin")
-  ist damit erwartbar und unkritisch — verschwindet erst, wenn Flutter Built-in-Kotlin ≥ 2.2.20 unterstützt.
+  Deshalb: KGP-Version 2.4.0 in `settings.gradle` deklarieren (`apply false`) + Opt-out-Flags setzen.
+- **Warnung vermeiden:** KGP nur in `settings.gradle` deklarieren, nicht in `app/build.gradle`
+  apply-en — Flutter applied es dann selbst, ohne die "migrate to Built-in Kotlin"-Warnung zu loggen.
 - Falls die Flags fehlen, fügt der Flutter-Migrator sie beim nächsten Build automatisch ein.
 - `-Xmx1536M` reicht für Gradle 9.4 + AGP 9.2 nicht mehr → auf 4G angehoben (OOM sonst).
   Guide: <https://docs.flutter.dev/release/breaking-changes/migrate-to-built-in-kotlin/for-app-developers>

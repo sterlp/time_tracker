@@ -1,7 +1,7 @@
 plugins {
     id "com.android.application"
-    id "org.jetbrains.kotlin.android"
-    // The Flutter Gradle Plugin must be applied after the Android and Kotlin Gradle plugins.
+    // Do NOT apply org.jetbrains.kotlin.android here: Flutter applies KGP automatically
+    // (legacy mode, android.builtInKotlin=false) and logs a warning otherwise.
     id "dev.flutter.flutter-gradle-plugin"
 }
 
