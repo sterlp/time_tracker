@@ -53,10 +53,9 @@ class AttachedEntity<Entity extends AbstractEntity>
       _deleted = true;
       notifyListeners();
     } else {
-      // TODO: broken as we compare with ID!
-      final notificationNeeded = e == value;
+      final sameInstance = identical(e, value);
       value = e;
-      if (notificationNeeded) notifyListeners();
+      if (!sameInstance) notifyListeners();
     }
   }
 }

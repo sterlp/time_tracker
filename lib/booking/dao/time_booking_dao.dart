@@ -6,7 +6,7 @@ import 'package:time_tracker/booking/entity/time_booking.dart';
 import 'package:time_tracker/booking/entity/time_booking_statistics.dart';
 import 'package:time_tracker/db/db_v2.dart';
 
-class TimeBookingDao extends AbstractDao<TimeBooking> {
+class TimeBookingDao extends IntDao<TimeBooking> {
   final _orderByStartDate = '${DbBookingTableV2.startDate} DESC, id DESC';
 
   TimeBookingDao(Database db) : super(db, DbBookingTableV2.table);

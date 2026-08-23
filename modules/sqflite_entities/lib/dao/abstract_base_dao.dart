@@ -9,7 +9,7 @@ abstract class AbstractBaseDao<KeyType> {
 
   Database get db => _db;
 
-  Future<int> deleteAll() async {
+  Future<int> deleteAll() {
     return _db.delete(tableName);
   }
 

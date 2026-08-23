@@ -36,7 +36,7 @@ class DbProvider {
         db = await openDatabase(join(await getDatabasesPath(), dbName),
             version: version, onUpgrade: _createDB);
       } else {
-        db = await _createDB(await _futureDb!, 0, version);
+        db = await _createDB(await _futureDb, 0, version);
       }
       completer.complete(db);
     } on Exception catch (e, stack) {
@@ -47,7 +47,7 @@ class DbProvider {
   }
 
   Future<Database> _createDB(
-      final Database db, final int oldVersion, final int newVersion) async {
+      Database db, int oldVersion, int newVersion) async {
     var currentVersion = oldVersion; // just to make dart analysis happy ...
     if (kDebugMode)
       print('DEBUG: createDB from version $currentVersion to $newVersion');

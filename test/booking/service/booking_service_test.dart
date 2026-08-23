@@ -14,7 +14,6 @@ Future<void> main() async {
   final db = await dbProvider.init();
   final dao = TimeBookingDao(db);
   final subject = BookingService(dao);
-  final testData = BookingTestData(dao);
 
   tearDownAll(() async {
     await dbProvider.close();

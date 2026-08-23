@@ -3,25 +3,25 @@ import 'package:sqflite/sqflite.dart';
 import 'package:sqflite_entities/entity/abstract_entity.dart';
 import 'package:sqflite_entities/entity/attached_entity.dart';
 
-abstract class AbstractDao<T extends AbstractEntity> {
+/// Base DAO with int ID. For other ID types, use [AbstractDao].
+typedef IntDao<T extends AbstractEntity<int>> = AbstractDao<int, T>;
+typedef StringDao<T extends AbstractEntity<String>> = AbstractDao<String, T>;
+
+abstract class AbstractDao<E, T extends AbstractEntity<E>> {
   final Database _db;
   final String tableName;
+  final String idColumn;
 
-  AbstractDao(this._db, this.tableName);
+  AbstractDao(this._db, this.tableName, {this.idColumn = 'id'});
 
   @protected
   Database get db => _db;
 
   AttachedEntity<T> attach(T entity) {
-    return AttachedEntity<T>(
-      entity,
-      reload,
-      save,
-      deleteEntity,
-    );
+    return AttachedEntity<T>(entity, reload, save, deleteEntity);
   }
 
-  Future<AttachedEntity<T>?> getAttached(int id) async {
+  Future<AttachedEntity<T>?> getAttached(E id) async {
     final e = await getById(id);
     if (e == null)
       return null;
@@ -36,14 +36,16 @@ abstract class AbstractDao<T extends AbstractEntity> {
       return getById(e.id!);
   }
 
-  Future<T?> getById(int id) async {
+  Future<T?> getById(E id) async {
     final List<Map<String, dynamic>> results = await _db.query(
       tableName,
-      where: "id = ?",
+      where: "$idColumn = ?",
       whereArgs: [id],
     );
-    assert(results.length <= 1,
-        'Get by ID should return only one element but returned ${results.length} elements.');
+    assert(
+      results.length <= 1,
+      'Get by ID should return only one element but returned ${results.length} elements.',
+    );
     return results.isEmpty ? null : fromMap(results[0]);
   }
 
@@ -59,6 +61,7 @@ abstract class AbstractDao<T extends AbstractEntity> {
   }) async {
     final List<Map<String, dynamic>> results = await _db.query(
       tableName,
+      distinct: distinct,
       where: where,
       whereArgs: whereArgs,
       groupBy: groupBy,
@@ -71,14 +74,13 @@ abstract class AbstractDao<T extends AbstractEntity> {
     return results.map((e) => fromMap(e)).toList();
   }
 
-  Future<int> deleteAll() async {
+  Future<int> deleteAll() {
     return _db.delete(tableName);
   }
 
-  Future<int> delete(int? id) async {
+  Future<int> delete(E? id) async {
     if (id == null) return 0;
-
-    return _db.delete(tableName, where: "id = ?", whereArgs: [id]);
+    return _db.delete(tableName, where: "$idColumn = ?", whereArgs: [id]);
   }
 
   Future<T> deleteEntity(T e) async {
@@ -107,20 +109,28 @@ abstract class AbstractDao<T extends AbstractEntity> {
   }
 
   Future<T> insert(T entity) async {
-    entity.id = await _db.insert(
+    final int newId = await db.insert(
       tableName,
       toMap(entity),
       conflictAlgorithm: ConflictAlgorithm.replace,
     );
+    if (entity.id is int?) entity.id = newId as E;
     return entity;
   }
 
   Future<T> update(T entity) async {
     assert(entity.id != null);
 
-    await _db.update(tableName, toMap(entity),
-        where: "id = ?", whereArgs: [entity.id]);
-    // if (count == 0) _log.warn('Record not found anymore to update $entity');
+    final int count = await _db.update(
+      tableName,
+      toMap(entity),
+      where: "$idColumn = ?",
+      whereArgs: [entity.id],
+    );
+    if (count == 0) {
+      print('Record not found anymore to update $entity adding again ...');
+      return insert(entity);
+    }
 
     return entity;
   }

@@ -11,7 +11,6 @@ abstract class DbUpdate {
   Future<int> execute(int currentVersion, Database db) async {
     if (currentVersion + 1 == version) {
       if (kDebugMode) print('update DB from $currentVersion -> $version.');
-
       await update(db);
       return version;
     }

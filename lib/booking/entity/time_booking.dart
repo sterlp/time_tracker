@@ -3,7 +3,7 @@ import 'package:sqflite_entities/converter/sqlite_converter.dart';
 import 'package:sqflite_entities/entity/abstract_entity.dart';
 import 'package:time_tracker/db/db_v2.dart';
 
-class TimeBooking extends AbstractEntity {
+class TimeBooking extends AbstractEntity<int> {
   DateTime start;
   DateTime? end;
   Duration targetWorkTime;

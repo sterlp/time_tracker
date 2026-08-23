@@ -1,21 +1,17 @@
-abstract class AbstractEntity {
-  int? id;
+abstract class AbstractEntity<E> {
+  E? id;
+
+  AbstractEntity([this.id]);
 
   @override
   bool operator ==(Object other) {
-    if (other is AbstractEntity && id != null && other.id != null) {
-      return id == other.id && this.runtimeType == other.runtimeType;
-    } else {
-      return super == other;
-    }
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is AbstractEntity &&
+            id != null &&
+            id == other.id);
   }
 
   @override
-  int get hashCode {
-    if (id == null) {
-      return super.hashCode;
-    } else {
-      return id.hashCode;
-    }
-  }
+  int get hashCode => id?.hashCode ?? identityHashCode(this);
 }

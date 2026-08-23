@@ -107,13 +107,13 @@ void main() {
   });
 }
 
-class _FooBE extends AbstractEntity {
+class _FooBE extends AbstractEntity<int> {
   String? name;
 
   _FooBE({this.name});
 }
 
-class _FooDao extends AbstractDao<_FooBE> {
+class _FooDao extends AbstractDao<int, _FooBE> {
   _FooDao(Database db) : super(db, "FOO_TABLE");
 
   @override
