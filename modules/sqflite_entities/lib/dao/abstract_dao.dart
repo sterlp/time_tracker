@@ -13,12 +13,7 @@ abstract class AbstractDao<T extends AbstractEntity> {
   Database get db => _db;
 
   AttachedEntity<T> attach(T entity) {
-    return AttachedEntity<T>(
-      entity,
-      reload,
-      save,
-      deleteEntity,
-    );
+    return AttachedEntity<T>(entity, reload, save, deleteEntity);
   }
 
   Future<AttachedEntity<T>?> getAttached(int id) async {
@@ -42,8 +37,10 @@ abstract class AbstractDao<T extends AbstractEntity> {
       where: "id = ?",
       whereArgs: [id],
     );
-    assert(results.length <= 1,
-        'Get by ID should return only one element but returned ${results.length} elements.');
+    assert(
+      results.length <= 1,
+      'Get by ID should return only one element but returned ${results.length} elements.',
+    );
     return results.isEmpty ? null : fromMap(results[0]);
   }
 
@@ -71,7 +68,7 @@ abstract class AbstractDao<T extends AbstractEntity> {
     return results.map((e) => fromMap(e)).toList();
   }
 
-  Future<int> deleteAll() async {
+  Future<int> deleteAll() {
     return _db.delete(tableName);
   }
 
@@ -118,8 +115,12 @@ abstract class AbstractDao<T extends AbstractEntity> {
   Future<T> update(T entity) async {
     assert(entity.id != null);
 
-    await _db.update(tableName, toMap(entity),
-        where: "id = ?", whereArgs: [entity.id]);
+    await _db.update(
+      tableName,
+      toMap(entity),
+      where: "id = ?",
+      whereArgs: [entity.id],
+    );
     // if (count == 0) _log.warn('Record not found anymore to update $entity');
 
     return entity;

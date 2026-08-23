@@ -1,4 +1,3 @@
-
 import 'package:csv/csv.dart';
 import 'package:flutter/material.dart';
 import 'package:sqflite_entities/converter/date_util.dart';
@@ -12,12 +11,14 @@ class _BookingsMap {
   var _exportEndDay = DateTime(1900);
 
   bool get hasDayToExport {
-    return _exportStartDay.isBefore(_exportEndDay) || _exportStartDay.isAtSameMomentAs(_exportEndDay);
+    return _exportStartDay.isBefore(_exportEndDay) ||
+        _exportStartDay.isAtSameMomentAs(_exportEndDay);
   }
 
   void initExport() {
     _exportStartDay = DateTime(_exportStartDay.year, _exportStartDay.month);
   }
+
   void addDay() {
     _exportStartDay = _exportStartDay.add(const Duration(days: 1));
   }
@@ -28,33 +29,35 @@ class _BookingsMap {
   }
 
   _BookingsMap.fromBookings(List<TimeBooking> bookings) {
-    for(final b in bookings) {
-      if (b.start.isBefore(_exportStartDay)) _exportStartDay = DateUtils.dateOnly(b.start);
-      if (b.start.isAfter(_exportEndDay)) _exportEndDay = DateUtils.dateOnly(b.start);
-      if (b.end != null && b.end!.isAfter(_exportEndDay)) _exportEndDay = DateUtils.dateOnly(b.end!);
+    for (final b in bookings) {
+      if (b.start.isBefore(_exportStartDay))
+        _exportStartDay = DateUtils.dateOnly(b.start);
+      if (b.start.isAfter(_exportEndDay))
+        _exportEndDay = DateUtils.dateOnly(b.start);
+      if (b.end != null && b.end!.isAfter(_exportEndDay))
+        _exportEndDay = DateUtils.dateOnly(b.end!);
 
-      if (byDay.containsKey(b.day)) byDay[b.day]!.add(b);
-      else byDay[b.day] = [b];
+      if (byDay.containsKey(b.day))
+        byDay[b.day]!.add(b);
+      else
+        byDay[b.day] = [b];
     }
   }
 }
 
 class ExportByMonthActivity {
-
   String execute(ExportFields fields, List<TimeBooking> bookings) {
     final bookingsMap = _BookingsMap.fromBookings(bookings);
 
-    final List<List<String>?> result = [fields.selectedHeaders];
+    final List<List<dynamic>> result = [fields.selectedHeaders];
 
     bookingsMap.initExport();
-    while(bookingsMap.hasDayToExport) {
+    while (bookingsMap.hasDayToExport) {
       final stats = bookingsMap.currentExportDailyStats;
       result.add(fields.exportWith(stats));
       bookingsMap.addDay();
     }
 
-    return const ListToCsvConverter(
-      fieldDelimiter: ';',
-    ).convert(result);
+    return Csv(fieldDelimiter: ';').encode(result);
   }
 }

@@ -25,14 +25,12 @@ class _BookingWidgetPageState extends State<BookingWidgetPage> {
   @override
   void initState() {
     super.initState();
-    _refreshTimer = Timer.periodic(
-        const Duration(seconds: 10), (timer) {
-          final todayBean = widget._container.get<TodayBean>();
-          final newNow  = DateTimeUtil.precisionMinutes(DateTime.now());
-          todayBean.changeDay(newNow);
-          if (mounted) setState(() {});
-        }
-    );
+    _refreshTimer = Timer.periodic(const Duration(seconds: 10), (timer) {
+      final todayBean = widget._container.get<TodayBean>();
+      final newNow = DateTimeUtil.precisionMinutes(DateTime.now());
+      todayBean.changeDay(newNow);
+      if (mounted) setState(() {});
+    });
   }
 
   @override
@@ -44,7 +42,7 @@ class _BookingWidgetPageState extends State<BookingWidgetPage> {
   Widget _topView(TodayBean todayBean) {
     return TimerButton(todayBean);
   }
-  
+
   Widget _bookingList(BuildContext context) {
     final todayBean = widget._container.get<TodayBean>();
     final container = widget._container;
@@ -84,31 +82,27 @@ class _BookingWidgetPageState extends State<BookingWidgetPage> {
     final container = widget._container;
     final todayBean = widget._container.get<TodayBean>();
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Zeiterfassung'),
-      ),
-      drawer: Drawer(
-        child: ExportDataWidget(container),
-      ),
+      appBar: AppBar(title: const Text('Zeiterfassung')),
+      drawer: Drawer(child: ExportDataWidget(container)),
       body: OrientationBuilder(
         builder: (context, orientation) {
           if (orientation == Orientation.portrait) {
             return Column(
               children: [
                 Expanded(child: _topView(todayBean)),
-                Expanded(child: _bookingList(context))
+                Expanded(child: _bookingList(context)),
               ],
             );
           } else {
             return Row(
               children: [
                 Expanded(child: _topView(todayBean)),
-                Expanded(child: _bookingList(context))
+                Expanded(child: _bookingList(context)),
               ],
             );
           }
         },
-        ),
+      ),
     );
   }
 }

@@ -13,11 +13,13 @@ class WorkTimeWidget extends StatelessWidget {
     Color? c;
     final s = style ?? DefaultTextStyle.of(context).style;
 
-    if (duration.inMinutes + 45 >= target.inMinutes) c = Colors.green;
-    else c = Colors.red;
+    if (duration.inMinutes + 45 >= target.inMinutes)
+      c = Colors.green;
+    else
+      c = Colors.red;
 
     final v = toDurationHoursAndMinutes(duration);
 
-    return Text(v, style: s.apply(color: c),);
+    return Text(v, style: s.apply(color: c));
   }
 }

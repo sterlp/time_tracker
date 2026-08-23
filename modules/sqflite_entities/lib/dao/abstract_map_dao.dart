@@ -11,10 +11,7 @@ abstract class AbstractMapDao extends AbstractBaseDao<String> {
     this.valueColumnName = 'value',
   }) : super(db, tableName, keyColumnName);
 
-  Future<Map<String, String?>> loadAll({
-    int? limit,
-    int? offset,
-  }) async {
+  Future<Map<String, String?>> loadAll({int? limit, int? offset}) async {
     final List<Map<String, dynamic>> results = await db.query(
       tableName,
       orderBy: keyColumnName,
@@ -34,11 +31,10 @@ abstract class AbstractMapDao extends AbstractBaseDao<String> {
   }
 
   Future<bool> setValue(String key, String? value) async {
-    return await db.insert(
-          tableName,
-          {keyColumnName: key, valueColumnName: value},
-          conflictAlgorithm: ConflictAlgorithm.replace,
-        ) >
+    return await db.insert(tableName, {
+          keyColumnName: key,
+          valueColumnName: value,
+        }, conflictAlgorithm: ConflictAlgorithm.replace) >
         0;
   }
 
@@ -48,8 +44,10 @@ abstract class AbstractMapDao extends AbstractBaseDao<String> {
       where: "$keyColumnName = ?",
       whereArgs: [key],
     );
-    assert(results.length <= 1,
-        'Get by ID should return only one element but returned ${results.length} elements.');
+    assert(
+      results.length <= 1,
+      'Get by ID should return only one element but returned ${results.length} elements.',
+    );
     if (results.isEmpty || results[0][valueColumnName] == null) {
       return null;
     } else {

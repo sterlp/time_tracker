@@ -10,10 +10,12 @@ class KeyValueLineWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Row(children: [
-      label,
-      Expanded(child: Container()),
-      value
-    ],);
+    return Row(
+      children: [
+        label,
+        Expanded(child: Container()),
+        value,
+      ],
+    );
   }
 }

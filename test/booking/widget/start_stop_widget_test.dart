@@ -5,12 +5,15 @@ import 'package:time_tracker/booking/widget/start_stop_widget.dart';
 void main() {
   testWidgets('Load StartAndStopWidget', (WidgetTester tester) async {
     // GIVEN
-    await tester.pumpWidget(MaterialApp(
+    await tester.pumpWidget(
+      MaterialApp(
         title: 'test',
-        home: StartAndStopWidget(false,
-            const Duration(minutes: 10),
-            const Duration(hours: 1),
-            () => {},),
+        home: StartAndStopWidget(
+          false,
+          const Duration(minutes: 10),
+          const Duration(hours: 1),
+          () => {},
+        ),
       ),
     );
 
@@ -21,15 +24,20 @@ void main() {
     expect(find.text('Stopp'), findsNWidgets(1));
   });
 
-  testWidgets('Load StartAndStopWidget 0 duration', (WidgetTester tester) async {
+  testWidgets('Load StartAndStopWidget 0 duration', (
+    WidgetTester tester,
+  ) async {
     // GIVEN
-    await tester.pumpWidget(MaterialApp(
-      title: 'test',
-      home: StartAndStopWidget(false,
-        const Duration(minutes: 10),
-        Duration.zero,
-            () => {},),
-    ),
+    await tester.pumpWidget(
+      MaterialApp(
+        title: 'test',
+        home: StartAndStopWidget(
+          false,
+          const Duration(minutes: 10),
+          Duration.zero,
+          () => {},
+        ),
+      ),
     );
 
     // WHEN

@@ -11,18 +11,22 @@ import 'package:time_tracker/export/service/export_service.dart';
 import 'package:time_tracker/home/widget/loading_widget.dart';
 
 Future<void> showBookingListPage(
-    BuildContext context,
-    AppContainer container,
-    DateTime from, DateTime to,) {
+  BuildContext context,
+  AppContainer container,
+  DateTime from,
+  DateTime to,
+) {
   return Navigator.push<void>(
     context,
     MaterialPageRoute(
-      builder: (context) => BookingListPage(container,
-        DateTimeUtil.clearTime(from), DateTimeUtil.midnight(to),),
+      builder: (context) => BookingListPage(
+        container,
+        DateTimeUtil.clearTime(from),
+        DateTimeUtil.midnight(to),
+      ),
     ),
   );
 }
-
 
 class BookingListPage extends StatefulWidget {
   final AppContainer _container;
@@ -58,7 +62,9 @@ class _BookingListPageState extends State<BookingListPage> {
     } else {
       return Scaffold(
         appBar: AppBar(
-          title: Text('von ${_df.format(widget._from)} bis ${_df.format(widget._to)}'),
+          title: Text(
+            'von ${_df.format(widget._from)} bis ${_df.format(widget._to)}',
+          ),
           actions: [
             IconButton(
               onPressed: _bookings!.value.isNotEmpty ? _doExport : null,
@@ -66,11 +72,7 @@ class _BookingListPageState extends State<BookingListPage> {
             ),
           ],
         ),
-        body: DailyBookingsList(
-          _bookings!,
-          _doEdit,
-          _doDelete,
-        ),
+        body: DailyBookingsList(_bookings!, _doEdit, _doDelete),
         floatingActionButton: FloatingActionButton(
           onPressed: () => _newBooking(),
           child: const Icon(Icons.add),
@@ -80,7 +82,10 @@ class _BookingListPageState extends State<BookingListPage> {
   }
 
   Future<void> _doReload() async {
-    final items = await widget._container.get<BookingService>().fromTo(widget._from, widget._to);
+    final items = await widget._container.get<BookingService>().fromTo(
+      widget._from,
+      widget._to,
+    );
     _log.debug('Doing a reload now ${items.length} items ...');
     if (_bookings == null) {
       if (mounted) setState(() => _bookings = ValueNotifier(items));
@@ -92,32 +97,49 @@ class _BookingListPageState extends State<BookingListPage> {
   Future<void> _doExport() async {
     final fD = DateTimeUtil.getFormat('dd.MM');
     final tD = DateTimeUtil.getFormat('dd.MM.yyyy');
-    final fileName = 'Datenexport ${fD.format(widget._from)} bis ${tD.format(widget._to)}.csv';
-    final csvData = widget._container.get<ExportService>().toCsvData(_bookings!.value);
-    final f = await widget._container.get<ExportService>().writeToFile(csvData, fileName: fileName);
+    final fileName =
+        'Datenexport ${fD.format(widget._from)} bis ${tD.format(widget._to)}.csv';
+    final csvData = widget._container.get<ExportService>().toCsvData(
+      _bookings!.value,
+    );
+    final f = await widget._container.get<ExportService>().writeToFile(
+      csvData,
+      fileName: fileName,
+    );
     await SharePlus.instance.share(
-      ShareParams(files: [XFile(f.path, mimeType: 'text/csv', name: fileName)]),
+      ShareParams(
+        files: [XFile(f.path, mimeType: 'text/csv', name: fileName)],
+      ),
     );
     f.delete();
   }
+
   Future<void> _doEdit(TimeBooking booking) async {
-    await  showBookingPageWithCallback(context, widget._container,
+    await showBookingPageWithCallback(
+      context,
+      widget._container,
       booking: booking,
     );
     await _doReload();
   }
+
   Future<void> _doDelete(TimeBooking booking) async {
     await widget._container.get<BookingService>().delete(booking);
     if (mounted) {
       ScaffoldMessenger.of(context)
-        .showSnackBar(const SnackBar(content: Text('Buchung gelöscht.')),
-      );
+          .showSnackBar(const SnackBar(content: Text('Buchung gelöscht.')));
       await _doReload();
     }
   }
+
   Future<void> _newBooking() async {
-    await showBookingPageWithCallback(context, widget._container,
-      booking: TimeBooking(widget._to, end: widget._to.add(const Duration(hours: 1))),
+    await showBookingPageWithCallback(
+      context,
+      widget._container,
+      booking: TimeBooking(
+        widget._to,
+        end: widget._to.add(const Duration(hours: 1)),
+      ),
     );
     await _doReload();
   }

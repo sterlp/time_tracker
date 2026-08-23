@@ -1,4 +1,3 @@
-
 import 'package:dependency_container/dependency_container.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -24,22 +23,23 @@ void main() {
     container = AppContainer();
     bookingService = BookingServiceMock();
     configMock = TimeTrackerConfigMock();
-    when(() => configMock.getDailyWorkHours()).thenReturn(const Duration(hours: 7));
+    when(() => configMock.getDailyWorkHours())
+        .thenReturn(const Duration(hours: 7));
     todayBean = TodayBean(bookingService, configMock);
 
-    when(() => bookingService.loadDay(any())).thenAnswer((i) => Future.value(loadDay));
+    when(() => bookingService.loadDay(any()))
+        .thenAnswer((i) => Future.value(loadDay));
 
     container.add<BookingService>(bookingService);
     container.add<TodayBean>(todayBean);
   });
 
   Future<void> loadBookingWidgetPage(WidgetTester tester) {
-    return tester.pumpWidget(MaterialApp(
-        title: 'test',
-        home: BookingWidgetPage(container),
-      ),
+    return tester.pumpWidget(
+      MaterialApp(title: 'test', home: BookingWidgetPage(container)),
     );
   }
+
   testWidgets('Load empty BookingWidgetPage', (WidgetTester tester) async {
     // GIVEN
     await loadBookingWidgetPage(tester);
@@ -58,9 +58,7 @@ void main() {
     await loadBookingWidgetPage(tester);
     await tester.pumpAndSettle();
     // WHEN
-    loadDay = [
-      TimeBooking(DateTime.now().addDays(-1))
-    ];
+    loadDay = [TimeBooking(DateTime.now().addDays(-1))];
     todayBean.changeDay(DateTime.now().addDays(-1));
     await tester.pumpAndSettle();
     // THEN

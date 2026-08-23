@@ -15,7 +15,6 @@ class BookingsHistoryPage extends StatefulWidget {
 
   @override
   _BookingsHistoryPageState createState() => _BookingsHistoryPageState();
-
 }
 
 class _BookingsHistoryPageState extends State<BookingsHistoryPage> {
@@ -24,16 +23,19 @@ class _BookingsHistoryPageState extends State<BookingsHistoryPage> {
   Future<void> _reload() async {
     _stats.value = await widget._container.get<TimeBookingDao>().stats();
   }
+
   @override
   void initState() {
     super.initState();
     _reload();
   }
+
   @override
   void dispose() {
     _stats.dispose();
     super.dispose();
   }
+
   @override
   Widget build(BuildContext context) {
     return ValueListenableBuilder<List<DailyBookingStatistic>?>(
@@ -43,9 +45,7 @@ class _BookingsHistoryPageState extends State<BookingsHistoryPage> {
           return const LoadingWidget();
         } else {
           return Scaffold(
-            appBar: AppBar(
-              title: const Text('Historie'),
-            ),
+            appBar: AppBar(title: const Text('Historie')),
             body: _buildWeekList(value),
             floatingActionButton: FloatingActionButton(
               onPressed: () async {
@@ -81,15 +81,26 @@ class _BookingsHistoryPageState extends State<BookingsHistoryPage> {
   }
 
   Widget _buildWeekItem(DailyBookingStatistic item) {
-    return DailyBookingStatisticWidget(item,
+    return DailyBookingStatisticWidget(
+      item,
       onLongPress: () async {
         if (item.bookingsCount > 1) {
-          await showBookingListPage(context, widget._container, item.start, item.end);
+          await showBookingListPage(
+            context,
+            widget._container,
+            item.start,
+            item.end,
+          );
         } else {
           final booking = await widget._container
               .get<BookingService>()
               .getBookingByStartDate(item.start);
-          if (mounted) await showEditBookingPage(context, widget._container, booking: booking);
+          if (mounted)
+            await showEditBookingPage(
+              context,
+              widget._container,
+              booking: booking,
+            );
         }
         if (mounted) _reload();
       },

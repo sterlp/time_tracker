@@ -1,6 +1,6 @@
 import 'package:dependency_container/dependency_container.dart';
 import 'package:flutter/material.dart';
-import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
+import 'package:flutter_material_design_icons/flutter_material_design_icons.dart';
 import 'package:sqflite_entities/converter/date_util.dart';
 import 'package:time_tracker/booking/entity/time_booking.dart';
 import 'package:time_tracker/booking/service/booking_service.dart';
@@ -111,7 +111,7 @@ class _EditBookingPageState extends State<EditBookingPage> {
                 padding: const EdgeInsets.fromLTRB(0, 16, 0, 0),
                 child: OutlinedButton.icon(
                   onPressed: _doAddBreak,
-                  icon: Icon(MdiIcons.coffeeToGoOutline),
+                  icon: const Icon(MdiIcons.coffeeToGoOutline),
                   label: const Text('Pause einfügen'),
                   style: OutlinedButton.styleFrom(
                     minimumSize: const Size.fromHeight(40),
@@ -120,7 +120,7 @@ class _EditBookingPageState extends State<EditBookingPage> {
               ),
               OutlinedButton.icon(
                 onPressed: _booking.id == null ? null : _doDelete,
-                icon: Icon(MdiIcons.delete),
+                icon: const Icon(MdiIcons.delete),
                 label: const Text('Löschen'),
                 style: OutlinedButton.styleFrom(
                   foregroundColor: Colors.red,
@@ -143,8 +143,9 @@ class _EditBookingPageState extends State<EditBookingPage> {
         breakTime,
       );
       if (mounted) {
-        ScaffoldMessenger.of(context)
-            .showSnackBar(const SnackBar(content: Text('Neue Pause eingefügt.')));
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(const SnackBar(content: Text('Neue Pause eingefügt.')));
         Navigator.pop(context);
       }
     }

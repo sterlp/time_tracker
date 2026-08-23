@@ -1,6 +1,6 @@
 import 'package:dependency_container/dependency_container.dart';
 import 'package:flutter/material.dart';
-import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
+import 'package:flutter_material_design_icons/flutter_material_design_icons.dart';
 import 'package:time_tracker/booking/page/booking_widget_page.dart';
 import 'package:time_tracker/booking/page/bookings_history_page.dart';
 import 'package:time_tracker/common/feedback.dart';
@@ -35,7 +35,7 @@ class _HomePageState extends State<HomePage> {
     return Scaffold(
       body: _pages[_index],
       bottomNavigationBar: BottomNavigationBar(
-        items: <BottomNavigationBarItem>[
+        items: const <BottomNavigationBarItem>[
           BottomNavigationBarItem(
             icon: Icon(MdiIcons.calendarToday),
             label: 'Heute',
@@ -44,7 +44,7 @@ class _HomePageState extends State<HomePage> {
             icon: Icon(MdiIcons.calendar),
             label: 'Statistik',
           ),
-          const BottomNavigationBarItem(
+          BottomNavigationBarItem(
             icon: Icon(Icons.view_day),
             label: 'Buchungshistorie',
           ),

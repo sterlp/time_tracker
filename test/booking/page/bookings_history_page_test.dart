@@ -25,10 +25,8 @@ void main() {
 
   testWidgets('Load empty BookingsWeekPage', (WidgetTester tester) async {
     // GIVEN
-    await tester.pumpWidget(MaterialApp(
-        title: 'test',
-        home: BookingsHistoryPage(container),
-      ),
+    await tester.pumpWidget(
+      MaterialApp(title: 'test', home: BookingsHistoryPage(container)),
     );
     // THEN
     expect(find.text('Lade ...'), findsOneWidget);
@@ -65,10 +63,8 @@ void main() {
     );
 
     // WHEN
-    await tester.pumpWidget(MaterialApp(
-        title: 'test',
-        home: BookingsHistoryPage(container),
-      ),
+    await tester.pumpWidget(
+      MaterialApp(title: 'test', home: BookingsHistoryPage(container)),
     );
     await tester.pumpAndSettle();
 

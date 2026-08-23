@@ -8,10 +8,12 @@ class MapDbV2 extends DbUpdate {
 
   @override
   Future<void> update(Database db) async {
-    await db
-        .execute('INSERT INTO ${MapDbV1.tableName} VALUES ("key1", "value1")');
-    await db
-        .execute('INSERT INTO ${MapDbV1.tableName} VALUES ("key2", "value2")');
+    await db.execute(
+      'INSERT INTO ${MapDbV1.tableName} VALUES ("key1", "value1")',
+    );
+    await db.execute(
+      'INSERT INTO ${MapDbV1.tableName} VALUES ("key2", "value2")',
+    );
     await db.execute('INSERT INTO ${MapDbV1.tableName} VALUES ("key3", null)');
   }
 }

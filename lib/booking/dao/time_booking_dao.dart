@@ -12,25 +12,29 @@ class TimeBookingDao extends AbstractDao<TimeBooking> {
   TimeBookingDao(Database db) : super(db, DbBookingTableV2.table);
 
   Future<int> updateTargetTime(String day, Duration newTarget) {
-    return db.rawUpdate("""
+    return db.rawUpdate(
+      """
       UPDATE ${DbBookingTableV2.table}
       SET ${DbBookingTableV2.targetHoursInMin} = ?
       WHERE ${DbBookingTableV2.day} = ?
       """,
-      [newTarget.inMinutes, day],);
+      [newTarget.inMinutes, day],
+    );
   }
 
   Future<List<TimeBooking>> all() {
     return loadAll(orderBy: _orderByStartDate);
   }
+
   Future<List<TimeBooking>> allOrderByStart() {
     return loadAll(orderBy: _orderByStartDate);
   }
 
   Future<List<TimeBooking>> fromTo(DateTime from, DateTime to) {
     return loadAll(
-      where: "${DbBookingTableV2.startDate} >= ? "
-             "AND (${DbBookingTableV2.startDate} <= ? )",
+      where:
+          "${DbBookingTableV2.startDate} >= ? "
+          "AND (${DbBookingTableV2.startDate} <= ? )",
       whereArgs: [dateTimeToInt(from), dateTimeToInt(to)],
       orderBy: "${DbBookingTableV2.startDate} ASC",
     );
@@ -39,14 +43,15 @@ class TimeBookingDao extends AbstractDao<TimeBooking> {
   /// loads the last open booking for the given date
   Future<List<TimeBooking>> loadDay(DateTime dateTime) {
     return loadAll(
-        where: "day = ? OR end_date is null",
-        whereArgs: [dateTime.toIsoDateString()],
-        orderBy: _orderByStartDate,
+      where: "day = ? OR end_date is null",
+      whereArgs: [dateTime.toIsoDateString()],
+      orderBy: _orderByStartDate,
     );
   }
 
   Future<List<DailyBookingStatistic>> stats([DateTime? withoutDay]) async {
-    var query = '''
+    var query =
+        '''
     SELECT
       ${DbBookingTableV2.day} as ${DbBookingTableV2.day},
       min(${DbBookingTableV2.startDate}) as ${DbBookingTableV2.startDate},
@@ -56,7 +61,8 @@ class TimeBookingDao extends AbstractDao<TimeBooking> {
       count(1) as bookingsCount
     FROM $tableName
     ''';
-    const sortAndGroup = '''
+    const sortAndGroup =
+        '''
     GROUP BY ${DbBookingTableV2.day}
     ORDER BY ${DbBookingTableV2.startDate} DESC
     ''';
@@ -67,7 +73,8 @@ class TimeBookingDao extends AbstractDao<TimeBooking> {
       query += sortAndGroup;
       qResult = await db.rawQuery(query);
     } else {
-      query += 'WHERE ${DbBookingTableV2.day} <> ? AND ${DbBookingTableV2.endDate} IS NOT NULL';
+      query +=
+          'WHERE ${DbBookingTableV2.day} <> ? AND ${DbBookingTableV2.endDate} IS NOT NULL';
       query += sortAndGroup;
       qResult = await db.rawQuery(query, [withoutDay.toIsoDateString()]);
     }
@@ -93,18 +100,23 @@ class TimeBookingDao extends AbstractDao<TimeBooking> {
       whereArgs: [dateTimeToInt(start)],
       limit: 1,
     );
-    if (result.isEmpty) return null;
-    else return result[0];
+    if (result.isEmpty)
+      return null;
+    else
+      return result[0];
   }
 
   Future<TimeBooking?> findByStartAndEnd(DateTime start, DateTime end) async {
     final result = await loadAll(
-      where: "${DbBookingTableV2.startDate} = ? AND ${DbBookingTableV2.endDate} = ?",
+      where:
+          "${DbBookingTableV2.startDate} = ? AND ${DbBookingTableV2.endDate} = ?",
       whereArgs: [dateTimeToInt(start), dateTimeToInt(end)],
       limit: 1,
     );
-    if (result.isEmpty) return null;
-    else return result[0];
+    if (result.isEmpty)
+      return null;
+    else
+      return result[0];
   }
 
   @override
@@ -113,6 +125,7 @@ class TimeBookingDao extends AbstractDao<TimeBooking> {
     result.setMap(values);
     return result;
   }
+
   @override
   Map<String, dynamic> toMap(TimeBooking value) {
     return value.asMap();

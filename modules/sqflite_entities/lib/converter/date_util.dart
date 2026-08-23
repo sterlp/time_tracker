@@ -53,8 +53,11 @@ class DateTimeUtil {
       return f.format(d);
   }
 
-  static String formatWithString(DateTime? date, String format,
-      [String? locale = 'de',]) {
+  static String formatWithString(
+    DateTime? date,
+    String format, [
+    String? locale = 'de',
+  ]) {
     if (date == null) return '';
     return getFormat(format, locale).format(date);
   }
@@ -74,13 +77,26 @@ class DateTimeUtil {
   }
 
   static DateTime precisionMilliseconds(DateTime now) {
-    return DateTime(now.year, now.month, now.day, now.hour, now.minute,
-        now.second, now.millisecond);
+    return DateTime(
+      now.year,
+      now.month,
+      now.day,
+      now.hour,
+      now.minute,
+      now.second,
+      now.millisecond,
+    );
   }
 
   static DateTime precisionSeconds(DateTime now) {
     return DateTime(
-        now.year, now.month, now.day, now.hour, now.minute, now.second);
+      now.year,
+      now.month,
+      now.day,
+      now.hour,
+      now.minute,
+      now.second,
+    );
   }
 
   static DateTime precisionMinutes(DateTime now) {

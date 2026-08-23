@@ -9,13 +9,13 @@ class DurationFormField extends StatelessWidget {
   final Duration duration;
   final _controller = TextEditingController();
 
-  DurationFormField(
-      {super.key,
-        this.duration = Duration.zero,
-        this.decoration = const InputDecoration(),
-        this.onChanged,
-        this.validator,
-      });
+  DurationFormField({
+    super.key,
+    this.duration = Duration.zero,
+    this.decoration = const InputDecoration(),
+    this.onChanged,
+    this.validator,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -23,7 +23,9 @@ class DurationFormField extends StatelessWidget {
     final result = TextFormField(
       controller: _controller,
       readOnly: true,
-      onTap: onChanged == null ? null : FeedbackFixed.wrapTouch(() =>  _pickTime(context), context),
+      onTap: onChanged == null
+          ? null
+          : FeedbackFixed.wrapTouch(() => _pickTime(context), context),
       decoration: decoration,
       validator: validator == null ? null : _validate,
     );
@@ -31,12 +33,15 @@ class DurationFormField extends StatelessWidget {
   }
 
   String? _validate(String? v) {
-    if (validator != null) return validator!(duration);
-    else return null;
+    if (validator != null)
+      return validator!(duration);
+    else
+      return null;
   }
 
   Future<void> _pickTime(BuildContext context) async {
-    final newTime = await showTimePicker(context: context,
+    final newTime = await showTimePicker(
+      context: context,
       helpText: 'Zeit wählen',
       initialTime: TimeOfDay(
         hour: duration.inHours,

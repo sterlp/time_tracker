@@ -1,6 +1,6 @@
 import 'package:dependency_container/dependency_container.dart';
 import 'package:flutter/material.dart';
-import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
+import 'package:flutter_material_design_icons/flutter_material_design_icons.dart';
 import 'package:time_tracker/booking/entity/time_booking_statistics.dart';
 import 'package:time_tracker/booking/page/bookings_list_page.dart';
 import 'package:time_tracker/booking/page/edit_booking_page.dart';
@@ -42,18 +42,18 @@ class _StatisticListPageState extends State<StatisticListPage> {
               }
             },
             itemBuilder: (context) => [
-              PopupMenuItem<_Statistic>(
+              const PopupMenuItem<_Statistic>(
                 value: _Statistic.week,
                 child: ListTile(
                   leading: Icon(MdiIcons.calendarWeek),
-                  title: const Text("Wochenübersicht"),
+                  title: Text("Wochenübersicht"),
                 ),
               ),
-              PopupMenuItem<_Statistic>(
+              const PopupMenuItem<_Statistic>(
                 value: _Statistic.month,
                 child: ListTile(
                   leading: Icon(MdiIcons.calendarMonth),
-                  title: const Text("Monatsübersicht"),
+                  title: Text("Monatsübersicht"),
                 ),
               ),
             ],

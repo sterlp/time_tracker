@@ -126,10 +126,7 @@ class _FooDao extends AbstractDao<_FooBE> {
 
   @override
   Map<String, dynamic> toMap(_FooBE value) {
-    return {
-      'id': value.id,
-      'name': value.name,
-    };
+    return {'id': value.id, 'name': value.name};
   }
 }
 

@@ -1,4 +1,3 @@
-
 import 'package:flutter_test/flutter_test.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:time_tracker/booking/dao/time_booking_dao.dart';
@@ -7,14 +6,12 @@ import 'package:time_tracker/booking/service/booking_service.dart';
 import 'package:time_tracker/statistic/entity/overview_stats.dart';
 
 import '../../test_helper.dart';
-import '../booking_test_data.dart';
 
 Future<void> main() async {
   final dbProvider = await initTestDB();
   final db = await dbProvider.init();
   final dao = TimeBookingDao(db);
   final subject = BookingService(dao);
-  final testData = BookingTestData(dao);
 
   tearDownAll(() async {
     await dbProvider.close();
@@ -55,24 +52,40 @@ Future<void> main() async {
 
   test('Load week detail bookins', () async {
     // GIVEN
-    await subject.save(TimeBooking(DateTime.parse("2022-04-11 08:00:00"))..workTime = _time(8));
-    await subject.save(TimeBooking(DateTime.parse("2022-04-12 08:00:00"))..workTime = _time(8));
-    await subject.save(TimeBooking(DateTime.parse("2022-04-13 08:00:00"))..workTime = _time(8));
-    await subject.save(TimeBooking(DateTime.parse("2022-04-14 08:00:00"))..workTime = _time(8));
-    await subject.save(TimeBooking(DateTime.parse("2022-04-15 08:00:00"))..workTime = _time(4));
-    await subject.save(TimeBooking(DateTime.parse("2022-04-15 13:00:00"))..workTime = _time(3));
+    await subject.save(
+      TimeBooking(DateTime.parse("2022-04-11 08:00:00"))..workTime = _time(8),
+    );
+    await subject.save(
+      TimeBooking(DateTime.parse("2022-04-12 08:00:00"))..workTime = _time(8),
+    );
+    await subject.save(
+      TimeBooking(DateTime.parse("2022-04-13 08:00:00"))..workTime = _time(8),
+    );
+    await subject.save(
+      TimeBooking(DateTime.parse("2022-04-14 08:00:00"))..workTime = _time(8),
+    );
+    await subject.save(
+      TimeBooking(DateTime.parse("2022-04-15 08:00:00"))..workTime = _time(4),
+    );
+    await subject.save(
+      TimeBooking(DateTime.parse("2022-04-15 13:00:00"))..workTime = _time(3),
+    );
 
-    await subject.save(TimeBooking(DateTime.parse("2022-04-19 08:00:00"))..workTime = _time(8));
+    await subject.save(
+      TimeBooking(DateTime.parse("2022-04-19 08:00:00"))..workTime = _time(8),
+    );
 
     // WHEN
     final stats = await subject.statisticByDay();
     final weeks = WeekOverviewStats.split(stats);
     expect(weeks.length, 2);
+    // ignore: avoid_print
     print('${weeks[1].start} -> ${weeks[1].end}');
     final weekBookings = await subject.fromTo(weeks[1].start, weeks[1].end);
 
     // THEN
     for(final s in stats) {
+      // ignore: avoid_print
       print('$s');
     }
     expect(weeks[1].start, DateTime.parse("2022-04-11 08:00:00"));

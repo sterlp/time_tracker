@@ -1,5 +1,3 @@
-
-
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:intl/date_symbol_data_local.dart';
@@ -11,9 +9,7 @@ void main() {
   Widget newTimeBookingList(List<Widget> children) {
     return MaterialApp(
       title: 'test',
-      home: Scaffold(
-        body: ListView(children: children,),
-      ),
+      home: Scaffold(body: ListView(children: children)),
     );
   }
 
@@ -24,25 +20,33 @@ void main() {
   testWidgets('Load TimeBookingListItem', (WidgetTester tester) async {
     // GIVEN
     final now = DateTime.now();
-    await tester.pumpWidget(newTimeBookingList([
-      TimeBookingListItem(TimeBooking(now), (b) { }, (b) {}),
-    ]),);
+    await tester.pumpWidget(
+      newTimeBookingList([
+        TimeBookingListItem(TimeBooking(now), (b) {}, (b) {}),
+      ]),
+    );
 
     // WHEN
     await tester.pumpAndSettle();
 
     // THEN
-    expect(find.text('${DateTimeUtil.formatWithString(now, 'HH:mm')} Uhr'),
-        findsOneWidget,);
+    expect(
+      find.text('${DateTimeUtil.formatWithString(now, 'HH:mm')} Uhr'),
+      findsOneWidget,
+    );
   });
 
   testWidgets('Edit TimeBooking with long press', (WidgetTester tester) async {
     // GIVEN
     final now = DateTime.now();
     bool edit = false;
-    await tester.pumpWidget(newTimeBookingList([
-      TimeBookingListItem(TimeBooking(now), (b) { edit = true; }, (b) {}),
-    ]));
+    await tester.pumpWidget(
+      newTimeBookingList([
+        TimeBookingListItem(TimeBooking(now), (b) {
+          edit = true;
+        }, (b) {}),
+      ]),
+    );
 
     // WHEN
     await tester.pumpAndSettle();
@@ -52,5 +56,4 @@ void main() {
     await tester.pumpAndSettle();
     expect(edit, true);
   });
-
 }

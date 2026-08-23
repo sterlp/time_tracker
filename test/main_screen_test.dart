@@ -17,7 +17,7 @@ void main() {
   testWidgets('Loaded App should show a "Start"', (WidgetTester tester) async {
     // GIVEN
     final context = AppContextMock();
-    await tester.pumpWidget(MyApp(c: context.initMockContext(),));
+    await tester.pumpWidget(MyApp(c: context.initMockContext()));
     // WHEN
     await tester.pumpAndSettle();
     // THEN

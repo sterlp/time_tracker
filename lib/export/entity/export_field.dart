@@ -1,4 +1,3 @@
-
 import 'package:sqflite_entities/converter/date_util.dart';
 import 'package:time_tracker/common/time_util.dart';
 import 'package:time_tracker/export/entity/export_day_statistic.dart';
@@ -11,23 +10,79 @@ class ExportField {
   ExportField._(this.name, this.key, this.extract);
 
   static final empty = ExportField._("Leer", "empty", (_) => "");
-  static final cw = ExportField._("Kalenderwoche", "cw", (s) => s.day.weekOfYear.toString());
+  static final cw = ExportField._(
+    "Kalenderwoche",
+    "cw",
+    (s) => s.day.weekOfYear.toString(),
+  );
 
   static final day = ExportField._("Tag", "day", (s) => dayName.format(s.day));
-  static final date = ExportField._("Datum", "date", (s) => dateFormat.format(s.day));
-  static final startTime = ExportField._("Arbeitsbeginn", "startTime", (s) => s.startTime);
-  static final endTime = ExportField._("Arbeitsende", "endTime", (s) => s.endTime);
-  static final workedTime = ExportField._("Arbeitszeit", "workedTime", (s) => s.workedTime);
-  static final planedWorkTime = ExportField._("Soll", "planedWorkTime", (s) => s.planedWorkTime);
+  static final date = ExportField._(
+    "Datum",
+    "date",
+    (s) => dateFormat.format(s.day),
+  );
+  static final startTime = ExportField._(
+    "Arbeitsbeginn",
+    "startTime",
+    (s) => s.startTime,
+  );
+  static final endTime = ExportField._(
+    "Arbeitsende",
+    "endTime",
+    (s) => s.endTime,
+  );
+  static final workedTime = ExportField._(
+    "Arbeitszeit",
+    "workedTime",
+    (s) => s.workedTime,
+  );
+  static final planedWorkTime = ExportField._(
+    "Soll",
+    "planedWorkTime",
+    (s) => s.planedWorkTime,
+  );
 
-  static final startFirstBreak = ExportField._("Pause 1 Start", "startFirstBreak", (s) => s.startFirstBreak);
-  static final endFirstBreak = ExportField._("Pause 1 Ende", "endFirstBreak", (s) => s.endFirstBreak);
-  static final startSecondBreak = ExportField._("Pause 2 Start", "startSecondBreak", (s) => s.startSecondBreak);
-  static final endSecondBreak = ExportField._("Pause 2 Ende", "endSecondBreak", (s) => s.endSecondBreak);
-  static final startRemainingBreak = ExportField._("Pause Rest Start", "startRemainingBreak", (s) => s.startRemainingBreak);
-  static final endRemainingBreak = ExportField._("Pause Rest Ende", "endRemainingBreak", (s) => s.endRemainingBreak);
-  static final breakTime = ExportField._("Pause dezimal", "breakTime", (s) => s.breakTime);
-  static final breakTimeHHmm = ExportField._("Pause HH:mm", "breakTimeHHmm", (s) => s.breakTimeHHmm);
+  static final startFirstBreak = ExportField._(
+    "Pause 1 Start",
+    "startFirstBreak",
+    (s) => s.startFirstBreak,
+  );
+  static final endFirstBreak = ExportField._(
+    "Pause 1 Ende",
+    "endFirstBreak",
+    (s) => s.endFirstBreak,
+  );
+  static final startSecondBreak = ExportField._(
+    "Pause 2 Start",
+    "startSecondBreak",
+    (s) => s.startSecondBreak,
+  );
+  static final endSecondBreak = ExportField._(
+    "Pause 2 Ende",
+    "endSecondBreak",
+    (s) => s.endSecondBreak,
+  );
+  static final startRemainingBreak = ExportField._(
+    "Pause Rest Start",
+    "startRemainingBreak",
+    (s) => s.startRemainingBreak,
+  );
+  static final endRemainingBreak = ExportField._(
+    "Pause Rest Ende",
+    "endRemainingBreak",
+    (s) => s.endRemainingBreak,
+  );
+  static final breakTime = ExportField._(
+    "Pause dezimal",
+    "breakTime",
+    (s) => s.breakTime,
+  );
+  static final breakTimeHHmm = ExportField._(
+    "Pause HH:mm",
+    "breakTimeHHmm",
+    (s) => s.breakTimeHHmm,
+  );
 }
 
 final dateFormat = DateTimeUtil.getFormat('dd.MM.yyyy');
@@ -81,7 +136,7 @@ class ExportFields {
     ExportField.startRemainingBreak,
     ExportField.endRemainingBreak,
 
-    ExportField.breakTime
+    ExportField.breakTime,
   ];
 
   List<String> get selectedHeaders {
@@ -95,7 +150,7 @@ class ExportFields {
   set selectedValuesString(String values) {
     selectedValues.clear();
     if (values.isNotEmpty) {
-      for (final key in  values.split(valueSeparator)) {
+      for (final key in values.split(valueSeparator)) {
         selectedValues.add(availableValues.firstWhere((e) => e.key == key));
       }
     }
@@ -115,9 +170,11 @@ class ExportFields {
   void clear() {
     selectedValues.clear();
   }
+
   void add(ExportField field) {
     selectedValues.add(field);
   }
+
   void remove(ExportField field) {
     selectedValues.remove(field);
   }

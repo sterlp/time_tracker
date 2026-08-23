@@ -1,4 +1,3 @@
-
 import 'package:sqflite_entities/converter/date_util.dart';
 
 class DailyBookingStatistic {
@@ -9,12 +8,14 @@ class DailyBookingStatistic {
   final Duration planedWorkTime;
   final int bookingsCount;
 
-  DailyBookingStatistic(this.day,
-      this.start,
-      this.end,
-      this.workedTime,
-      this.planedWorkTime,
-      this.bookingsCount);
+  DailyBookingStatistic(
+    this.day,
+    this.start,
+    this.end,
+    this.workedTime,
+    this.planedWorkTime,
+    this.bookingsCount,
+  );
 
   DailyBookingStatistic.ofStartAndDuration(this.start, Duration duration)
     : day = start.toIsoDateString(),
@@ -60,7 +61,7 @@ class DailyBookingStatisticList {
   DailyBookingStatisticList.of(List<DailyBookingStatistic> v) {
     _elements = v;
 
-    for(final e in _elements) {
+    for (final e in _elements) {
       _sumWorkedTime += e.workedTime;
       _sumOverHours += e.overHours;
       _sumBreakTime += e.breakTime;

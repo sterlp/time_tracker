@@ -1,9 +1,8 @@
-
 import 'package:flutter_test/flutter_test.dart';
 import 'package:time_tracker/booking/entity/time_booking.dart';
 
 void main() {
-  test('Test empty copy', () async {
+  test('Test empty copy', () {
     // GIVEN
     final root = TimeBooking.now();
     final copy = TimeBooking(DateTime(2016));
@@ -13,7 +12,7 @@ void main() {
     expect(copy.start, root.start);
   });
 
-  test('Test full copy', () async {
+  test('Test full copy', () {
     // GIVEN
     final root = TimeBooking.now()
       ..targetWorkTime = const Duration(hours: 2, minutes: 20)
@@ -58,8 +57,9 @@ void main() {
 
     // WHEN
     final newBooking = original.split(
-        DateTime.now().add(const Duration(hours: -5)),
-        DateTime.now().add(const Duration(hours: -4)));
+      DateTime.now().add(const Duration(hours: -5)),
+      DateTime.now().add(const Duration(hours: -4)),
+    );
 
     // THEN
     expect(newBooking.end, end);

@@ -1,4 +1,3 @@
-
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:sqflite_entities/converter/date_util.dart';
@@ -28,7 +27,8 @@ class TodayBean extends ValueNotifier<List<TimeBooking>> {
   }
 
   Future<List<TimeBooking>> changeDay(DateTime newDay) {
-    if (DateUtils.isSameDay(_day, newDay)) return SynchronousFuture(value);
+    if (DateUtils.isSameDay(_day, newDay))
+      return SynchronousFuture(value);
     else {
       _day = DateUtils.dateOnly(newDay);
       return reload();
@@ -60,6 +60,7 @@ class TodayBean extends ValueNotifier<List<TimeBooking>> {
     for (final b in value) result += b.workTime;
     return result;
   }
+
   Duration sumBreakTime() {
     if (value.isEmpty) return Duration.zero;
 
@@ -74,7 +75,8 @@ class TodayBean extends ValueNotifier<List<TimeBooking>> {
     }
     // if the last booking has an end, we add any time spend as break
     if (lastBooking != null && lastBooking.end != null) {
-      breakTime += DateTimeUtil.precisionMinutes(DateTime.now()).difference(lastBooking.end!);
+      breakTime += DateTimeUtil.precisionMinutes(DateTime.now())
+          .difference(lastBooking.end!);
     }
     return breakTime;
   }
@@ -103,6 +105,7 @@ class TodayBean extends ValueNotifier<List<TimeBooking>> {
 
     return result;
   }
+
   Future<TimeBooking?> stopBooking() async {
     if (hasCurrentBooking) {
       final b = _currentRunning!;
@@ -114,6 +117,7 @@ class TodayBean extends ValueNotifier<List<TimeBooking>> {
     }
     return null;
   }
+
   void add(TimeBooking booking) {
     value.add(booking);
     notifyListeners();
@@ -127,6 +131,7 @@ class TodayBean extends ValueNotifier<List<TimeBooking>> {
     notifyListeners();
     return _bookingService.delete(booking);
   }
+
   Future<TimeBooking> save(TimeBooking booking) async {
     final result = await _bookingService.save(booking);
     reload();

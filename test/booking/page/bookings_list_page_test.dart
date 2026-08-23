@@ -21,9 +21,8 @@ void main() {
     container.add<BookingService>(bookingServiceMock);
     bookings = [];
     registerFallbackValue(SortOrder.DESC);
-    when(
-      () => bookingServiceMock.fromTo(any(), any()),
-    ).thenAnswer((_) => Future.value(bookings));
+    when(() => bookingServiceMock.fromTo(any(), any()))
+        .thenAnswer((_) => Future.value(bookings));
   });
 
   testWidgets('Load empty bookings', (WidgetTester tester) async {

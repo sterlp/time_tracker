@@ -15,45 +15,62 @@ class BookingService {
     b.id = null;
     return _timeBookingDao.save(b);
   }
+
   Future<TimeBooking> reload(TimeBooking b) async {
     var result = await _timeBookingDao.getById(b.id!);
     return result ??= await _timeBookingDao.save(b);
   }
+
   Future<TimeBooking> save(TimeBooking b) async {
     final r = await _timeBookingDao.save(b);
     await _timeBookingDao.updateTargetTime(r.day, r.targetWorkTime);
     return r;
   }
+
   Future<List<TimeBooking>> loadDay(DateTime dateTime) {
     return _timeBookingDao.loadDay(dateTime);
   }
+
   Future<List<TimeBooking>> fromTo(DateTime from, DateTime to) {
     return _timeBookingDao.fromTo(from, to);
   }
+
   Future<List<TimeBooking>> all({SortOrder order = SortOrder.DESC}) {
-    if (order == SortOrder.DESC) return _timeBookingDao.allOrderByStart();
-    else return _timeBookingDao.loadAll(orderBy: '${DbBookingTableV2.startDate} ASC');
+    if (order == SortOrder.DESC)
+      return _timeBookingDao.allOrderByStart();
+    else
+      return _timeBookingDao.loadAll(
+        orderBy: '${DbBookingTableV2.startDate} ASC',
+      );
   }
+
   Future<TimeBooking> delete(TimeBooking booking) {
     return _timeBookingDao.deleteEntity(booking);
   }
-  Future<TimeBooking> addBreakToBooking(TimeBooking b,
-      TimeRange breakTime) async {
 
+  Future<TimeBooking> addBreakToBooking(
+    TimeBooking b,
+    TimeRange breakTime,
+  ) async {
     final newBooking = b.split(
-        breakTime.startTime.toDateTime(b.start),
-        breakTime.endTime.toDateTime(b.start));
+      breakTime.startTime.toDateTime(b.start),
+      breakTime.endTime.toDateTime(b.start),
+    );
 
     await _timeBookingDao.save(b);
     return _timeBookingDao.save(newBooking);
   }
+
   Future<List<DailyBookingStatistic>> statisticByDay() {
     return _timeBookingDao.stats();
   }
+
   Future<TimeBooking?> findByStartEnd(DateTime start, DateTime? end) async {
     TimeBooking? result;
-    if (end == null) result = await _timeBookingDao.findOpenByStart(start);
-    else result = await _timeBookingDao.findByStartAndEnd(start, end);
+    if (end == null)
+      result = await _timeBookingDao.findOpenByStart(start);
+    else
+      result = await _timeBookingDao.findByStartAndEnd(start, end);
     return result;
   }
 

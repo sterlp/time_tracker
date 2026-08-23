@@ -3,7 +3,7 @@ import 'dart:io';
 import 'package:dependency_container/dependency_container.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
-import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
+import 'package:flutter_material_design_icons/flutter_material_design_icons.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:time_tracker/booking/service/booking_service.dart';
 import 'package:time_tracker/common/time_util.dart';
@@ -38,7 +38,7 @@ class _ExportDataWidgetState extends State<ExportDataWidget> {
             ),
           ),
           ListTile(
-            leading: Icon(MdiIcons.wrenchClock),
+            leading: const Icon(MdiIcons.wrenchClock),
             title: const Text('Tagesarbeitszeit'),
             subtitle: Text(
               toDurationHoursAndMinutes(config.getDailyWorkHours()),
@@ -98,21 +98,23 @@ class _ExportDataWidgetState extends State<ExportDataWidget> {
     final f = await widget._container.get<ExportService>().exportAllToFile(
       fileName: 'Datensicherung ${now.month}-${now.year}.csv',
     );
-    await SharePlus.instance.share(ShareParams(files: [XFile(f.path, mimeType: 'text/csv')]));
+    await SharePlus.instance.share(
+      ShareParams(files: [XFile(f.path, mimeType: 'text/csv')]),
+    );
     f.delete();
   }
 
   Future<void> _importBackup() async {
-    final result = await FilePicker.platform.pickFiles(
+    final file = await FilePicker.pickFile(
       dialogTitle: 'Daten Export CSV auswählen',
       type: FileType.custom,
       allowedExtensions: ['csv'],
     );
 
-    if (result != null && result.files.single.path != null) {
+    if (file != null && file.path != null) {
       SnackBar message;
       try {
-        final csvData = await File(result.files.single.path!).readAsString();
+        final csvData = await File(file.path!).readAsString();
         final imported = await widget._container
             .get<ExportService>()
             .importBackup(csvData);

@@ -6,15 +6,10 @@ import 'package:time_tracker/export/page/configure_export_page.dart';
 import '../../test_helper.dart';
 
 void main() {
-
   testWidgets('Load BookingsStatisticWidget', (WidgetTester tester) async {
     // GIVEN
     final page = ConfigureExportPage(await AppContextMock().initMockContext());
-    await tester.pumpWidget(MaterialApp(
-        title: 'test',
-        home: page,
-      ),
-    );
+    await tester.pumpWidget(MaterialApp(title: 'test', home: page));
 
     // WHEN
     await tester.pumpAndSettle();

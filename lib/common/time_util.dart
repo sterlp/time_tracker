@@ -1,8 +1,8 @@
-
 import 'package:flutter/material.dart';
 
 int durationToMinutes(Duration? d) {
-  if (d == null) return 0;
+  if (d == null)
+    return 0;
   else {
     return d.inMinutes;
   }
@@ -14,6 +14,7 @@ String toHoursAndMinutes(Duration duration) {
   final minutes = duration.inMinutes - hours * 60;
   return '${_padWith0(hours)}:${_padWith0(minutes)}';
 }
+
 Duration hoursAndMinutesToDuration(String? time) {
   if (time == null || time.length < 3) return Duration.zero;
   final hm = time.split(':');
@@ -22,11 +23,13 @@ Duration hoursAndMinutesToDuration(String? time) {
 
 /// Returns the time as <b>00:00</b>
 String toHoursWithMinutes(DateTime? time) {
-  if (time == null) return '';
+  if (time == null)
+    return '';
   else {
     return '${_padWith0(time.hour)}:${_padWith0(time.minute)}';
   }
 }
+
 /// h Std m Min
 String toDurationHoursAndMinutes(Duration? inDuration) {
   final duration = inDuration ?? Duration.zero;
@@ -75,9 +78,11 @@ extension DateTimeExtension on DateTime {
         return 'Sonntag';
     }
   }
+
   bool isWeekend() {
     return weekday >= 6;
   }
+
   // https://github.com/KadaDev/week_of_year/blob/master/lib/date_week_extensions.dart
   /// The ISO 8601 week of year [1..53].
   ///
@@ -102,6 +107,7 @@ extension DateTimeExtension on DateTime {
 
     return woy;
   }
+
   /// The ordinal date, the number of days since December 31st the previous year.
   ///
   /// January 1st has the ordinal date 1

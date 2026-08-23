@@ -1,4 +1,3 @@
-
 import 'package:flutter_test/flutter_test.dart';
 import 'package:sqflite_common_ffi/sqflite_ffi.dart';
 import 'package:sqflite_entities/service/db_provider.dart';
@@ -23,7 +22,7 @@ void main() {
 
   test('Test ConfigService defaults', () async {
     final subject = ConfigDao(db!);
-    
+
     final config = await subject.loadConfig();
     expect(config.getDailyWorkHours(), const Duration(hours: 8));
   });

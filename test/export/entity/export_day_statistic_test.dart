@@ -4,7 +4,6 @@ import 'package:time_tracker/booking/entity/time_booking.dart';
 import 'package:time_tracker/export/entity/export_day_statistic.dart';
 
 Future<void> main() async {
-
   setUpAll(() async {
     await initializeDateFormatting();
   });
@@ -12,10 +11,14 @@ Future<void> main() async {
   test('One fromBookings', () {
     // GIVEN
     final bookings = [
-      TimeBooking(DateTime(2021, 3, 1, 8, 30))..end = DateTime(2021, 3, 1, 16, 20)
+      TimeBooking(DateTime(2021, 3, 1, 8, 30))
+        ..end = DateTime(2021, 3, 1, 16, 20),
     ];
     // WHEN
-    final subject = ExportDailyStats.fromBookings(DateTime(2021, 3, 1, 8, 30), bookings);
+    final subject = ExportDailyStats.fromBookings(
+      DateTime(2021, 3, 1, 8, 30),
+      bookings,
+    );
     // THEN
     expect(subject.workedTime, '7,83');
     expect(subject.startTime, '08:30');
@@ -30,10 +33,13 @@ Future<void> main() async {
     // GIVEN
     final bookings = [
       TimeBooking(DateTime(2021, 3, 1, 8))..end = DateTime(2021, 3, 1, 12),
-      TimeBooking(DateTime(2021, 3, 1, 13))..end = DateTime(2021, 3, 1, 17)
+      TimeBooking(DateTime(2021, 3, 1, 13))..end = DateTime(2021, 3, 1, 17),
     ];
     // WHEN
-    final subject = ExportDailyStats.fromBookings(DateTime(2021, 3, 1, 8), bookings);
+    final subject = ExportDailyStats.fromBookings(
+      DateTime(2021, 3, 1, 8),
+      bookings,
+    );
     // THEN
     expect(subject.startTime, '08:00');
     expect(subject.endTime, '17:00');
@@ -45,12 +51,18 @@ Future<void> main() async {
   test('Three fromBookings', () {
     // GIVEN
     final bookings = [
-      TimeBooking(DateTime(2021, 3, 1, 8))..end = DateTime(2021, 3, 1, 11, 50), // 30min break
-      TimeBooking(DateTime(2021, 3, 1, 12, 20))..end = DateTime(2021, 3, 1, 14, 20), // 45min break
-      TimeBooking(DateTime(2021, 3, 1, 15, 05))..end = DateTime(2021, 3, 1, 17, 30)
+      TimeBooking(DateTime(2021, 3, 1, 8))
+        ..end = DateTime(2021, 3, 1, 11, 50), // 30min break
+      TimeBooking(DateTime(2021, 3, 1, 12, 20))
+        ..end = DateTime(2021, 3, 1, 14, 20), // 45min break
+      TimeBooking(DateTime(2021, 3, 1, 15, 05))
+        ..end = DateTime(2021, 3, 1, 17, 30),
     ];
     // WHEN
-    final subject = ExportDailyStats.fromBookings(DateTime(2021, 3, 1, 8), bookings);
+    final subject = ExportDailyStats.fromBookings(
+      DateTime(2021, 3, 1, 8),
+      bookings,
+    );
     // THEN
     expect(subject.startTime, '08:00');
 
@@ -72,11 +84,13 @@ Future<void> main() async {
       TimeBooking(DateTime(2021, 3, 1, 13))..end = DateTime(2021, 3, 1, 17),
     ];
     // WHEN
-    final subject = ExportDailyStats.fromBookings(DateTime(2021, 3, 1, 8), bookings);
+    final subject = ExportDailyStats.fromBookings(
+      DateTime(2021, 3, 1, 8),
+      bookings,
+    );
     // THEN
     expect(subject.calculateBreakTime(), const Duration(hours: 1));
     expect(subject.calculateBreakTime(2), const Duration(hours: 2));
-
   });
 
   test('Many breaks fromBookings', () {
@@ -89,7 +103,10 @@ Future<void> main() async {
       TimeBooking(DateTime(2021, 3, 1, 16))..end = DateTime(2021, 3, 1, 17),
     ];
     // WHEN
-    final subject = ExportDailyStats.fromBookings(DateTime(2021, 3, 1, 8), bookings);
+    final subject = ExportDailyStats.fromBookings(
+      DateTime(2021, 3, 1, 8),
+      bookings,
+    );
     // THEN
     expect(subject.startTime, '08:00');
     expect(subject.endTime, '17:00');

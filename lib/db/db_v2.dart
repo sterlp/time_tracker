@@ -1,11 +1,12 @@
-
 import 'package:sqflite_common/sqlite_api.dart';
 import 'package:sqflite_entities/service/db_update.dart';
 
 class DbBookingTableV2 extends DbUpdate {
   static const String table = 'TIME_BOOKING';
+
   /// [int] in minutes
   static const String workedHoursInMin = 'worked_hours_in_min';
+
   /// [int] in minutes
   static const String targetHoursInMin = 'target_hours_in_min';
   static const String weekday = 'weekday';

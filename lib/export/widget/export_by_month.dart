@@ -45,7 +45,9 @@ Future<void> exportBookingsByMonth(
     );
 
     await SharePlus.instance.share(
-      ShareParams(files: [XFile(f.path, mimeType: 'text/csv', name: exportFileName)]),
+      ShareParams(
+        files: [XFile(f.path, mimeType: 'text/csv', name: exportFileName)],
+      ),
     );
     f.delete();
   }

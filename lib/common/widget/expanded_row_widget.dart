@@ -5,18 +5,17 @@ class ExpandedRowWidget extends StatelessWidget {
   final List<Widget> children;
   final EdgeInsets padding;
 
-  const ExpandedRowWidget({super.key,
+  const ExpandedRowWidget({
+    super.key,
     this.children = const <Widget>[],
-    this.padding = const EdgeInsets.fromLTRB(4, 8, 4, 0)
+    this.padding = const EdgeInsets.fromLTRB(4, 8, 4, 0),
   });
 
   @override
   Widget build(BuildContext context) {
     return Padding(
       padding: padding,
-      child: Row(
-        children: expandWidgets(children),
-      ),
+      child: Row(children: expandWidgets(children)),
     );
   }
 }

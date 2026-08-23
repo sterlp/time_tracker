@@ -8,7 +8,11 @@ class TimeBooking extends AbstractEntity {
   DateTime? end;
   Duration targetWorkTime;
 
-  TimeBooking(this.start, {this.end, this.targetWorkTime = const Duration(hours: 8)});
+  TimeBooking(
+    this.start, {
+    this.end,
+    this.targetWorkTime = const Duration(hours: 8),
+  });
 
   TimeBooking.now() : this(DateTimeUtil.precisionMinutes(DateTime.now()));
 
@@ -26,7 +30,11 @@ class TimeBooking extends AbstractEntity {
   }
 
   TimeBooking split(DateTime thisBookingEnd, DateTime newStart) {
-    final result = TimeBooking(newStart, end: end, targetWorkTime: targetWorkTime);
+    final result = TimeBooking(
+      newStart,
+      end: end,
+      targetWorkTime: targetWorkTime,
+    );
     end = thisBookingEnd;
     return result;
   }
@@ -40,7 +48,9 @@ class TimeBooking extends AbstractEntity {
     id = values['id'] as int?;
     start = parseDateTime(values['start_date'])!;
     end = parseDateTime(values['end_date']);
-    targetWorkTime = Duration(minutes: values[DbBookingTableV2.targetHoursInMin] as int);
+    targetWorkTime = Duration(
+      minutes: values[DbBookingTableV2.targetHoursInMin] as int,
+    );
   }
 
   Map<String, dynamic> asMap() {
@@ -52,7 +62,7 @@ class TimeBooking extends AbstractEntity {
       'end_date': dateTimeToInt(value.end),
       DbBookingTableV2.workedHoursInMin: value.workTime.inMinutes,
       DbBookingTableV2.targetHoursInMin: value.targetWorkTime.inMinutes,
-      'weekday': value.start.weekday
+      'weekday': value.start.weekday,
     };
   }
 }

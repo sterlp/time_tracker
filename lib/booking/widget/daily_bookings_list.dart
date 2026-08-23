@@ -12,8 +12,13 @@ class DailyBookingsList extends StatelessWidget {
   final Function(TimeBooking b) deleteFn;
   final String ignoreDay;
 
-  const DailyBookingsList(this.items, this.editFn, this.deleteFn,
-      {super.key, this.ignoreDay = "none", });
+  const DailyBookingsList(
+    this.items,
+    this.editFn,
+    this.deleteFn, {
+    super.key,
+    this.ignoreDay = "none",
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -35,7 +40,7 @@ class DailyBookingsList extends StatelessWidget {
               result = Column(
                 children: [
                   DividerWithLabel(df.format(items[index].start)),
-                  TimeBookingListItem(items[index], editFn, deleteFn)
+                  TimeBookingListItem(items[index], editFn, deleteFn),
                 ],
               );
             }
@@ -47,5 +52,6 @@ class DailyBookingsList extends StatelessWidget {
     );
   }
 
-  bool _addItemWithoutDivider(String lastDay, String day) => lastDay == day || ignoreDay == day;
+  bool _addItemWithoutDivider(String lastDay, String day) =>
+      lastDay == day || ignoreDay == day;
 }

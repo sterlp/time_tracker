@@ -9,12 +9,10 @@ class MapDbV1 extends DbUpdate {
   MapDbV1() : super(1);
   @override
   Future<void> update(Database db) {
-    return db.execute(
-      '''
+    return db.execute('''
 CREATE TABLE IF NOT EXISTS $tableName (
   $keyColumn varchar(16) PRIMARY KEY,
   $valueColumn text
-);''',
-    );
+);''');
   }
 }

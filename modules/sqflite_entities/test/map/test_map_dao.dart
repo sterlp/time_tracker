@@ -5,10 +5,10 @@ import 'map_db_v1.dart';
 
 class TestMapDao extends AbstractMapDao {
   TestMapDao(Database db)
-      : super(
-          db,
-          MapDbV1.tableName,
-          keyColumnName: MapDbV1.keyColumn,
-          valueColumnName: MapDbV1.valueColumn,
-        );
+    : super(
+        db,
+        MapDbV1.tableName,
+        keyColumnName: MapDbV1.keyColumn,
+        valueColumnName: MapDbV1.valueColumn,
+      );
 }

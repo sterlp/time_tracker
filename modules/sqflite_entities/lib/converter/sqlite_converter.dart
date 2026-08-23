@@ -29,6 +29,8 @@ T? parseEnum<T>(String? v, List<T> enumValues) {
 /// Returns the first matching ENUM to the given String, otherwise the default value.
 T parseEnumWithDefault<T>(String? v, T defaultValue, List<T> enumValues) {
   if (v == null) return defaultValue;
-  return enumValues.firstWhere((e) => enumToString(e) == v,
-      orElse: () => defaultValue);
+  return enumValues.firstWhere(
+    (e) => enumToString(e) == v,
+    orElse: () => defaultValue,
+  );
 }

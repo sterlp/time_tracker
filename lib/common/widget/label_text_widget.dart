@@ -10,9 +10,8 @@ class LabeledWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final headerStyle = Theme.of(
-      context,
-    ).textTheme.titleSmall?.apply(color: Theme.of(context).disabledColor);
+    final headerStyle = Theme.of(context).textTheme.titleSmall
+        ?.apply(color: Theme.of(context).disabledColor);
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,

@@ -23,11 +23,18 @@ Future<AppContainer> initContext({Future<DbProvider>? dbProvider}) async {
   result.add(config);
 
   // TodayBean
-  result.add<TimeBookingDao>(TimeBookingDao(db))
-        .addFactory<BookingService>((c) => BookingService(c.get<TimeBookingDao>()))
-        .addFactory<TodayBean>((c) => TodayBean(c.get<BookingService>(), c.get<TimeTrackerConfig>()).init())
-        .addFactory<ExportService>((c) => ExportService(c.get<BookingService>()))
-  ;
+  result
+      .add<TimeBookingDao>(TimeBookingDao(db))
+      .addFactory<BookingService>(
+        (c) => BookingService(c.get<TimeBookingDao>()),
+      )
+      .addFactory<TodayBean>(
+        (c) => TodayBean(
+          c.get<BookingService>(),
+          c.get<TimeTrackerConfig>(),
+        ).init(),
+      )
+      .addFactory<ExportService>((c) => ExportService(c.get<BookingService>()));
 
   return result;
 }
@@ -49,13 +56,11 @@ class MyApp extends StatelessWidget {
       title: 'Zeiterfassung',
       darkTheme: ThemeData.dark(useMaterial3: true),
       theme: ThemeData.light(useMaterial3: true),
-      supportedLocales: const [
-        Locale('de', '')
-      ],
+      supportedLocales: const [Locale('de', '')],
       localizationsDelegates: const [
         GlobalMaterialLocalizations.delegate,
         GlobalWidgetsLocalizations.delegate,
-        GlobalCupertinoLocalizations.delegate
+        GlobalCupertinoLocalizations.delegate,
       ],
       home: FutureBuilder<AppContainer>(
         future: _container,

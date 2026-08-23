@@ -3,9 +3,10 @@ import 'package:time_tracker/booking/entity/time_booking_statistics.dart';
 import 'package:week_of_year/week_of_year.dart';
 
 List<T> _split<T extends StatsEntity>(
-    List<DailyBookingStatistic> elements,
-    bool Function(DateTime newDate, DateTime currentDate) splitter,
-    T Function(DateTime d, List<DailyBookingStatistic> elements) builder) {
+  List<DailyBookingStatistic> elements,
+  bool Function(DateTime newDate, DateTime currentDate) splitter,
+  T Function(DateTime d, List<DailyBookingStatistic> elements) builder,
+) {
   final List<T> result = [];
 
   if (elements.isNotEmpty) {
@@ -52,6 +53,7 @@ abstract class StatsEntity {
     }
     return r;
   }
+
   @override
   String toString() {
     return '$runtimeType[time=$time, statisticList=${statisticList.elements.length}]';
@@ -60,31 +62,38 @@ abstract class StatsEntity {
 
 class MonthOverviewStats extends StatsEntity {
   MonthOverviewStats(DateTime time, List<DailyBookingStatistic> elements)
-      : super(time, DailyBookingStatisticList.of(elements));
+    : super(time, DailyBookingStatisticList.of(elements));
 
   @override
-  String get title => '${DateTimeUtil.formatWithString(time, 'MMMM')} - ${time.year}';
+  String get title =>
+      '${DateTimeUtil.formatWithString(time, 'MMMM')} - ${time.year}';
 
   static List<MonthOverviewStats> split(List<DailyBookingStatistic> elements) {
-    return _split(elements,
-            (newDate, currentDate) => currentDate.year != newDate.year
-                || currentDate.month != newDate.month,
-            (d, elements) => MonthOverviewStats(d, elements),);
+    return _split(
+      elements,
+      (newDate, currentDate) =>
+          currentDate.year != newDate.year ||
+          currentDate.month != newDate.month,
+      (d, elements) => MonthOverviewStats(d, elements),
+    );
   }
 }
 
 class WeekOverviewStats extends StatsEntity {
   @override
-  String get title => 'KW ${time.weekOfYear} - ${statisticList.elements[0].start.year}';
-  @override
+  String get title =>
+      'KW ${time.weekOfYear} - ${statisticList.elements[0].start.year}';
 
   WeekOverviewStats(DateTime week, List<DailyBookingStatistic> elements)
-      : super(week, DailyBookingStatisticList.of(elements));
+    : super(week, DailyBookingStatisticList.of(elements));
 
   static List<WeekOverviewStats> split(List<DailyBookingStatistic> elements) {
-    return _split(elements,
-          (newDate, currentDate) => currentDate.year != newDate.year
-            || currentDate.weekOfYear != newDate.weekOfYear,
-          (d, elements) => WeekOverviewStats(d, elements),);
+    return _split(
+      elements,
+      (newDate, currentDate) =>
+          currentDate.year != newDate.year ||
+          currentDate.weekOfYear != newDate.weekOfYear,
+      (d, elements) => WeekOverviewStats(d, elements),
+    );
   }
 }

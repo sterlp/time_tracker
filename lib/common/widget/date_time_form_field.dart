@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
+import 'package:flutter_material_design_icons/flutter_material_design_icons.dart';
 import 'package:sqflite_entities/converter/date_util.dart';
 import 'package:time_tracker/common/feedback.dart';
 
@@ -12,14 +12,16 @@ class DateTimeFormField extends StatelessWidget {
   final FormFieldValidator<DateTime?>? validator;
   final bool clearable;
 
-  const DateTimeFormField(this.dateTime, this.onChanged,
-      {super.key,
-        this.decoration = const InputDecoration(),
-        this.firstDateTime,
-        this.lastDateTime,
-        this.validator,
-        this.clearable = false,
-      });
+  const DateTimeFormField(
+    this.dateTime,
+    this.onChanged, {
+    super.key,
+    this.decoration = const InputDecoration(),
+    this.firstDateTime,
+    this.lastDateTime,
+    this.validator,
+    this.clearable = false,
+  });
 
   String get _displayText => dateTime != null
       ? "${DateTimeUtil.formatWithString(dateTime, 'EEEE, dd.MM.yyyy, HH:mm')} Uhr"
@@ -38,7 +40,7 @@ class DateTimeFormField extends StatelessWidget {
         suffixIcon: _showClearButton
             ? IconButton(
                 onPressed: () => onChanged(null),
-                icon: Icon(MdiIcons.delete),
+                icon: const Icon(MdiIcons.delete),
                 tooltip: 'Löschen',
               )
             : null,
@@ -50,7 +52,8 @@ class DateTimeFormField extends StatelessWidget {
   Future<void> _pickNewDate(BuildContext context) async {
     final now = DateTime.now();
     final currentDate = dateTime ?? firstDateTime ?? now;
-    var newDate = await showDatePicker(context: context,
+    var newDate = await showDatePicker(
+      context: context,
       initialDate: currentDate,
       firstDate: firstDateTime ?? currentDate.add(const Duration(days: -30)),
       lastDate: lastDateTime ?? currentDate.add(const Duration(days: 30)),
@@ -61,9 +64,10 @@ class DateTimeFormField extends StatelessWidget {
       final initialTime = dateTime != null
           ? TimeOfDay(hour: dateTime!.hour, minute: dateTime!.minute)
           : (firstDateTime != null && now.isAfter(firstDateTime!))
-              ? TimeOfDay(hour: now.hour, minute: now.minute)
-              : TimeOfDay(hour: currentDate.hour, minute: currentDate.minute);
-      final newTime = await showTimePicker(context: context,
+          ? TimeOfDay(hour: now.hour, minute: now.minute)
+          : TimeOfDay(hour: currentDate.hour, minute: currentDate.minute);
+      final newTime = await showTimePicker(
+        context: context,
         initialTime: initialTime,
       );
       if (newTime != null) {

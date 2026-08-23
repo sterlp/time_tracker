@@ -24,27 +24,23 @@ Future<TimeRange?> showBreakPickerDialog(
     ),
     start: booking.start.add(Duration(minutes: breakStart)).toTimeOfDay(),
     end: booking.start
-        .add(Duration(
-          minutes: breakStart == 1 ? breakStart + 1 : durationToMidTime + 15,
-        ))
+        .add(
+          Duration(
+            minutes: breakStart == 1 ? breakStart + 1 : durationToMidTime + 15,
+          ),
+        )
         .toTimeOfDay(),
     interval: const Duration(minutes: 1),
     ticks: 8,
     strokeColor: Theme.of(context).primaryColor.withValues(alpha: 0.5),
     ticksColor: Colors.black,
-    labels: [
-      "24:00",
-      "03:00",
-      "06:00",
-      "09:00",
-      "12:00",
-      "15:00",
-      "18:00",
-      "21:00",
-    ]
-        .asMap()
-        .entries
-        .map((e) => ClockLabel.fromIndex(idx: e.key, length: 8, text: e.value))
-        .toList(),
+    labels:
+        ["24:00", "03:00", "06:00", "09:00", "12:00", "15:00", "18:00", "21:00"]
+            .asMap()
+            .entries
+            .map(
+              (e) => ClockLabel.fromIndex(idx: e.key, length: 8, text: e.value),
+            )
+            .toList(),
   ) as TimeRange?;
 }

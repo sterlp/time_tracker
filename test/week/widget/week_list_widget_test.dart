@@ -20,9 +20,8 @@ void main() {
     container = AppContainer();
     container.add<BookingService>(bookingService);
     stats = [];
-    when(
-      () => bookingService.statisticByDay(),
-    ).thenAnswer((_) => Future.value(stats));
+    when(() => bookingService.statisticByDay())
+        .thenAnswer((_) => Future.value(stats));
   });
 
   testWidgets('Load WeekListWidget', (WidgetTester tester) async {

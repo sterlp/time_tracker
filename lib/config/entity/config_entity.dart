@@ -9,6 +9,7 @@ class TimeTrackerConfig extends AttachedMap {
   Future<void> setExportCsvConfig(String config) {
     return setValue(exportCsvConfig, config);
   }
+
   Future<String?> getExportCsvConfig() {
     return getValue(exportCsvConfig);
   }
@@ -16,10 +17,12 @@ class TimeTrackerConfig extends AttachedMap {
   Future<void> setDailyWorkHours(Duration workTime) {
     return setValue(dailyWorkHours, '${workTime.inMinutes}');
   }
+
   Duration getDailyWorkHours() {
     final stringDuration = value[dailyWorkHours];
     Duration result = const Duration(hours: 8);
-    if (stringDuration != null) result = Duration(minutes: int.parse(stringDuration));
+    if (stringDuration != null)
+      result = Duration(minutes: int.parse(stringDuration));
     return result;
   }
 }

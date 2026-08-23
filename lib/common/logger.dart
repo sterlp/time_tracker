@@ -8,6 +8,7 @@ class LoggerFactory {
   static Logger get<T>() {
     return getWithName(T.toString());
   }
+
   static Logger getWithName(String name) {
     return Logger(name);
   }
@@ -22,17 +23,22 @@ class Logger {
   String? _syncString;
 
   void error(dynamic message, dynamic e) {
+    // ignore: avoid_print
     print('[ERROR]  $_name: $message -> $e');
   }
+
   void warn(dynamic message) {
     _print('WARN', message);
   }
+
   void info(dynamic message) {
     _print('INFO', message);
   }
+
   void debug(dynamic message) {
     _print('DEBUG', message);
   }
+
   void _print(String level, dynamic message) {
     if (kDebugMode) debugPrint('[$level] $_name: $message');
   }

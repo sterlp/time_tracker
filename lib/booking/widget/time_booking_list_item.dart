@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
+import 'package:flutter_material_design_icons/flutter_material_design_icons.dart';
 import 'package:time_tracker/booking/entity/time_booking.dart';
 import 'package:time_tracker/booking/widget/delete_booking_dialog.dart';
 import 'package:time_tracker/booking/widget/duration_icon_widget.dart';
@@ -44,7 +44,7 @@ class TimeBookingListItem extends StatelessWidget {
     Widget end;
     Widget icon;
     if (booking.end == null) {
-      icon = Icon(MdiIcons.clockFast);
+      icon = const Icon(MdiIcons.clockFast);
       end = Expanded(child: Container());
     } else {
       icon = DurationIconWidget(booking.workTime);

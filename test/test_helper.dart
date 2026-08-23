@@ -1,5 +1,3 @@
-
-
 import 'package:dependency_container/dependency_container.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:sqflite_common_ffi/sqflite_ffi.dart';
@@ -13,18 +11,23 @@ import 'package:time_tracker/config/entity/config_entity.dart';
 import 'package:time_tracker/db/time_tracker_db.dart';
 import 'package:time_tracker/main.dart';
 
-Future<DbProvider> initTestDB() async {
+Future<DbProvider> initTestDB() {
   sqfliteFfiInit();
   return initDb(testDb: databaseFactoryFfi.openDatabase(inMemoryDatabasePath));
 }
 
-Future<AppContainer> initTestContext() async {
+Future<AppContainer> initTestContext() {
   return initContext(dbProvider: initTestDB());
 }
+
 class CreditServiceMock with Mock implements ConfigDao {}
+
 class TimeBookingDaoMock with Mock implements TimeBookingDao {}
+
 class BookingServiceMock with Mock implements BookingService {}
-class TimeTrackerConfigMock with Mock implements TimeTrackerConfig{}
+
+class TimeTrackerConfigMock with Mock implements TimeTrackerConfig {}
+
 class TodayBeanMock with Mock implements TodayBean {}
 
 class AppContextMock {
@@ -42,7 +45,8 @@ class AppContextMock {
   Future<AppContainer> initMockContext() {
     final result = AppContainer();
 
-    when(() => timeBookingDao.loadDay(any())).thenAnswer((_) => Future.value(todayBookings));
+    when(() => timeBookingDao.loadDay(any()))
+        .thenAnswer((_) => Future.value(todayBookings));
     final bs = BookingService(timeBookingDao);
 
     when(() => configDao.getValue(any())).thenAnswer((_) => Future.value());

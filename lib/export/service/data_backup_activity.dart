@@ -1,6 +1,4 @@
-
 import 'package:csv/csv.dart';
-import 'package:csv/csv_settings_autodetection.dart';
 import 'package:sqflite_entities/converter/date_util.dart';
 import 'package:time_tracker/booking/entity/time_booking.dart';
 import 'package:time_tracker/common/logger.dart';
@@ -12,7 +10,7 @@ class DataBackupActivity {
   static final _format = DateTimeUtil.getFormat(_dateTimeFormat);
 
   String toCsvData(List<TimeBooking> bookings) {
-    final List<List<String>?> result = [
+    final List<List<dynamic>> result = [
       [
         'Kalenderwoche',
         'Tag',
@@ -20,16 +18,14 @@ class DataBackupActivity {
         'Start',
         'Ende',
         'Arbeitszeit',
-        'Soll'
-      ]
+        'Soll',
+      ],
     ];
     for (final b in bookings) {
       result.add(_bookingToBackupList(b));
     }
 
-    final csvData = const ListToCsvConverter(
-      fieldDelimiter: ';',
-    ).convert(result);
+    final csvData = Csv(fieldDelimiter: ';').encode(result);
 
     return csvData;
   }
@@ -47,11 +43,7 @@ class DataBackupActivity {
   }
 
   List<TimeBooking> fromCsvData(String csvData) {
-    final List<List<dynamic>> data = const CsvToListConverter(
-      fieldDelimiter: ';',
-      csvSettingsDetector: FirstOccurrenceSettingsDetector(
-        eols: ['\r\n', '\n'],),
-    ).convert(csvData);
+    final List<List<dynamic>> data = Csv(fieldDelimiter: ';').decode(csvData);
 
     final result = <TimeBooking>[];
     for (final row in data) {
@@ -61,14 +53,12 @@ class DataBackupActivity {
         if (row[0].toString().startsWith('KW') && start != null) {
           _log.debug('Parsing row => $row');
 
-
           final end = _parse(row[4].toString());
           var target = const Duration(hours: 8);
-          if (row.length > 6) target = hoursAndMinutesToDuration(row[6].toString());
+          if (row.length > 6)
+            target = hoursAndMinutesToDuration(row[6].toString());
 
-          result.add(TimeBooking(
-            start, end: end, targetWorkTime: target,
-          ),);
+          result.add(TimeBooking(start, end: end, targetWorkTime: target));
         }
       } else {
         _log.debug('skipped row => ${row[0]}');
@@ -78,7 +68,8 @@ class DataBackupActivity {
   }
 
   DateTime? _parse(dynamic dateTime) {
-    if (dateTime != null && dateTime.toString().length == _dateTimeFormat.length) {
+    if (dateTime != null &&
+        dateTime.toString().length == _dateTimeFormat.length) {
       return _format.parse(dateTime.toString());
     } else {
       return null;

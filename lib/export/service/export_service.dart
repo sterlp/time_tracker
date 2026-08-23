@@ -22,7 +22,10 @@ class ExportService {
     return writeToFile(csvData, fileName: fileName);
   }
 
-  Future<File> writeToFile(String csvData, {String fileName = 'Datenexport.csv'}) async {
+  Future<File> writeToFile(
+    String csvData, {
+    String fileName = 'Datenexport.csv',
+  }) async {
     final directory = await getApplicationDocumentsDirectory();
     var f = File('${directory.path}/$fileName');
     if (await f.exists()) await f.delete();

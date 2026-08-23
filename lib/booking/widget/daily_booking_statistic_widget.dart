@@ -22,21 +22,21 @@ class DailyBookingStatisticWidget extends StatelessWidget {
           ExpandedRowWidget(
             children: [
               LabelTextWidget.ofTime('Start', item.start),
-              LabelTextWidget.ofTime('Ende', item.end)
+              LabelTextWidget.ofTime('Ende', item.end),
             ],
           ),
           ExpandedRowWidget(
             children: [
               LabelTextWidget.ofDuration('Arbeitszeit', item.workedTime),
-              LabelTextWidget.ofDuration('Überstunden', item.overHours)
+              LabelTextWidget.ofDuration('Überstunden', item.overHours),
             ],
           ),
-            ExpandedRowWidget(
-              children: [
-                LabelTextWidget.ofDuration('Pause', breakTime),
-                LabelTextWidget.ofDuration('Soll', item.planedWorkTime),
-              ],
-            )
+          ExpandedRowWidget(
+            children: [
+              LabelTextWidget.ofDuration('Pause', breakTime),
+              LabelTextWidget.ofDuration('Soll', item.planedWorkTime),
+            ],
+          ),
         ],
       ),
       onLongPress: onLongPress,
